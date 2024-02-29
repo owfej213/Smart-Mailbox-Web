@@ -1,8 +1,12 @@
-# React + Vite
+# 智慧郵箱管理平台
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* 完成度
+- [ ] 畫面HTML+CSS
+  - [x] 主頁
+  - [ ] 歷史紀錄
+  - [ ] 圖表統計
+  - [ ] 郵箱內部
+  - [ ] 管理介面
+- [ ] 其他
+  - [ ] Google登入
+  - [ ] API
