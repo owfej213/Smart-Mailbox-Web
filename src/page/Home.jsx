@@ -1,5 +1,5 @@
 import '../css/Home.css'
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 
 const Title = styled.h2`
