@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import './css/App.css'
+import Login from './page/Login.jsx'
 import Home from './page/Home.jsx'
 import History from './page/History.jsx'
 import Statistics from './page/Statistics.jsx'
@@ -36,7 +37,8 @@ function App() {
         </div>
       </div>
       <Routes>
-        <Route path="/" exact element={<Home />} />
+        <Route path="/" exact element={<Login />} />
+        <Route path="/Home" exact element={<Home />} />
         <Route path="/History" element={<History />} />
         <Route path="/Statistics" element={<Statistics />} />
         <Route path="/Inside_Box" element={<Inside_Box />} />
