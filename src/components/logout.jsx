@@ -1,16 +1,11 @@
-import { GoogleLogout } from "@leecheuk/react-google-login"
-import { Navigate } from "react-router-dom"
-import { useState } from 'react'
+import { GoogleLogout } from "@leecheuk/react-google-login";
+import { useNavigate } from 'react-router-dom';
 
 function Logout() {
-    const [isLoggedOut, setLoggedOut] = useState(false)
-    
-    const onSuccess = () => {
-        setLoggedOut(true)
-    }
-
-    if(isLoggedOut){
-        return <Navigate to="/" />
+    const navigate = useNavigate();
+    const onSuccess = (res) => {
+        console.log(res);
+        navigate("/Login");
     }
 
     return(
@@ -21,7 +16,7 @@ function Logout() {
                 onLogoutSuccess={onSuccess}
             />
         </div>
-    )
+    );
 }
 
-export default Logout
+export default Logout;

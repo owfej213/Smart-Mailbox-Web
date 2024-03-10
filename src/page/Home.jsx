@@ -2,6 +2,7 @@ import LogoutButton from '../components/logout'
 
 function Home() {
 
+
     return (
       <>
         <LogoutButton />

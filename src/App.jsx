@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { HashRouter, Routes, Route, Link } from 'react-router-dom'
 import './css/App.css'
 import Login from './page/Login.jsx'
 import Home from './page/Home.jsx'
@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
       <div className='nav2'>
         <nav>
           <ul>
@@ -29,6 +29,9 @@ function App() {
             <li>
               <Link to="/Admin">管理介面</Link>
             </li>
+            <li>
+              <Link to="/Login">登入</Link>
+            </li>
           </ul>
         </nav>
         <div className='icon'>
@@ -37,14 +40,14 @@ function App() {
         </div>
       </div>
       <Routes>
-        <Route path="/" exact element={<Login />} />
-        <Route path="/Home" exact element={<Home />} />
+        <Route path="/" exact element={<Home />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/History" element={<History />} />
         <Route path="/Statistics" element={<Statistics />} />
         <Route path="/Inside_Box" element={<Inside_Box />} />
         <Route path="/Admin" element={<Admin />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </>
   )
 }

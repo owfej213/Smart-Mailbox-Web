@@ -1,8 +1,8 @@
-import '../css/Home.css'
-import styled from 'styled-components'
-import { useEffect } from 'react'
-import { gapi } from 'gapi-script'
-import LoginButton from '../components/login'
+import '../css/Login.css';
+import styled from 'styled-components';
+import { useEffect } from 'react';
+import { gapi } from 'gapi-script';
+import LoginButton from '../components/login';
 
 const Title = styled.h2`
     font-size: 2em;
@@ -18,15 +18,14 @@ const Title2 = styled.h2`
 function Home() {
 
   useEffect(() => {
-    function start() {
+    //初始化 GoogleAuth 物件
+    gapi.load('auth2', () => {
       gapi.auth2.init({
         clientId: import.meta.env.VITE_CLIENT_ID,
         scope: ""
-      })
-    }
-    gapi.load('client:auth2', start)
-  })
-
+      });
+    });
+  }, []);
 
   return (
     <>
@@ -45,7 +44,7 @@ function Home() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

@@ -1,0 +1,30 @@
+.Total-chart{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.detail{
+    
+    width: auto !important;
+}
+
+.chart{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: rgb(217, 217, 217);
+    border-radius: 20px;
+    width: 50%;
+}
+
+h2{
+    text-align: center;
+    text-decoration: solid;
+    font-size: 2em;
+}

@@ -1,7 +1,6 @@
-import { GoogleLogin } from "@leecheuk/react-google-login"
-import { Navigate } from "react-router-dom"
-import { useState } from 'react'
-import styled from 'styled-components'
+import { GoogleLogin } from "@leecheuk/react-google-login";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const SignInButton = styled.div`
     margin: 0 15%;
@@ -11,20 +10,15 @@ const SignInButton = styled.div`
 `
 
 function Login() {
-    const [isLoggedIn, setLoggedIn] = useState(false)
+    const navigate = useNavigate();
 
     const onSuccess = (res) => {
-        if(res.profileObj){
-            setLoggedIn(true)
-        }
+        console.log("Login Success!", res);
+        navigate("/");
     }
 
     const onFailure = (res) => {
-        console.log("Login Failed! res: ", res)
-    }
-
-    if(isLoggedIn){
-        return <Navigate to="/Home" />
+        console.log("Login Failed!", res);
     }
 
     return(
@@ -38,7 +32,7 @@ function Login() {
                 isSignedIn={true}
             />
         </SignInButton>
-    )
+    );
 }
 
-export default Login
+export default Login;
