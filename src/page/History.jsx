@@ -1,5 +1,6 @@
-import styled from 'styled-components'
-
+import styled from 'styled-components';
+import Container from '../components/Container';
+import { Title } from '../components/CommonStyles';
 //Chat-GPT寫的，回傳現在年月日
 const Today = () => {
   var currentDate = new Date();
@@ -22,7 +23,6 @@ var Mails = [{
 }]
 
 const Table = styled.div`
-  margin: 0 10%;
   margin-bottom: 0.1em;
   display: flex;
   font-size: 2em;
@@ -78,27 +78,29 @@ function History() {
 
   return (
     <>
-      <h1>歷史紀錄</h1>
-      <Header>
-        <Component style={{flexBasis: '35%'}}>
-          <span>日期</span>
-        </Component>
-        <Component style={{flexBasis: '20%'}}>
-          <span>郵件主題</span>
-        </Component>
-        <Component style={{flexBasis: '15%'}}>
-          <span>類型</span>
-        </Component>
-        <Component style={{flexBasis: '15%'}}>
-          <span>收信人</span>
-        </Component>
-        <Component style={{flexBasis: '15%'}}>
-          <span>細節</span>
-        </Component>
-      </Header>
-      <List />
+      <Container>
+        <Title>歷史紀錄</Title>
+        <Header>
+          <Component style={{flexBasis: '35%'}}>
+            <span>日期</span>
+          </Component>
+          <Component style={{flexBasis: '20%'}}>
+            <span>郵件主題</span>
+          </Component>
+          <Component style={{flexBasis: '15%'}}>
+            <span>類型</span>
+          </Component>
+          <Component style={{flexBasis: '15%'}}>
+            <span>收信人</span>
+          </Component>
+          <Component style={{flexBasis: '15%'}}>
+            <span>細節</span>
+          </Component>
+        </Header>
+        <List />
+      </Container>
     </>
   )
 }
 
-export default History
+export default History;

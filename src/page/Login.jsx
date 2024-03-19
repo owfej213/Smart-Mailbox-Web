@@ -1,16 +1,57 @@
-import '../css/Login.css';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { gapi } from 'gapi-script';
-import LoginButton from '../components/login';
+import LoginButton from '../components/Login';
+import Container from '../components/Container';
 
-const Title = styled.h2`
+const ContainerLogin = styled(Container)`
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const Cover = styled.img`
+  width: 256px;
+  height: 256px;
+`
+
+const LoginCard = styled.div`
+  margin-left: 10em;
+  width: 20em;
+  padding: 2em;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+
+  input[type="text"],
+  input[type="password"],
+  input[type="submit"] {
+    width: 100%;
+    margin-bottom: 0.5em;
+    padding: 0.8em;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 5px;
+  }
+
+  input[type="submit"] {
+    width: 70%;
+    margin: 0 15%;
+    margin-top: 1em;
+    background-color: rgb(56, 182, 255);
+    color: black;
+    font-weight: bolder;
+    cursor: pointer;
+  }
+`
+
+const LoginTitle = styled.h2`
     font-size: 2em;
     color: white;
     text-align: center;
   `
 
-const Title2 = styled.h2`
+const LoginSubtitle = styled.h2`
     font-size: 1.2em;
     color: white;
   `
@@ -29,20 +70,20 @@ function Home() {
 
   return (
     <>
-      <div className='container'>
-        <img className='cover' src='../../images/postbox.png'></img>
-        <div className="login-form">
-            <Title>帳號登入</Title>
+      <ContainerLogin>
+        <Cover src='../../images/postbox.png'></Cover>
+        <LoginCard>
+            <LoginTitle>帳號登入</LoginTitle>
             <form action="#" method="post">
-              <Title2>電子信箱或使用者名稱</Title2>
+              <LoginSubtitle>電子信箱或使用者名稱</LoginSubtitle>
               <input type="text" name="username" placeholder="電子信箱或使用者名稱" required></input>
-              <Title2>密碼</Title2>
+              <LoginSubtitle>密碼</LoginSubtitle>
               <input type="password" name="password" placeholder="密碼" required></input>
               <input type="submit" value="登入"></input>
             </form>
             <LoginButton />
-        </div>
-      </div>
+        </LoginCard>
+      </ContainerLogin>
     </>
   );
 }

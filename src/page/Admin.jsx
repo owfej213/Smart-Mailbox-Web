@@ -1,10 +1,15 @@
+import Container from '../components/Container';
+import { Title } from '../components/CommonStyles';
+
 function Admin() {
 
   return (
     <>
-      <h1>管理介面</h1>
+      <Container>
+        <Title>管理介面</Title>
+      </Container>
     </>
-  )
+  );
 }
 
-export default Admin
+export default Admin;

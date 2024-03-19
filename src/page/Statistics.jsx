@@ -1,8 +1,35 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import "../css/Statistics.css"
+import styled from "styled-components";
+import Container from '../components/Container';
+import { Title } from '../components/CommonStyles';
 
 ChartJS.register(...registerables);
+
+const AllChart = styled.div`
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+
+const Chart = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  background-color: rgb(217, 217, 217);
+  border-radius: 20px;
+  width: 75%;
+`
+
+const Subtitle = styled.h2`
+  text-align: center;
+  text-decoration: solid;
+  font-size: 2em;
+`
 
 function Statistics() {
 
@@ -47,17 +74,19 @@ function Statistics() {
 
   return (
     <>
-      <h1>圖表統計</h1>
-      <div className="Total-chart">
-        <div className="chart">
-          <h2>20XX上半年收件數量</h2>
-          <Bar className="detail" data={BarData} options={BarOptions}/>
-        </div>
-        <div className="chart">
-        <h2>20XX上半年收件類型</h2>
-          <Pie className="detail" data={PieData} options={""}/>
-        </div>
-      </div>
+      <Container>
+        <Title>圖表統計</Title>
+        <AllChart>
+          <Chart>
+            <Subtitle>20XX上半年收件數量</Subtitle>
+            <Bar data={BarData} options={BarOptions}/>
+          </Chart>
+          <Chart>
+            <Subtitle>20XX上半年收件類型</Subtitle>
+            <Pie data={PieData} options={""}/>
+          </Chart>
+        </AllChart>
+      </Container>
     </>
   );
 }
