@@ -1,8 +1,7 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import styled from "styled-components";
-import Container from '../components/Container';
-import { Title } from '../components/CommonStyles';
+import { Title, Container } from '../components/CommonStyles';
 
 ChartJS.register(...registerables);
 

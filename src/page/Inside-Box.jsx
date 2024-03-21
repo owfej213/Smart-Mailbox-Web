@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react-refresh/only-export-components */
+import { useState } from "react";
 import styled from "styled-components";
-import Container from '../components/Container';
-import { Title } from '../components/CommonStyles';
+import { Title, StyledButton, Container } from '../components/CommonStyles';
 
 const Image = styled.div`
   background-color: white;
   margin: 0 auto;
-  width: 1000px;
+  width: 800px;
   height: 600px;
   display: flex;
   align-items: center;
@@ -21,17 +23,6 @@ const UpdateTime = styled.div`
   margin-top: 1em;
   margin-bottom: 1em;
   color: white;
-`
-
-const UpdateTimeBtn = styled.button`
-  width: 12em;
-  padding: 1em;
-  background-color: white;
-  box-sizing: border-box;
-  border: 0;
-  border-radius: 20px;
-  color: black;
-  cursor: pointer;
 `
 
 const Content = styled.div`
@@ -60,24 +51,53 @@ const Now = () => {
   return dateString;
 }
 
-function Inside_Box() {
+const NoImage = () => {
+  return (
+    <Icon src="../../images/mail.png" />
+  )
+}
+
+const RandomImage = ({ seed }) => {
+
+  var url = `https://picsum.photos/800/600?random=${seed}`;
+
+  return (
+    <img src={url}></img>
+  )
+}
+
+function InsideBox() {
+  // eslint-disable-next-line no-unused-vars
+  const [ imageExists, setImgaeExists ] = useState(true);
+  const [ reloadKey, SetReloadKey ] = useState(0);
 
   const time = Now();
+
+  function handleReload() {
+    SetReloadKey((prevkey) => prevkey + 1);
+  }
 
   return (
     <>
       <Container>
         <Title>郵箱內部</Title>
         <Content>
-          <Image>
-            <Icon src="images/mail.png"></Icon>
+          <Image key={reloadKey}>
+            {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />}
           </Image>
           <UpdateTime>上次更新時間：{ time }</UpdateTime>
-          <UpdateTimeBtn>更新</UpdateTimeBtn>
+            <StyledButton
+              onClick={ handleReload } 
+              width="12em" 
+              borderRadius="20px"
+              p="0.8em"
+              >
+              更新
+            </StyledButton>
         </Content>
       </Container>
     </>
   );
 }
 
-export default Inside_Box;
+export default InsideBox;

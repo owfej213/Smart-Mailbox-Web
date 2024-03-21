@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase/firebase';
 import { Navigate, Link } from 'react-router-dom';
 import { GoogleButton } from '../components/Common';
-import { doSignInWithGoogle, doSignInWithEmailAndPassword } from '../firebase/auth';
 import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, StyledButton, CaptionTextBox } from '../components/CommonStyles';
+import { auth } from '../firebase/firebase';
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-function Login() {
+
+
+function Register(){
   const [ user ] = useAuthState(auth);
+  const [ isRegistering, setIsRegistering ] = useState(false);
   const [ isSigningIn , setIsSigningIn ] = useState(false);
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
@@ -15,14 +18,19 @@ function Login() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    
-    if(!isSigningIn) {
-        setIsSigningIn(true);
-        await doSignInWithEmailAndPassword(email, password).catch(() => {
-          SetErrorMessage('帳號或密碼錯誤！');
-          setIsSigningIn(false);
-        });
-        // doSendEmailVerification()
+
+    SetErrorMessage('');
+
+    if(!isRegistering) {
+      setIsRegistering(true);
+      await doCreateUserWithEmailAndPassword(email, password).catch((error) => {
+        console.log(error.code);
+        if(error.code === "auth/email-already-in-use") SetErrorMessage('帳號已使用！');
+        if(error.code === "auth/invalid-email" ) SetErrorMessage('無效的帳號！');
+        if(error.code === "auth/weak-password" ) SetErrorMessage('密碼需至少6個字元！');
+        setIsSigningIn(false);
+      });
+      return;
     }
   }
 
@@ -35,21 +43,21 @@ function Login() {
 
     if (!isSigningIn) {
         setIsSigningIn(true);
-        doSignInWithGoogle().catch(error => {
+        doSignInWithGoogle().catch(err => {
             setIsSigningIn(false);
-            console.log(error);
+            console.log(err);
         })
     }
   }
 
+
   return (
     <>
       {user && (<Navigate to={'/home'} replace={true} />)}
-
       <HandleAccountContainer>
         <img src='../../images/postbox.png'></img>
         <HandleAccountCard>
-            <h2>帳號登入</h2>
+            <h2>建立新帳戶</h2>
             <form onSubmit={onSubmit}>
               <div>
                 <label>
@@ -80,20 +88,19 @@ function Login() {
                 />
               </div>
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
-              <StyledButton
+              <StyledButton 
                 type="submit"
-                disabled={isSigningIn} 
-                bg="primary" 
+                bg="success" 
                 width="50%" 
                 borderRadius="5px"
                 mx="auto"
                 my="2em"
                 p="0.8em"
               >
-                登入
+                註冊
               </StyledButton>
             </form>
-            <p>尚未註冊？<Link to={'/register'}>註冊</Link></p>
+            <p>已經有帳戶？<Link to={'/login'}>登入</Link></p>
             <CaptionTextBox>
               <hr/>
               <p>或是使用其他方式</p>
@@ -105,7 +112,7 @@ function Login() {
         </HandleAccountCard>
       </HandleAccountContainer>
     </>
-  );
+  )
 }
 
-export default Login;
+export default Register;

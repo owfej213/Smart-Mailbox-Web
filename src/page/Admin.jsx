@@ -1,5 +1,4 @@
-import Container from '../components/Container';
-import { Title } from '../components/CommonStyles';
+import { Title, Container } from '../components/CommonStyles';
 
 function Admin() {
 

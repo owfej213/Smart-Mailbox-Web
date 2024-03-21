@@ -8,6 +8,7 @@ const GlobalStyles = createGlobalStyle`
 
     * {
         font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
+        box-sizing: border-box;
     }
 
     img {

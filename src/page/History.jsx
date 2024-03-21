@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import Container from '../components/Container';
-import { Title } from '../components/CommonStyles';
+import { Title, Container } from '../components/CommonStyles';
 //Chat-GPT寫的，回傳現在年月日
 const Today = () => {
   var currentDate = new Date();
