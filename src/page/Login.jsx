@@ -8,7 +8,7 @@ import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, S
 
 function Login() {
   const [ user ] = useAuthState(auth);
-  const [ isSigningIn , setIsSigningIn ] = useState(false);
+  const [ isSigningIn, setIsSigningIn ] = useState(false);
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ errorMessage, SetErrorMessage ] = useState('');
@@ -82,7 +82,7 @@ function Login() {
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
               <StyledButton
                 type="submit"
-                disabled={isSigningIn} 
+                // isDisabled={isSigningIn} 
                 bg="primary" 
                 width="50%" 
                 borderRadius="5px"

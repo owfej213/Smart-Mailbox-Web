@@ -24,11 +24,10 @@ function Register(){
     if(!isRegistering) {
       setIsRegistering(true);
       await doCreateUserWithEmailAndPassword(email, password).catch((error) => {
-        console.log(error.code);
         if(error.code === "auth/email-already-in-use") SetErrorMessage('帳號已使用！');
         if(error.code === "auth/invalid-email" ) SetErrorMessage('無效的帳號！');
         if(error.code === "auth/weak-password" ) SetErrorMessage('密碼需至少6個字元！');
-        setIsSigningIn(false);
+        setIsRegistering(false);
       });
       return;
     }
@@ -90,6 +89,7 @@ function Register(){
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
               <StyledButton 
                 type="submit"
+                // isDisabled={isRegistering} 
                 bg="success" 
                 width="50%" 
                 borderRadius="5px"
