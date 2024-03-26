@@ -11,6 +11,7 @@ import Statistics from './page/Statistics.jsx';
 import Inside_Box from './page/Inside-Box.jsx';
 import Admin from './page/Admin.jsx';
 import Register from './page/Register.jsx';
+import Storage from './page/Storage.jsx';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                   <Route path="statistics" element={<Statistics />} />
                   <Route path="inside-Box" element={<Inside_Box />} />
                   <Route path="admin" element={<Admin />} />
+                  <Route path="storage" element={<Storage />} />
                 </Route>
               </Route>
               <Route path="/login" element={<Login />} />

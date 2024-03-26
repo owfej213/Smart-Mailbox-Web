@@ -1,7 +1,9 @@
 import { Link, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { UserMenu, Notify } from './PopupMenu';
-
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase/firebase';
+import { Navigate } from 'react-router-dom';
 const NavBackground = styled.div`
     background-color: rgb(82, 113, 255);
 `
@@ -49,47 +51,51 @@ const Icon = styled.div`
     align-items: center;
 `
 function Header() {
-
-  return (
-    <>
-        <NavBackground>
-            <NavBody>
-                <Nav>
-                    <ul>
-                        <li>
-                            <NavTitle to="/home">智慧郵箱</NavTitle>
-                        </li>
-                        <li>
-                            <Link to="/home/history">歷史紀錄</Link>
-                        </li>
-                        <li>
-                            <Link to="/home/statistics">圖表統計</Link>
-                        </li>
-                        <li>
-                            <Link to="/home/inside-box">郵箱內部</Link>
-                        </li>
-                        <li>
-                            <Link to="/home/admin">管理介面</Link>
-                        </li>
-                    </ul>
-                </Nav>
-                <Icon>
-                    <Notify
-                        src="images/bell.png"
-                        maxWidth="32px" 
-                        maxHeight="32px"
-                    />
-                    <UserMenu
-                        src="images/account.png"
-                        maxWidth="40px" 
-                        maxHeight="40px"
-                    />
-                </Icon>
-            </NavBody>
-        </NavBackground>
-        <Outlet />
-    </>
-  )
+    const [ user ] = useAuthState(auth);
+    return (
+        <>
+            {!user && (<Navigate to={'/login'} replace={true} />)}
+            <NavBackground>
+                <NavBody>
+                    <Nav>
+                        <ul>
+                            <li>
+                                <NavTitle to="/home">智慧郵箱</NavTitle>
+                            </li>
+                            <li>
+                                <Link to="/home/history">歷史紀錄</Link>
+                            </li>
+                            <li>
+                                <Link to="/home/statistics">圖表統計</Link>
+                            </li>
+                            <li>
+                                <Link to="/home/inside-box">郵箱內部</Link>
+                            </li>
+                            <li>
+                                <Link to="/home/admin">管理介面</Link>
+                            </li>
+                            <li>
+                                <Link to="/home/storage">Storage測試</Link>
+                            </li>
+                        </ul>
+                    </Nav>
+                    <Icon>
+                        <Notify
+                            src="images/bell.png"
+                            maxWidth="32px" 
+                            maxHeight="32px"
+                        />
+                        <UserMenu
+                            src="images/account.png"
+                            maxWidth="40px" 
+                            maxHeight="40px"
+                        />
+                    </Icon>
+                </NavBody>
+            </NavBackground>
+            <Outlet />
+        </>
+    )
 }
 
 export default Header;
