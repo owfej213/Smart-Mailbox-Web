@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { GoogleButton } from '../components/Common';
+import { GoogleButton } from '../components/GoogleButton';
 import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, StyledButton, CaptionTextBox } from '../components/CommonStyles';
 import { auth } from '../firebase/firebase';
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth';

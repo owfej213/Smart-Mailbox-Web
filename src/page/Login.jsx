@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebase';
 import { Navigate, Link } from 'react-router-dom';
-import { GoogleButton } from '../components/Common';
+import { GoogleButton } from '../components/GoogleButton';
 import { doSignInWithGoogle, doSignInWithEmailAndPassword } from '../firebase/auth';
 import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, StyledButton, CaptionTextBox } from '../components/CommonStyles';
 
@@ -82,7 +82,7 @@ function Login() {
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
               <StyledButton
                 type="submit"
-                // isDisabled={isSigningIn} 
+                isDisabled={isSigningIn} 
                 bg="primary" 
                 width="50%" 
                 borderRadius="5px"

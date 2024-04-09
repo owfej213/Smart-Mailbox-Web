@@ -1,13 +1,11 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { auth, db } from '../firebase/firebase';
 import { collection, query, orderBy, limit, addDoc, serverTimestamp } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { Title, Container } from '../components/CommonStyles';
-
+import { Title, Container, Box } from '../components/CommonStyles';
+import { useAuthState } from 'react-firebase-hooks/auth';
 const Chatroom = () => {
   const [ formValue, setFormValue ] = useState('');
   //提取集合
@@ -54,18 +52,67 @@ const ChatMessage = ( props ) => {
 
 function Home() {
   const [ user ] = useAuthState(auth);
+
   return (
     <>
-      {!user && (<Navigate to={'/Login'} replace={true} />)}
       <Container>
         <Title>主頁</Title>
-        <h2>聊天室</h2>
-        <Chatroom />
+        <Box
+          fontWeight="bold"
+        >
+          <Box
+            bg="box"
+            width="100%"
+            maxWidth="250px"
+            mx="10px"
+            py="10px"
+            borderRadius="5px"
+            flexDirection="column"
+          >
+            <Box
+              mx= "auto"
+              mb="10px"
+              fontSize= {[1, 2]}
+              textAlign= "center"
+            >
+              登入狀態
+            </Box>
+            <Box
+              ml="10px"
+              fontSize={[0, 1]}
+              flexDirection="column"
+            >
+              <Box>
+                名稱：{user.displayName}
+              </Box>
+              <Box>
+                身分：住戶
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            bg="box"
+            width="100%"
+            maxWidth="750px"
+            mx="10px"
+            py="10px"
+            borderRadius="5px"
+          >
+            <Box
+              mx= "auto"
+              fontSize= {[0, 1, 2]}
+              textAlign= "center"
+            >
+              總覽
+            </Box>
+          </Box>
+        </Box>
+        
+        {/* <Chatroom /> */}
       </Container>
 
     </>
   )
 }
-  
-  export default Home
-  
+
+export default Home;

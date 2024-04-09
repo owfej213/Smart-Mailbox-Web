@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import { color, space, width, height, borderRadius } from "styled-system";
+import { color, space, typography, layout, flexbox, border } from "styled-system";
 import { Button } from "react-aria-components";
 
 export const Box = styled.div`
+  ${color}
   ${space}
-  ${width}
-  ${height}
+  ${layout}
+  ${border}
+  ${typography}
+  ${flexbox}
+  display: flex;
 `
 
 export const Title = styled.h1`
@@ -100,8 +104,8 @@ export const HandleAccountErrorMessage = styled.span`
 export const StyledButton = styled(Button)`
     ${color}
     ${space}
-    ${width}
-    ${borderRadius}
+    ${layout}
+    ${border}
     
     border: 0;
     color: black;
@@ -127,4 +131,3 @@ hr {
   flex:1 1;
 }
 `;
-
