@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { UserMenu, Notify } from './PopupMenu';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebase';

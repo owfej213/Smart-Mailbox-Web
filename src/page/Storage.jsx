@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 import { v4 } from "uuid";
-import { Container } from '../components/CommonStyles';
+import { Wrapper } from '../components/CommonStyles';
 
 function App() {
   const [imageUpload, setImageUpload] = useState(null);
@@ -31,7 +31,7 @@ function App() {
 
   return (
     <>
-        <Container>
+        <Wrapper>
         <input
             type="file"
             onChange={(event) => {
@@ -42,7 +42,7 @@ function App() {
         {imageUrls.map((url, index) => {
             return <img key={index} src={url} />;
         })}
-        </Container>
+        </Wrapper>
     </>
   );
 }

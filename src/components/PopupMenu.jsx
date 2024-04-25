@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Menu, MenuItem, MenuTrigger, Popover} from 'react-aria-components';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { maxWidth, maxHeight, space } from 'styled-system';
 import { StyledButton } from './CommonStyles';
 import { doSignOut } from '../firebase/auth';
@@ -12,6 +12,9 @@ export function UserMenu({ src, ...props }) {
     const handleMenuItemClick = (key) => {
         if(key === "logout"){
             doSignOut().then(() => navigate('/Login'));
+        }
+        if(key === "setting"){
+            navigate('/home/setting');
         }
     }
 

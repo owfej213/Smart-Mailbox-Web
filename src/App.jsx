@@ -1,4 +1,4 @@
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@emotion/react';
 import GlobalStyles from './styles/GlobalStyles.jsx';
 import theme from './styles/Theme.jsx';
 import Header from './components/Header';
@@ -12,7 +12,8 @@ import Inside_Box from './page/Inside-Box.jsx';
 import Admin from './page/Admin.jsx';
 import Register from './page/Register.jsx';
 import Storage from './page/Storage.jsx';
-
+import Detail from './page/Detail.jsx';
+import Setting from './page/Setting.jsx';
 function App() {
 
   return (
@@ -26,11 +27,15 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/home">
                   <Route index element={<Home />} />
-                  <Route path="history" element={<History />} />
+                  <Route path="history">
+                    <Route index element={<History />} />
+                    <Route path=":id" element={<Detail />} />
+                  </Route>
                   <Route path="statistics" element={<Statistics />} />
                   <Route path="inside-Box" element={<Inside_Box />} />
                   <Route path="admin" element={<Admin />} />
                   <Route path="storage" element={<Storage />} />
+                  <Route path="setting" element={<Setting />} />
                 </Route>
               </Route>
               <Route path="/login" element={<Login />} />

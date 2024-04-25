@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { color, space, typography, layout, flexbox, border } from "styled-system";
+import styled from "@emotion/styled";
+import { color, space, typography, layout, flexbox, border, variant } from "styled-system";
 import { Button } from "react-aria-components";
 
 export const Box = styled.div`
@@ -12,21 +12,45 @@ export const Box = styled.div`
   display: flex;
 `
 
-export const Title = styled.h1`
-    margin: 0.5em 0;
-    color: white;
-    text-align: center;
-    font-size: 3em;
+export const TextBox = styled.div`
+  ${color}
+  ${space}
+  ${layout}
+  ${typography}
+  ${variant}
 `;
 
-export const Container = styled.div`
-    width: 1000px;
-    max-width: 100%;
+export const SpanBox = styled.span`
+  ${color}
+  ${space}
+  ${layout}
+  ${typography}
+`;
+
+Box.propTypes = {
+  ...color.propTypes,
+  ...space.propTypes,
+  ...layout.propTypes,
+  ...border.propTypes,
+  ...typography.propTypes,
+  ...flexbox.propTypes,
+}
+
+export const Title = styled.h1`
+  ${typography}
+  margin: 0.5em 0;
+  color: white;
+  text-align: center;
+`;
+
+export const Wrapper = styled.div`
+    width: 100%;
+    max-width: 1000px;
     padding-top: 20px;
     margin: 0 auto;
 `;
 
-export const HandleAccountContainer = styled(Container)`
+export const HandleAccountContainer = styled(Wrapper)`
   margin-top: 100px;
   display: flex;
   align-items: center;

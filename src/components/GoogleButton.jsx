@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { space, width } from "styled-system";
 const GoogleIcon = () => {
     return (

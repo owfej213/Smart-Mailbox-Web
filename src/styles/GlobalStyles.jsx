@@ -1,19 +1,27 @@
-import { createGlobalStyle } from "styled-components";
+import { Global, css } from '@emotion/react'
 
-const GlobalStyles = createGlobalStyle`
-    body{
-        margin: 0;
-        background-color: rgb(84, 84, 84);
-    }
+function GlobalStyles(){
+    return (
+        <>
+            <Global styles={
+                css`
+                    body{
+                        margin: 0;
+                        background-color: rgb(84, 84, 84);
+                    }
 
-    * {
-        font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
-        box-sizing: border-box;
-    }
+                    * {
+                        font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
+                        box-sizing: border-box;
+                    }
 
-    img {
-        max-width: 100%;
-    }
-`;
+                    img {
+                        max-width: 100%;
+                    }
+                `
+            }/>
+        </>
+    )
+} 
 
 export default GlobalStyles;

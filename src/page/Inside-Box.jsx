@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useState } from "react";
-import styled from "styled-components";
-import { Title, StyledButton, Container } from '../components/CommonStyles';
+import styled from "@emotion/styled";
+import { Title, StyledButton, Wrapper } from '../components/CommonStyles';
 
 const Image = styled.div`
   background-color: white;
@@ -79,8 +79,8 @@ function InsideBox() {
 
   return (
     <>
-      <Container>
-        <Title>郵箱內部</Title>
+      <Wrapper>
+        <Title fontSize={[3, 4, 5, 6]}>郵箱內部</Title>
         <Content>
           <Image key={reloadKey}>
             {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />}
@@ -95,7 +95,7 @@ function InsideBox() {
               更新
             </StyledButton>
         </Content>
-      </Container>
+      </Wrapper>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import styled from "styled-components";
-import { Title, Container } from '../components/CommonStyles';
+import styled from "@emotion/styled";
+import { Title, Wrapper } from '../components/CommonStyles';
 
 ChartJS.register(...registerables);
 
@@ -73,8 +73,8 @@ function Statistics() {
 
   return (
     <>
-      <Container>
-        <Title>圖表統計</Title>
+      <Wrapper>
+        <Title fontSize={[3, 4, 5, 6]}>圖表統計</Title>
         <AllChart>
           <Chart>
             <Subtitle>20XX上半年收件數量</Subtitle>
@@ -85,7 +85,7 @@ function Statistics() {
             <Pie data={PieData} options={""}/>
           </Chart>
         </AllChart>
-      </Container>
+      </Wrapper>
     </>
   );
 }
