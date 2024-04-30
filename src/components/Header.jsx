@@ -74,9 +74,9 @@ function Header() {
                             <li>
                                 <Link to="/home/admin">管理介面</Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/home/storage">Storage測試</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </Nav>
                     <Icon>

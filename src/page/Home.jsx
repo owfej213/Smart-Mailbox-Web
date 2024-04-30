@@ -76,7 +76,7 @@ const List = () => {
               mb="5px"
               alignItems="center"
             >
-              <Detail to={`/home/history/${msg.createAt.seconds}`}>
+              <Detail to={`/home/history/${msg.uuid}`}>
                 <TextBox mx="5px">
                   <SpanBox
                     fontSize={[1]}
@@ -135,7 +135,7 @@ function Home() {
             </SideBarBox>
           </ContentWrapper>
           <ContentWrapper maxWidth="500px">
-            <SideBarBox bg="box">
+            <SideBarBox>
               <SubTitle>
                 通知
               </SubTitle>

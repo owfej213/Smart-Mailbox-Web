@@ -83,7 +83,8 @@ function InsideBox() {
         <Title fontSize={[3, 4, 5, 6]}>郵箱內部</Title>
         <Content>
           <Image key={reloadKey}>
-            {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />}
+          <NoImage />
+            {/* {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />} */}
           </Image>
           <UpdateTime>上次更新時間：{ time }</UpdateTime>
             <StyledButton

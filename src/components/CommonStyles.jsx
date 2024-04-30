@@ -11,6 +11,14 @@ export const Box = styled.div`
   ${flexbox}
   display: flex;
 `
+Box.propTypes = {
+  ...color.propTypes,
+  ...space.propTypes,
+  ...layout.propTypes,
+  ...border.propTypes,
+  ...typography.propTypes,
+  ...flexbox.propTypes,
+}
 
 export const TextBox = styled.div`
   ${color}
@@ -27,14 +35,21 @@ export const SpanBox = styled.span`
   ${typography}
 `;
 
-Box.propTypes = {
-  ...color.propTypes,
-  ...space.propTypes,
-  ...layout.propTypes,
-  ...border.propTypes,
-  ...typography.propTypes,
-  ...flexbox.propTypes,
-}
+export const StyledButton = styled(Button)`
+    ${color}
+    ${space}
+    ${layout}
+    ${border}
+    
+    border: 0;
+    color: black;
+    font-weight: bolder;
+
+    &:hover{
+        cursor: pointer;
+        filter: brightness(0.8);
+    }
+`;
 
 export const Title = styled.h1`
   ${typography}
@@ -123,22 +138,6 @@ export const HandleAccountCard = styled.div`
 export const HandleAccountErrorMessage = styled.span`
     text-align: center;
     color: rgb(241, 94, 108);
-`;
-
-export const StyledButton = styled(Button)`
-    ${color}
-    ${space}
-    ${layout}
-    ${border}
-    
-    border: 0;
-    color: black;
-    font-weight: bolder;
-
-    &:hover{
-        cursor: pointer;
-        filter: brightness(0.8);
-    }
 `;
 
 export const CaptionTextBox = styled.div`

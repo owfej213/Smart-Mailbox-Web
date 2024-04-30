@@ -5,7 +5,7 @@ import { collection, query, orderBy, addDoc, serverTimestamp } from 'firebase/fi
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { v4 as uuidv4 } from 'uuid';
 //Chat-GPT寫的，回傳現在年月日
 const Today = () => {
   var currentDate = new Date();
@@ -59,6 +59,7 @@ const List = () => {
         type: word[1],
         name: word[2],
         createAt: serverTimestamp(),
+        uuid: uuidv4(),
     });
 
     setFormValue('');
@@ -85,7 +86,7 @@ const List = () => {
                 <span>{msg.name}</span>
               </Component>
               <Component flexBasis="15%" color="primary">
-                <Detail to={`/home/history/${msg.createAt.seconds}`}>
+                <Detail to={`/home/history/${msg.uuid}`}>
                   查看
                 </Detail>
               </Component>
