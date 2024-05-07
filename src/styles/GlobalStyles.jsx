@@ -1,13 +1,13 @@
-import { Global, css } from '@emotion/react'
-
+import { Global, css, useTheme } from '@emotion/react'
 function GlobalStyles(){
+    const theme = useTheme()
     return (
         <>
             <Global styles={
                 css`
                     body{
                         margin: 0;
-                        background-color: rgb(84, 84, 84);
+                        background-color: ${theme.colors['primary-background']};
                     }
 
                     * {

@@ -4,16 +4,19 @@ import theme from './styles/Theme.jsx';
 import Header from './components/Header';
 import { AuthProvider } from './components/Context/AuthContext.jsx';
 import { Routes, Route, HashRouter } from 'react-router-dom';
-import Login from './page/Login.jsx';
+import Login from './page/Auth/Login.jsx';
 import Home from './page/Home.jsx';
-import History from './page/History.jsx';
+import History from './page/User/History.jsx';
 import Statistics from './page/Statistics.jsx';
-import Inside_Box from './page/Inside-Box.jsx';
+import Inside_Box from './page/User/Inside-Box.jsx';
 import Admin from './page/Admin.jsx';
-import Register from './page/Register.jsx';
+import Register from './page/Auth/Register.jsx';
 import Storage from './page/Storage.jsx';
-import Detail from './page/Detail.jsx';
+import Detail from './page/User/Detail.jsx';
 import Setting from './page/Setting.jsx';
+import UserOptions from './page/Auth/UserOptions.jsx';
+import UserTypes from './page/Auth/UserTypes.jsx';
+
 function App() {
 
   return (
@@ -25,7 +28,7 @@ function App() {
             <Routes>
               <Route element={<Header />} >
                 <Route path="/" element={<Home />} />
-                <Route path="/home">
+                <Route path="home">
                   <Route index element={<Home />} />
                   <Route path="history">
                     <Route index element={<History />} />
@@ -39,7 +42,11 @@ function App() {
                 </Route>
               </Route>
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/register" >
+                <Route index element={<Register />} />
+                <Route path="user-options" element={<UserOptions />} />
+                <Route path="user-types" element={<UserTypes />} />
+              </Route>
             </Routes>
         </ThemeProvider>
       </AuthProvider>

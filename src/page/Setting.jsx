@@ -1,9 +1,8 @@
-import { Title, Wrapper } from '../components/CommonStyles';
+import Wrapper from '../components/layout/Wrapper';
 function Setting() {
     return (
         <>
-            <Wrapper>
-            <Title fontSize={[3, 4, 5, 6]}>個人設定</Title>
+            <Wrapper title="個人設定">
             </Wrapper>
         </>
     );

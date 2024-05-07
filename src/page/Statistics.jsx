@@ -1,34 +1,39 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import styled from "@emotion/styled";
-import { Title, Wrapper } from '../components/CommonStyles';
+import Wrapper from "../components/layout/Wrapper";
+import Box from "../components/ui/Box";
+import Title from "../components/ui/Title";
+import PropTypes from 'prop-types';
 
 ChartJS.register(...registerables);
 
-const AllChart = styled.div`
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
+Chart.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.any
+}
 
-const Chart = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px;
-  padding: 20px;
-  background-color: rgb(217, 217, 217);
-  border-radius: 20px;
-  width: 75%;
-`
-
-const Subtitle = styled.h2`
-  text-align: center;
-  text-decoration: solid;
-  font-size: 2em;
-`
+function Chart({ title, children}){
+  return (
+    <Box
+      mb={4}
+      p={[2, 3, 4]}
+      width={"100%"}
+      maxWidth={"1000px"}
+      flexDirection={"column"}
+      bg={"secondary-background"}
+      borderRadius={"20px"}
+    >
+      <Title
+        my={2}
+        fontSize={[2, 3, 4]}
+        textAlign={"center"}
+      >
+        {title}
+      </Title>
+      {children}
+    </Box>
+  )
+}
 
 function Statistics() {
 
@@ -73,18 +78,17 @@ function Statistics() {
 
   return (
     <>
-      <Wrapper>
-        <Title fontSize={[3, 4, 5, 6]}>圖表統計</Title>
-        <AllChart>
-          <Chart>
-            <Subtitle>20XX上半年收件數量</Subtitle>
+      <Wrapper title="圖表統計">
+        <Box
+          flexDirection={"column"}
+        >
+          <Chart title="2023上半年收件數量">
             <Bar data={BarData} options={BarOptions}/>
           </Chart>
-          <Chart>
-            <Subtitle>20XX上半年收件類型</Subtitle>
+          <Chart title="2023上半年收件數量">
             <Pie data={PieData} options={""}/>
           </Chart>
-        </AllChart>
+        </Box>
       </Wrapper>
     </>
   );

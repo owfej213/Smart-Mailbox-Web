@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase/firebase';
+import { auth } from '../../firebase/firebase';
 import { Navigate, Link } from 'react-router-dom';
-import { GoogleButton } from '../components/GoogleButton';
-import { doSignInWithGoogle, doSignInWithEmailAndPassword } from '../firebase/auth';
-import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, StyledButton, CaptionTextBox } from '../components/CommonStyles';
+import { GoogleButton } from '../../components/ui/GoogleButton';
+import { doSignInWithGoogle, doSignInWithEmailAndPassword } from '../../firebase/auth';
+import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, CaptionTextBox } from '../../components/CommonStyles';
+import Title from '../../components/ui/Title';
+import Logo from '../../components/layout/Logo';
+import Button from '../../components/ui/Button';
 
 function Login() {
   const [ user ] = useAuthState(auth);
@@ -22,7 +25,6 @@ function Login() {
           SetErrorMessage('帳號或密碼錯誤！');
           setIsSigningIn(false);
         });
-        // doSendEmailVerification()
     }
   }
 
@@ -45,9 +47,16 @@ function Login() {
   return (
     <>
       {user && (<Navigate to={'/home'} replace={true} />)}
-
+      <Title
+        my={4}
+        fontSize={[4, 5, 6]}
+        color={"White"}
+        textAlign={"center"}
+      >
+        智慧郵箱網頁平台
+      </Title>
       <HandleAccountContainer>
-        <img src='../../images/postbox.png'></img>
+        <Logo />
         <HandleAccountCard>
             <h2>帳號登入</h2>
             <form onSubmit={onSubmit}>
@@ -80,7 +89,7 @@ function Login() {
                 />
               </div>
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
-              <StyledButton
+              <Button
                 type="submit"
                 isDisabled={isSigningIn} 
                 bg="primary" 
@@ -89,9 +98,10 @@ function Login() {
                 mx="auto"
                 my="2em"
                 p="0.8em"
+                variant="primary"
               >
                 登入
-              </StyledButton>
+              </Button>
             </form>
             <p>尚未註冊？<Link to={'/register'}>註冊</Link></p>
             <CaptionTextBox>

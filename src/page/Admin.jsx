@@ -1,11 +1,10 @@
-import { Title, Wrapper } from '../components/CommonStyles';
+import Wrapper from '../components/layout/Wrapper';
 
 function Admin() {
 
   return (
     <>
-      <Wrapper>
-        <Title fontSize={[3, 4, 5, 6]}>管理介面</Title>
+      <Wrapper title="管理介面">
       </Wrapper>
     </>
   );

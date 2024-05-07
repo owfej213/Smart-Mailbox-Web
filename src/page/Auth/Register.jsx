@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { GoogleButton } from '../components/GoogleButton';
-import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, StyledButton, CaptionTextBox } from '../components/CommonStyles';
-import { auth } from '../firebase/firebase';
-import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth';
+import { GoogleButton } from '../../components/ui/GoogleButton';
+import { HandleAccountContainer, HandleAccountCard, HandleAccountErrorMessage, CaptionTextBox } from '../../components/CommonStyles';
+import { auth } from '../../firebase/firebase';
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../../firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
-
+import Title from '../../components/ui/Title';
+import Logo from '../../components/layout/Logo';
+import Button from '../../components/ui/Button';
 
 function Register(){
   const [ user ] = useAuthState(auth);
@@ -21,14 +22,22 @@ function Register(){
 
     SetErrorMessage('');
 
-    if(!isRegistering) {
+    if(!isRegistering) {//處理註冊事件
       setIsRegistering(true);
-      await doCreateUserWithEmailAndPassword(email, password).catch((error) => {
+
+      //await fetchSignInMethodsForEmail(auth, email).then((res) => console.log(res))
+      //TODO：檢查用戶是否使用其他方式登入，上面方法有email enumeration protection問題
+      //https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection
+
+      try {
+
+        await doCreateUserWithEmailAndPassword(email, password);
+        
+      } catch(error) {
         if(error.code === "auth/email-already-in-use") SetErrorMessage('帳號已使用！');
         if(error.code === "auth/invalid-email" ) SetErrorMessage('無效的帳號！');
         if(error.code === "auth/weak-password" ) SetErrorMessage('密碼需至少6個字元！');
-        setIsRegistering(false);
-      });
+      }
       return;
     }
   }
@@ -49,23 +58,30 @@ function Register(){
     }
   }
 
-
   return (
     <>
       {user && (<Navigate to={'/home'} replace={true} />)}
+      <Title
+        my={4}
+        fontSize={[4, 5, 6]}
+        color={"White"}
+        textAlign={"center"}
+      >
+        智慧郵箱網頁平台
+      </Title>
       <HandleAccountContainer>
-        <img src='../../images/postbox.png'></img>
+        <Logo />
         <HandleAccountCard>
             <h2>建立新帳戶</h2>
             <form onSubmit={onSubmit}>
               <div>
                 <label>
-                  電子信箱或使用者名稱
+                  電子信箱
                 </label>
                 <input
                   type="email"
                   autoComplete="email"
-                  placeholder="電子信箱或使用者名稱"
+                  placeholder="電子信箱"
                   required
                   value={email}
                   onClick={ handleErrorMessage }
@@ -87,18 +103,19 @@ function Register(){
                 />
               </div>
               {errorMessage && (<HandleAccountErrorMessage>{errorMessage}</HandleAccountErrorMessage>)}
-              <StyledButton 
+              <Button 
                 type="submit"
-                // isDisabled={isRegistering} 
+                isDisabled={isRegistering} 
                 bg="success" 
                 width="50%" 
                 borderRadius="5px"
                 mx="auto"
                 my="2em"
                 p="0.8em"
+                variant="primary"
               >
                 註冊
-              </StyledButton>
+              </Button>
             </form>
             <p>已經有帳戶？<Link to={'/login'}>登入</Link></p>
             <CaptionTextBox>

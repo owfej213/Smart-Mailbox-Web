@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { Menu, MenuItem, MenuTrigger, Popover} from 'react-aria-components';
 import styled from '@emotion/styled';
-import { maxWidth, maxHeight, space } from 'styled-system';
+import { space } from 'styled-system';
 import { StyledButton } from './CommonStyles';
 import { doSignOut } from '../firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import Icon from './ui/Icon';
 
-export function UserMenu({ src, ...props }) {
+export function UserMenu() {
     const navigate = useNavigate();
 
     const handleMenuItemClick = (key) => {
@@ -25,7 +26,7 @@ export function UserMenu({ src, ...props }) {
                 bg="transparent"
                 p="0.8em"
             >
-                <UserMenuIcon src={src} {...props}></UserMenuIcon>
+                <Icon name="CircleUserRound" color="white" size={42}/>
             </StyledButton>
             <Popover placement='bottom right'>
                 <StyledMenu onAction={handleMenuItemClick}>
@@ -37,7 +38,7 @@ export function UserMenu({ src, ...props }) {
     )
 }
 
-export function Notify({ src, ...props }) {
+export function Notify() {
 
     return (
         <MenuTrigger>
@@ -46,7 +47,7 @@ export function Notify({ src, ...props }) {
                 bg="transparent"
                 p="0.8em"
             >
-                <UserMenuIcon src={src} {...props}></UserMenuIcon>
+                <Icon name="Bell" color="white" size={42}/>
             </StyledButton>
             <Popover placement='bottom right'>
                 <StyledMenu>
@@ -70,6 +71,7 @@ const StyledMenu = styled(Menu)`
         outline: none;
     }
 `
+
 const StyledMenuItem = styled(MenuItem)`
     ${space}
     margin: 2px;
@@ -87,10 +89,4 @@ const StyledMenuItem = styled(MenuItem)`
     &[data-focused] {
         background: rgb(160, 160, 160);
     }
-`
-const UserMenuIcon = styled.img`
-    ${maxWidth}
-    ${maxHeight}
-    width: auto;
-    height: auto;
 `

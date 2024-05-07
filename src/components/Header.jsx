@@ -2,18 +2,14 @@ import { Link, Outlet } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { UserMenu, Notify } from './PopupMenu';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase/firebase';
+import { auth, db } from '../firebase/firebase';
 import { Navigate } from 'react-router-dom';
-const NavBackground = styled.div`
-    background-color: rgb(82, 113, 255);
-`
+import Box from './ui/Box';
+import { doc, getDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
-const NavBody = styled.div`
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1000px;
+const NavBackground = styled(Box)`
+    background: linear-gradient(180deg, rgb(91, 110, 255) 0%, rgb(100, 118, 255) 100%);
 `
 
 const Nav = styled.nav`
@@ -46,17 +42,43 @@ const NavTitle = styled(Link)`
     margin-right: 10px;
 `
 
-const Icon = styled.div`
-    display: flex;
-    align-items: center;
-`
 function Header() {
     const [ user ] = useAuthState(auth);
+    const [ navigate, setNavigate ] = useState(null);
+    const [ userData, setUserData ] = useState(null);
+    
+    useEffect(() => {
+        const fetchUserData = async() => {
+            if(user !== null) {
+                const userDoc = doc(db, `users/${user.uid}`);
+                //取得用戶資料
+                try {
+                    const result = await getDoc(userDoc);
+                    
+                    setUserData(result.data());
+                    
+                    if(userData === undefined) setNavigate(<Navigate to={'/register/user-types'} replace={true} />);
+
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                setNavigate(<Navigate to={'/login'} replace={true} />);
+            }
+        }
+        fetchUserData();
+    }, [])
+
     return (
         <>
-            {!user && (<Navigate to={'/login'} replace={true} />)}
+            {navigate}
             <NavBackground>
-                <NavBody>
+                <Box
+                    mx={"auto"}
+                    justifyContent={"space-between"}
+                    width={"100%"}
+                    maxWidth={"1000px"}
+                >
                     <Nav>
                         <ul>
                             <li>
@@ -79,19 +101,11 @@ function Header() {
                             </li> */}
                         </ul>
                     </Nav>
-                    <Icon>
-                        <Notify
-                            src="images/bell.png"
-                            maxWidth="32px" 
-                            maxHeight="32px"
-                        />
-                        <UserMenu
-                            src="images/account.png"
-                            maxWidth="40px" 
-                            maxHeight="40px"
-                        />
-                    </Icon>
-                </NavBody>
+                    <Box>
+                        <Notify />
+                        <UserMenu />
+                    </Box>
+                </Box>
             </NavBackground>
             <Outlet />
         </>
