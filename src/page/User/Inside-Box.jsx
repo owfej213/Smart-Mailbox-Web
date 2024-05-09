@@ -1,13 +1,7 @@
 import { useState } from "react";
-import styled from "@emotion/styled";
-import { StyledButton } from '../../components/CommonStyles';
-import Wrapper from "../../components/layout/Wrapper";
-import Box from "../../components/ui/Box";
-
-const Icon = styled.img`
-  width: 100px;
-  height: 100px;
-`
+import MainTitle from "../../components/ui/MainTitle";
+import Wrapper from "../../components/ui/Wrapper";
+import { Box, Button, Flex, Image, VStack } from "@chakra-ui/react";
 
 const Now = () => {
   var currentDate = new Date();
@@ -17,20 +11,18 @@ const Now = () => {
   var hour = currentDate.getHours();
   var Minute = currentDate.getMinutes();
 
-  month = month < 10 ? '0' + month : month;
-  day = day < 10 ? '0' + day : day;
-  hour = hour < 10 ? '0' + hour : hour;
-  Minute = Minute < 10 ? '0' + Minute : Minute;
+  month = month < 10 ? "0" + month : month;
+  day = day < 10 ? "0" + day : day;
+  hour = hour < 10 ? "0" + hour : hour;
+  Minute = Minute < 10 ? "0" + Minute : Minute;
 
   var dateString = `${year}年${month}月${day}日${hour}時${Minute}分`;
   return dateString;
-}
+};
 
 const NoImage = () => {
-  return (
-    <Icon src="../../images/mail.png" />
-  )
-}
+  return <Image w="100px" h="100px" src="../../images/mail.png" />;
+};
 
 // const RandomImage = ({ seed }) => {
 
@@ -43,8 +35,8 @@ const NoImage = () => {
 
 function InsideBox() {
   // eslint-disable-next-line no-unused-vars
-  const [ imageExists, setImgaeExists ] = useState(true);
-  const [ reloadKey, SetReloadKey ] = useState(0);
+  const [imageExists, setImgaeExists] = useState(true);
+  const [reloadKey, SetReloadKey] = useState(0);
 
   const time = Now();
 
@@ -54,41 +46,35 @@ function InsideBox() {
 
   return (
     <>
-      <Wrapper title="郵箱內部">
-        <Box
-          flexDirection={"column"}
-          alignItems={"center"}
-        >
-          <Box
+      <MainTitle>郵箱內部</MainTitle>
+      <Wrapper>
+        <VStack>
+          <Flex
             key={reloadKey}
-            bg={"secondary-background"}
-            // margin: 0 auto;
-            width={"900px"}
-            height={"600px"}
-            alignItems={"center"}
-            justifyContent={"center"}
+            bg="gray.300"
+            w="900px"
+            h="600px"
+            align="center"
+            justify="center"
           >
-          <NoImage />
+            <NoImage />
             {/* {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />} */}
+          </Flex>
+          <Box my="4" color="white">
+            上次更新時間：{time}
           </Box>
-          <Box
-            my={3}
-            color={"primary-text"}
-          >
-            上次更新時間：{ time }
-          </Box>
-          <StyledButton
-            onClick={ handleReload } 
-            width={"150px"}
-            borderRadius={"20px"}
-            p={"10px"}
+          <Button
+            onClick={handleReload}
+            p="4"
+            width="150px"
+            borderRadius="20px"
           >
             更新
-          </StyledButton>
-        </Box>
+          </Button>
+        </VStack>
       </Wrapper>
     </>
-  )
+  );
 }
 
 export default InsideBox;

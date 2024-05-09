@@ -1,143 +1,120 @@
-import Box from "../../components/ui/Box";
-import PropTypes from 'prop-types';
-import Title from "../../components/ui/Title";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/Button";
-import { auth, db } from "../../firebase/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { db } from "../../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import MainTitle from "../../components/ui/MainTitle";
+import AuthWrapper from "../../components/ui/AuthWrapper";
+import {
+  Button,
+  Card,
+  CardBody,
+  Center,
+  FormControl,
+  FormLabel,
+  Input,
+  VStack,
+} from "@chakra-ui/react";
+import { useAuth } from "../../components/Context/AuthContext";
+import { useUserData } from "../../components/Context/UserDataContext";
 
-function InputBox({ label, children }){
-    return (
-        <>
-            <Box
-                as="label"
-                mb={2}
-                fontSize={2}
-                fontWeight={"bold"}
-                color={"primary-text"}
-                alignItems={"center"}
-            >
-                {label}：
-            </Box>
-            {children}
-        </>
-    )
-}
+function UserOptions() {
+  const { currentUser } = useAuth();
+  const { isUserDataExist } = useUserData();
+  const [loading, setLoading] = useState(false);
+  const [userNickName, setUserNickName] = useState("");
+  const [userRealName, setUserRealName] = useState("");
+  const [address, setAddress] = useState("");
+  const [mailBoxID, setMailID] = useState("");
 
-InputBox.propTypes = {
-    children: PropTypes.any,
-    label: PropTypes.string
-}
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-function UserOptions(){
-    const [ user ] = useAuthState(auth);
-    const [ formSubmitted, setFormSubmitted ] = useState(false);
-    const [ userNickName, setUserNickName ] = useState('');
-    const [ userRealName, setUserRealName ] = useState('');
-    const [ address, setAddress ] = useState('');
-    const [ mailID, setMailID ] = useState('');
+    async function UserDataUpdate() {
+      try {
+        if (currentUser) {
+          setLoading(true);
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
+          const userType = sessionStorage.getItem("userType");
+          const userDocRef = doc(db, `users/${currentUser.uid}`);
 
-        const userType = sessionStorage.getItem('userType');
-        const userDoc = doc(db, `users/${user.uid}`);
-        
-        setDoc(userDoc, {
+          await setDoc(userDocRef, {
             userNickName: userNickName,
             userRealName: userRealName,
             userType: userType,
-            email: user.email,
+            email: currentUser.email,
             address: address,
-            mailID: mailID,
-        })
-        setFormSubmitted(true)
+            mailBoxID: mailBoxID,
+          });
+          setLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
+    UserDataUpdate();
+  };
 
-    return (
-        <>
-            {!user && (<Navigate to={'/Login'} replace={true} />)}
-            {formSubmitted && (<Navigate to={'/home'} replace={true} />)}
-            <Box
-                flexDirection={"column"}
-                minHeight={"calc(100vh - 400px)"}
-                justifyContent={"space-between"}
-            >
-                <Title
-                    my={4}
-                    fontSize={[4, 5, 6]}
-                    color={"White"}
-                    textAlign={"center"}
-                >
-                    請輸入基本資料
-                </Title>
-                <Box
-                    borderColor={"secondary-background-light"}
-                    borderWidth={"2px"}
-                    borderStyle={"solid"}
-                    borderRadius={5}
-                    mx={"auto"}
-                    maxWidth={"500px"}
-                    width={"100%"}
-                >
-                    <Box 
-                        as="form"
-                        mx={"auto"}
-                        p={4}
-                        onSubmit={onSubmit}
-                        maxWidth={"350px"}
-                        width={"100%"}
-                        flexDirection={"column"}
-                    >
-                        <InputBox label="暱稱">
-                            <Input
-                                maxlength={20}
-                                onChange={(e) => { setUserNickName(e.target.value) }}
-                            />
-                        </InputBox>
-                        <InputBox label="真實姓名">
-                            <Input
-                                maxlength={20}
-                                onChange={(e) => { setUserRealName(e.target.value) }}
-                                required
-                            />
-                        </InputBox>
-                        <InputBox label="地址">
-                            <Input 
-                                onChange={(e) => { setAddress(e.target.value) }}
-                                required
-                            />
-                        </InputBox>
-                        <InputBox label="郵箱ID">
-                            <Input
-                                onChange={(e) => { setMailID(e.target.value) }}
-                                required
-                            />
-                        </InputBox>
-                        <Button
-                            type="submit"
-                            mx={"auto"}
-                            mt={3}
-                            bg={"primary"}
-                            color={"white"}
-                            fontSize={1}
-                            borderRadius={"8px"}
-                            maxWidth={"80px"}
-                            width={"100%"}
-                            minHeight={"40px"}
-                            variant={"primary"}
-                        >
-                            繼續
-                        </Button>
-                    </Box>
-                </Box>
-            </Box>
-            
-        </>
-    )
+  return (
+    <>
+      {isUserDataExist && <Navigate to={"/home"} replace={true} />}
+      <MainTitle>請輸入基本資料</MainTitle>
+      <AuthWrapper>
+        <Center minHeight="calc(100vh - 250px)">
+          <Card variant="auth">
+            <CardBody>
+              <form onSubmit={onSubmit}>
+                <VStack px="8">
+                  <FormControl>
+                    <FormLabel>暱稱</FormLabel>
+                    <Input
+                      maxLength={20}
+                      onChange={(e) => {
+                        setUserNickName(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>真實姓名</FormLabel>
+                    <Input
+                      maxLength={20}
+                      onChange={(e) => {
+                        setUserRealName(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>地址</FormLabel>
+                    <Input
+                      onChange={(e) => {
+                        setAddress(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>郵箱ID</FormLabel>
+                    <Input
+                      onChange={(e) => {
+                        setMailID(e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <Button
+                    isDisabled={loading}
+                    isLoading={loading}
+                    type="submit"
+                    mt="4"
+                    colorScheme="green"
+                  >
+                    繼續
+                  </Button>
+                </VStack>
+              </form>
+            </CardBody>
+          </Card>
+        </Center>
+      </AuthWrapper>
+    </>
+  );
 }
 
 export default UserOptions;

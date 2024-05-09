@@ -52,4 +52,4 @@ const StyledGoogleButton = styled.button`
     }
 `
 
-export { GoogleButton };
+export default GoogleButton;

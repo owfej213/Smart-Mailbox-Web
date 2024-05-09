@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import {ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { storage } from "../firebase/firebase";
-import { v4 } from "uuid";
-import { Wrapper } from '../components/CommonStyles';
+import Wrapper from "../components/ui/Wrapper";
 
 function App() {
   const [imageUpload, setImageUpload] = useState(null);
@@ -11,7 +10,7 @@ function App() {
   const imagesListRef = ref(storage, "images/");
   const uploadFile = () => {
     if (imageUpload == null) return;
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    const imageRef = ref(storage, `images/${imageUpload.name}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImageUrls((prev) => [...prev, url]);
@@ -31,18 +30,18 @@ function App() {
 
   return (
     <>
-        <Wrapper>
+      <Wrapper>
         <input
-            type="file"
-            onChange={(event) => {
+          type="file"
+          onChange={(event) => {
             setImageUpload(event.target.files[0]);
-            }}
+          }}
         />
         <button onClick={uploadFile}> Upload Image</button>
         {imageUrls.map((url, index) => {
-            return <img key={index} src={url} />;
+          return <img key={index} src={url} />;
         })}
-        </Wrapper>
+      </Wrapper>
     </>
   );
 }

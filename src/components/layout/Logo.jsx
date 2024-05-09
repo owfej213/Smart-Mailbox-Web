@@ -1,20 +1,23 @@
+import { Box, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import styled from "@emotion/styled";
 
-const LogoMotion = styled.div`
-    cursor: pointer;
-`
 
 function Logo(){
     return (
-        <LogoMotion>
+        <Box
+            w='3%'
+            h='3%'
+        >
             <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9}}
             >
-            <img src='../../../images/postbox.png' alt="Smart-MailBox" />
+                <Image
+                    src='../../../images/postbox.png'
+                    alt="iMailBox"
+                />
             </motion.div>
-        </LogoMotion>
+        </Box>
     )
 }
 

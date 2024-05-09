@@ -1,44 +1,42 @@
-import styled from '@emotion/styled';
-import Wrapper from '../../components/layout/Wrapper';
-import Box from '../../components/ui/Box';
-import { auth, db } from '../../firebase/firebase';
-import { collection, query, orderBy, addDoc, serverTimestamp, getDoc, doc } from 'firebase/firestore';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import PropTypes from 'prop-types';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { db } from "../../firebase/firebase";
+import { collection, addDoc, serverTimestamp, doc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import MainTitle from "../../components/ui/MainTitle";
+import Wrapper from "../../components/ui/Wrapper";
+import { Button, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { useMailsData } from "../../components/Context/MailsDataContext";
+import { useUserData } from "../../components/Context/UserDataContext";
+
+function TableRow({ children, ...props }) {
+  return (
+    <>
+      <HStack maxW="1000px" w="100%" {...props}>
+        {children}
+      </HStack>
+    </>
+  );
+}
+
+TableRow.propTypes = {
+  children: PropTypes.any,
+};
+
+function TableItem({ children, ...props }) {
+  return (
+    <Flex p="4" width={["50%", "100%"]} {...props}>
+      <Text fontSize="2xl" fontWeight="bold">
+        {children}
+      </Text>
+    </Flex>
+  );
+}
 
 TableItem.propTypes = {
   data: PropTypes.any,
-  children: PropTypes.any
-}
-
-function TableItem({ data, children, ...prop}){
-  return (
-    <Box
-      justifyContent={"center"}
-      fontWeight={"bold"}
-      mx={1}
-      p={2}
-      bg={"secondary-background"}
-      { ...prop }
-    >
-      {data}
-      {children}
-    </Box>
-  )
-}
-
-const Detail = styled(Link)`
-  text-decoration: none;
-  color: ${props => props.theme.colors['primary-text-link']};
-  &:hover{
-    color: ${props => props.theme.colors['primary-text-link-light']};
-  }
-`;
-
+  children: PropTypes.any,
+};
 //Chat-GPT寫的，回傳現在年月日
 const Today = () => {
   var currentDate = new Date();
@@ -46,165 +44,128 @@ const Today = () => {
   var month = currentDate.getMonth() + 1;
   var day = currentDate.getDate();
 
-  month = month < 10 ? '0' + month : month;
-  day = day < 10 ? '0' + day : day;
+  month = month < 10 ? "0" + month : month;
+  day = day < 10 ? "0" + day : day;
 
-  var dateString = year + '年' + month + '月' + day + '日';
+  var dateString = year + "年" + month + "月" + day + "日";
   return dateString;
-}
+};
 
-const List = ({ mails }) => {
-
+function List({ mailsData, ...props }) {
   return (
     <>
-      { mails && mails.map((msg, index) => {
+      {mailsData &&
+        mailsData.map((mail, index) => {
           return (
-            <Box
-              key={ index }
-              mb="5px"
-              fontSize={[0, 1, 2, 3]}
-            >
-              <TableItem
-                maxWidth={"350px"}
-                width={[1/2, 1]}
-                data={msg.date}
-              />
-              <TableItem
-                maxWidth={"200px"}
-                width={[1/2, 1]}
-                data={msg.title}
-              />
-              <TableItem
-                maxWidth={"150px"}
-                width={[1/2, 1]}
-                data={msg.type}
-              />
-              <TableItem
-                maxWidth={"150px"}
-                width={[1/2, 1]}
-                data={msg.name}
-              />
-              <TableItem
-                maxWidth={"150px"}
-                width={[1/2, 1]}
-                color={"primary-text-link"}
-              >
-                <Detail to={`/home/history/${msg.uuid}`}>
-                  查看
-                </Detail>
+            <TableRow key={index} {...props}>
+              <TableItem maxW="300px" justify="center">
+                {mail.date}
               </TableItem>
-            </Box>
-          )
-        })
-      }
+              <TableItem maxW="250px" justify="center">
+                {mail.title}
+              </TableItem>
+              <TableItem maxW="150px" justify="center">
+                {mail.name}
+              </TableItem>
+              <TableItem maxW="150px" justify="center">
+                {mail.level}
+              </TableItem>
+              <TableItem maxW="150px" justify="center">
+                <Link to={`/home/history/${mail.uid}`}>
+                  <Text
+                    fontWeight="bold"
+                    color="teal.600"
+                    _hover={{
+                      color: "teal.400",
+                    }}
+                  >
+                    查看
+                  </Text>
+                </Link>
+              </TableItem>
+            </TableRow>
+          );
+        })}
     </>
-  )
+  );
 }
 
 List.propTypes = {
-  mails: PropTypes.array,
-}
+  mailsData: PropTypes.array,
+};
 
 function History() {
-  const [ user ] = useAuthState(auth);
-  const [ formValue, setFormValue ] = useState('');
-  const [ userData, setUserData ] = useState(null);
-  const [ mailsQuery, setMailQuery ] = useState(null);
-  const [ messageRef, setMessageRef ] = useState(null);
-  //Hook監聽資料
-  const [ mails ] = useCollectionData(mailsQuery, { idField: 'id' });
+  const { userData } = useUserData();
+  const { mailsData } = useMailsData();
+  const { mailBoxID } = userData || {};
+
+  const [formValue, setFormValue] = useState("");
+  const [mailsRef, setMailsRef] = useState(null);
 
   useEffect(() => {
-    if(userData !== null){
-      //提取集合
-      const messageRef = collection(doc(db, `mail/${userData.mailID}`), 'mails');
+    if (mailBoxID !== null) {
+      const result = collection(doc(db, `mailBoxes/${mailBoxID}`), "mails");
 
-      setMessageRef(messageRef);
-
-      //提取資料(集合, 依照createAt(時間)排序)
-      const q = query(messageRef, orderBy('createAt'));
-
-      setMailQuery(q);
+      setMailsRef(result);
     }
-  }, [userData])
+  }, [mailBoxID]);
 
-  useEffect(() => {
-    const fetchUserData = async() => {
-      if(user !== null) {
-        const userDoc = doc(db, `users/${user.uid}`);
-
-        try {
-          const result = await getDoc(userDoc);
-
-          setUserData(result.data());
-
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchUserData();
-  }, [])
-
-  const sendMessage = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    var word = formValue.split(' ');
-
-    //新增資料(集合, {資料格式})
-    await addDoc(messageRef, {
+    var word = formValue.split(" ");
+    try {
+      await addDoc(mailsRef, {
         date: Today(),
         title: word[0],
         type: word[1],
         name: word[2],
         createAt: serverTimestamp(),
-        uuid: uuidv4(),
-    });
+      });
+      setFormValue("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    setFormValue('');
-  }
   return (
     <>
-      <Wrapper title="歷史紀錄">
-
-        <Box
-          mb="10px"
-          fontSize={[1, 2, 3, 4]}
-        >
-          <TableItem
-            maxWidth={"350px"}
-            width={[1/2, 1]}
-            data="日期"
-          />
-          <TableItem
-            maxWidth={"200px"}
-            width={[1/2, 1]}
-            data="郵件主題"
-          />
-          <TableItem
-            maxWidth={"150px"}
-            width={[1/2, 1]}
-            data="類型"
-          />
-          <TableItem
-            maxWidth={"150px"}
-            width={[1/2, 1]}
-            data="收信人"
-           />
-          <TableItem
-            maxWidth={"150px"}
-            width={[1/2, 1]}
-            data="細節"
-          />
-        </Box>
-        <List mails={mails} />
-        <form onSubmit={sendMessage}>
-          <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-          <button type='submit'>發送</button>
-        </form>
+      <MainTitle>歷史紀錄</MainTitle>
+      <Wrapper>
+        <VStack spacing="1" maxW="1000px" w="100%">
+          <TableRow
+            bg="gray.400"
+            borderTopLeftRadius="16"
+            borderTopRightRadius="16"
+          >
+            <TableItem maxW="300px" justify="center">
+              日期
+            </TableItem>
+            <TableItem maxW="250px" justify="center">
+              郵件標題
+            </TableItem>
+            <TableItem maxW="150px" justify="center">
+              收信人
+            </TableItem>
+            <TableItem maxW="150px" justify="center">
+              緊急度
+            </TableItem>
+            <TableItem maxW="150px" justify="center">
+              細節
+            </TableItem>
+          </TableRow>
+          <List bg="gray.300" mailsData={mailsData} />
+          <form onSubmit={onSubmit}>
+            <input
+              value={formValue}
+              onChange={(e) => setFormValue(e.target.value)}
+            />
+            <Button type="submit">發送</Button>
+          </form>
+        </VStack>
       </Wrapper>
     </>
-  )
+  );
 }
 
 export default History;

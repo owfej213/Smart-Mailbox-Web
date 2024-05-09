@@ -1,107 +1,87 @@
 import { motion } from "framer-motion";
 import Icon from "../../components/ui/Icon";
-import Box from "../../components/ui/Box";
-import PropTypes from 'prop-types';
-import Title from "../../components/ui/Title";
-import { Link } from "react-router-dom";
-import styled from "@emotion/styled";
-import Button from "../../components/ui/Button";
+import PropTypes from "prop-types";
+import { Link, Navigate } from "react-router-dom";
+import MainTitle from "../../components/ui/MainTitle";
+import AuthWrapper from "../../components/ui/AuthWrapper";
+import { Button, Center, Flex } from "@chakra-ui/react";
+import { useUserData } from "../../components/Context/UserDataContext";
 
-const CardWrapper = styled(Button)`
-    text-decoration: none;
-    &:hover {
-        cursor: pointer;
-    }
-`
+function Card({ userType, iconName, bg }) {
+  function handleClick() {
+    sessionStorage.setItem("userType", userType);
+  }
 
-function Card({ userType, iconName, bg }){
-    
-    function handleClick(){
-        sessionStorage.setItem('userType', userType);
-        
-    }
-
-    return (
-        <Link to={'/register/user-options'}>
-            <motion.div
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 10, opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-            >
-                <CardWrapper to="/register/user-options" 
-                    onClick={ handleClick } 
-                    bg={"transparent"}
-                    flexDirection={"column"}
-                    border={0}
-                    fontSize={2}
-                >
-                        <Box
-                            bg={bg}
-                            width={"210px"}
-                            height={"180px"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            borderTopLeftRadius={10}
-                            borderTopRightRadius={10}
-                        >
-                            <Icon name={iconName} color="white" size={100}/>
-                        </Box>
-                        <Box
-                            height={"60px"}
-                            bg={"white"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            borderBottomLeftRadius={10}
-                            borderBottomRightRadius={10}
-                            fontWeight={"bold"}
-                            color={"secondary-text"}
-                        >
-                            {userType}
-                        </Box>
-                </CardWrapper>
-            </motion.div>
-        </Link>
-    )
+  return (
+    <Link to={"/register/user-options"}>
+      <motion.div
+        initial={{ x: -10, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: 10, opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Button
+          onClick={handleClick}
+          w="210px"
+          h="240px"
+          p="0"
+          bg="transparent"
+          flexDirection="column"
+          _hover={{
+            bg: "transparent",
+          }}
+        >
+          <Center
+            bg={bg}
+            width="100%"
+            height="100%"
+            borderTopLeftRadius="10"
+            borderTopRightRadius="10"
+          >
+            <Icon name={iconName} color="white" size={100} />
+          </Center>
+          <Center
+            height="60px"
+            w="100%"
+            bg="white"
+            borderBottomLeftRadius="10"
+            borderBottomRightRadius="10"
+            fontSize="xl"
+            fontWeight="bold"
+          >
+            {userType}
+          </Center>
+        </Button>
+      </motion.div>
+    </Link>
+  );
 }
 
 Card.propTypes = {
-    userType: PropTypes.string,
-    iconName: PropTypes.string,
-    bg: PropTypes.string,
-}
+  userType: PropTypes.string,
+  iconName: PropTypes.string,
+  bg: PropTypes.string,
+};
 
-function UserTypes(){
+function UserTypes() {
+  const { isUserDataExist } = useUserData();
 
-    return (
-        <>
-            <Box
-                flexDirection={"column"}
-                minHeight={"calc(100vh - 400px)"}
-                justifyContent={"space-between"}
-            >
-                <Title
-                    my={4}
-                    fontSize={[4, 5, 6]}
-                    color={"White"}
-                    textAlign={"center"}
-                >
-                    請選擇帳號類型
-                </Title>
-                <Box
-                    mx={"auto"}
-                    width={"500px"}
-                    justifyContent={"space-between"}
-                    
-                >
-                    <Card userType="住戶" iconName="UserRound" bg="primary" />
-                    <Card userType="管理員" iconName="FolderKanban" bg="red" />
-                </Box>
-            </Box>
-        </>
-    )
+  return (
+    <>
+      {isUserDataExist && <Navigate to={"/home"} replace={true} />}
+      <MainTitle>請選擇帳號類型</MainTitle>
+      <AuthWrapper>
+        <Center minHeight="calc(100vh - 250px)">
+          <Flex justify="space-between" w="500px">
+            <Card userType="住戶" iconName="UserRound" bg="blue.500" />
+            <Card userType="管理員" iconName="FolderKanban" bg="red.500" />
+          </Flex>
+        </Center>
+      </AuthWrapper>
+    </>
+  );
 }
 
 export default UserTypes;
