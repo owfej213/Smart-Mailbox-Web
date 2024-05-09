@@ -7,6 +7,8 @@ import Container from "../components/ui/Container";
 import SubTitle from "../components/ui/SubTitle";
 import { useUserData } from "../components/Context/UserDataContext";
 import { useMailsData } from "../components/Context/MailsDataContext";
+import { useAuth } from "../components/Context/AuthContext";
+import { useEffect, useState } from "react";
 
 function calculateTimeDifference(start, end) {
   var difference = Math.abs(end - start);
@@ -64,9 +66,18 @@ List.propTypes = {
 };
 
 function Home() {
+  const { isGoogleUser, isEmailUser } = useAuth();
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
   const { userNickName, userType } = userData || {};
+
+  const [userLoginType, setUserLoginType] = useState("");
+
+  useEffect(() => {
+    if (isEmailUser) setUserLoginType("Email");
+    if (isGoogleUser) setUserLoginType("Google");
+  }, []);
+
   return (
     <>
       <MainTitle>主頁</MainTitle>
@@ -77,6 +88,7 @@ function Home() {
             <VStack align="flex-start">
               <Text fontWeight="bold">名稱：{userNickName}</Text>
               <Text fontWeight="bold">身分：{userType}</Text>
+              <Text fontWeight="bold">登入方式：{userLoginType}</Text>
             </VStack>
           </Container>
           <Container>

@@ -127,7 +127,7 @@ function Register() {
                   w="150px"
                   isDisabled={isRegistering || isSigningIn}
                   isLoading={isRegistering || isSigningIn}
-                  colorScheme="blue"
+                  colorScheme="green"
                   variant="solid"
                 >
                   註冊
