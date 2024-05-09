@@ -8,13 +8,15 @@ import { useUserData } from "../Context/UserDataContext";
 function Header() {
   const { userLoggedIn } = useAuth();
   const { isUserDataExist } = useUserData();
-
+  var navigator;
+  if(!userLoggedIn){
+    navigator = <Navigate to={"/Login"} replace={true} />
+  } else if(!isUserDataExist){
+    navigator =<Navigate to={"/register/user-types"} replace={true} />
+  }
   return (
     <>
-      {!userLoggedIn && <Navigate to={"/Login"} replace={true} />}
-      {!isUserDataExist && (
-        <Navigate to={"/register/user-types"} replace={true} />
-      )}
+      {navigator}
       <Flex bgGradient="linear-gradient(180deg, rgb(91, 110, 255) 0%, rgb(100, 118, 255) 100%)">
         <Flex mx="auto" maxW="1000px" w="100%" justify="space-between">
           <HStack

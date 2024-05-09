@@ -32,6 +32,7 @@ export function UserDataProvider({ children }) {
       }
     };
     fetchUserData();
+    setLoading(false);
   }, [currentUser]);
 
   async function initializeUserData(result) {

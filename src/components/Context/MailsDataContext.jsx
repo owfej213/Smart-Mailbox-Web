@@ -15,7 +15,7 @@ export function MailsDataProvider({ children }) {
   const { userData } = useUserData();
   const { mailBoxID } = userData || {};
 
-  const [mailsData, setMailsData] = useState({});
+  const [mailsData, setMailsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ export function MailsDataProvider({ children }) {
       }
     };
     fetchUserData();
+    setLoading(false);
   }, [mailBoxID]);
 
   async function initializeMailsData(result) {

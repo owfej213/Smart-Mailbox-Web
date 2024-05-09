@@ -125,8 +125,8 @@ function Register() {
                   my="8"
                   py="4"
                   w="150px"
-                  isDisabled={isRegistering}
-                  isLoading={isRegistering}
+                  isDisabled={isRegistering || isSigningIn}
+                  isLoading={isRegistering || isSigningIn}
                   colorScheme="blue"
                   variant="solid"
                 >

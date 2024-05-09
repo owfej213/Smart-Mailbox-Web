@@ -67,7 +67,6 @@ function Home() {
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
   const { userNickName, userType } = userData || {};
-
   return (
     <>
       <MainTitle>主頁</MainTitle>
