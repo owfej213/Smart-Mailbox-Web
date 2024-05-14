@@ -41,6 +41,33 @@ const variants = {
       },
     },
   }),
+  test: definePartsStyle({
+    container: {
+      borderColor: "white",
+      borderWidth: "2px",
+      background: "gray.600",
+      maxW: "800px",
+      width: "100%",
+    },
+    header: {
+      color: "white",
+      textAlign: "center",
+      fontSize: "3xl",
+      fontWeight: "bold",
+      pt: "8",
+    },
+    body: {
+      color: "white",
+      label: {
+        fontSize: "lg",
+        fontWeight: "900",
+      },
+      input: {
+        bg: "white",
+        color: "black",
+      },
+    },
+  }),
 };
 
 export const cardTheme = defineMultiStyleConfig({ variants });

@@ -69,7 +69,7 @@ function Home() {
   const { isGoogleUser, isEmailUser } = useAuth();
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
-  const { userNickName, userType } = userData || {};
+  const { userName, userType } = userData || {};
 
   const [userLoginType, setUserLoginType] = useState("");
 
@@ -86,17 +86,17 @@ function Home() {
           <Container>
             <SubTitle>登入狀態</SubTitle>
             <VStack align="flex-start">
-              <Text fontWeight="bold">名稱：{userNickName}</Text>
+              <Text fontWeight="bold">名稱：{userName}</Text>
               <Text fontWeight="bold">身分：{userType}</Text>
               <Text fontWeight="bold">登入方式：{userLoginType}</Text>
             </VStack>
           </Container>
           <Container>
-            <SubTitle>家庭成員</SubTitle>
+            <SubTitle>郵箱使用人</SubTitle>
           </Container>
         </VStack>
         <Container w="500px">
-          <SubTitle>通知</SubTitle>
+          <SubTitle>重要郵件</SubTitle>
           <VStack divider={<StackDivider borderColor="gray.600" />}>
             <List mailsData={mailsData} />
           </VStack>

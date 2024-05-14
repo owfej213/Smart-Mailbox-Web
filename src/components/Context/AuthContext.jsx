@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useLayoutEffect } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
 import PropTypes from "prop-types";
@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
     return unsubscribe;
   }, []);

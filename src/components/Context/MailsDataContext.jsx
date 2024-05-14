@@ -16,6 +16,7 @@ export function MailsDataProvider({ children }) {
   const { mailBoxID } = userData || {};
 
   const [mailsData, setMailsData] = useState([]);
+  const [mailsDataCount, setMailsDataCount] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export function MailsDataProvider({ children }) {
 
         return items;
       });
-
+      setMailsDataCount(mails.length);
       setMailsData(mails);
     }
     setLoading(false);
@@ -58,6 +59,7 @@ export function MailsDataProvider({ children }) {
 
   const value = {
     mailsData,
+    mailsDataCount,
   };
 
   return (

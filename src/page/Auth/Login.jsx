@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   doSignInWithGoogle,
   doSignInWithEmailAndPassword,
 } from "../../firebase/auth";
-import { Navigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "../../components/ui/GoogleButton";
 import MainTitle from "../../components/ui/MainTitle";
 import Logo from "../../components/layout/Logo";
@@ -32,6 +32,12 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, SetErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if(userLoggedIn) navigate("/home");
+  }, [navigate, userLoggedIn]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +69,6 @@ function Login() {
 
   return (
     <>
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
       <MainTitle>智慧郵箱網頁平台</MainTitle>
       <AuthWrapper>
         <Card variant="auth">
@@ -80,7 +85,6 @@ function Login() {
                     autoComplete="email"
                     placeholder="電子信箱或使用者名稱"
                     required
-                    value={email}
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -94,7 +98,6 @@ function Login() {
                     autoComplete="new-password"
                     placeholder="密碼"
                     required
-                    value={password}
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setPassword(e.target.value);

@@ -13,8 +13,16 @@ const theme = extendTheme({
           '"Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif',
         boxSizing: "border-box",
       },
-      img: {
+      "img": {
         maxWidth: "100%",
+      },
+      "@keyframes slide": {
+        "0%": {
+          transform: "scaleX(0)",
+        },
+        "100%": {
+          transform: "scaleX(1)",
+        }
       },
     },
   },

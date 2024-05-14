@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, createContext } from "react";
+import { useContext, useState, createContext, useLayoutEffect } from "react";
 import { db } from "../../firebase/firebase";
 import PropTypes from "prop-types";
 import { useAuth } from "./AuthContext";
@@ -15,8 +15,9 @@ export function UserDataProvider({ children }) {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  const [isUserDataExist, setIsUserDataExist] = useState(false);
-  useEffect(() => {
+  const [isUserDataExist, setIsUserDataExist] = useState(true);
+
+  useLayoutEffect(() => {
     const fetchUserData = async () => {
       try {
         if (currentUser !== null) {

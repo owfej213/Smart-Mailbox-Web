@@ -1,7 +1,7 @@
 import { db } from "../../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import MainTitle from "../../components/ui/MainTitle";
 import AuthWrapper from "../../components/ui/AuthWrapper";
 import {
@@ -21,10 +21,15 @@ function UserOptions() {
   const { currentUser } = useAuth();
   const { isUserDataExist } = useUserData();
   const [loading, setLoading] = useState(false);
-  const [userNickName, setUserNickName] = useState("");
+  const [userName, setUserName] = useState("");
   const [userRealName, setUserRealName] = useState("");
   const [address, setAddress] = useState("");
   const [mailBoxID, setMailID] = useState("");
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if(isUserDataExist) navigate("/home");
+  }, [isUserDataExist, navigate]);
   
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +43,7 @@ function UserOptions() {
           const userDocRef = doc(db, `users/${currentUser.uid}`);
 
           await setDoc(userDocRef, {
-            userNickName: userNickName,
+            userName: userName,
             userRealName: userRealName,
             userType: userType,
             email: currentUser.email,
@@ -69,7 +74,7 @@ function UserOptions() {
                     <Input
                       maxLength={20}
                       onChange={(e) => {
-                        setUserNickName(e.target.value);
+                        setUserName(e.target.value);
                       }}
                     />
                   </FormControl>

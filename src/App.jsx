@@ -17,6 +17,7 @@ import UserTypes from './page/Auth/UserTypes.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import { UserDataProvider } from './components/Context/UserDataContext.jsx';
 import { MailsDataProvider } from './components/Context/MailsDataContext.jsx';
+import Test from './page/Test.jsx';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
                       <Route path="admin" element={<Admin />} />
                       <Route path="storage" element={<Storage />} />
                       <Route path="setting" element={<Setting />} />
+                      <Route path="test" element={<Test />} />
                     </Route>
                   </Route>
                   <Route path="/login" element={<Login />} />

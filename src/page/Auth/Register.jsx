@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   doCreateUserWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../firebase/auth";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 import GoogleButton from "../../components/ui/GoogleButton";
 import MainTitle from "../../components/ui/MainTitle";
 import Logo from "../../components/layout/Logo";
@@ -34,6 +34,12 @@ function Register() {
   const [password, setPassword] = useState("");
   const [errorMessage, SetErrorMessage] = useState("");
 
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if(userLoggedIn) navigate("/home");
+  }, [navigate, userLoggedIn]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,7 +61,7 @@ function Register() {
         if (error.code === "auth/weak-password")
           SetErrorMessage("密碼需至少6個字元！");
       }
-      return;
+      navigate("/register/user-types");
     }
   };
 
@@ -94,7 +100,6 @@ function Register() {
                     autoComplete="email"
                     placeholder="電子信箱"
                     required
-                    value={email}
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -108,7 +113,6 @@ function Register() {
                     autoComplete="new-password"
                     placeholder="密碼"
                     required
-                    value={password}
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setPassword(e.target.value);

@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import Icon from "../../components/ui/Icon";
 import PropTypes from "prop-types";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MainTitle from "../../components/ui/MainTitle";
 import AuthWrapper from "../../components/ui/AuthWrapper";
 import { Button, Center, Flex } from "@chakra-ui/react";
 import { useUserData } from "../../components/Context/UserDataContext";
+import { useLayoutEffect } from "react";
 
 function Card({ userType, iconName, bg }) {
   function handleClick() {
@@ -67,10 +68,14 @@ Card.propTypes = {
 
 function UserTypes() {
   const { isUserDataExist } = useUserData();
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    if(isUserDataExist) navigate("/home");
+  }, [isUserDataExist, navigate]);
 
   return (
     <>
-      {isUserDataExist && <Navigate to={"/home"} replace={true} />}
       <MainTitle>請選擇帳號類型</MainTitle>
       <AuthWrapper>
         <Center minHeight="calc(100vh - 250px)">

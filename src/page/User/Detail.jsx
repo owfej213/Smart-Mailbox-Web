@@ -14,7 +14,17 @@ function Detail() {
   const { mailBoxID } = userData || {};
 
   const [maildata, setMaildata] = useState({});
-  const { date, title, type, name } = maildata || {};
+  const {
+    date,
+    title,
+    type,
+    receiver,
+    sender,
+    senderAddress,
+    senderCompany,
+    urgency,
+    keyContent,
+  } = maildata || {};
 
   useEffect(() => {
     const fetchMailData = async () => {
@@ -46,15 +56,15 @@ function Detail() {
           <span>送達日期：{date}</span>
           <span>信件主題：{title}</span>
           <span>類型：{type}</span>
-          <span>收信人：{name}</span>
+          <span>收信人：{receiver}</span>
         </Container>
         <Container w="500px">
           <SubTitle>進階資訊</SubTitle>
-          <span>寄送人：</span>
-          <span>寄送單位：</span>
-          <span>寄送單位地址：</span>
-          <span>緊急性：</span>
-          <span>關鍵內容：</span>
+          <span>寄送人：{sender}</span>
+          <span>寄送單位：{senderCompany}</span>
+          <span>寄送單位地址：{senderAddress}</span>
+          <span>緊急性：{urgency}</span>
+          <span>關鍵內容：{keyContent}</span>
         </Container>
       </Wrapper>
     </>
