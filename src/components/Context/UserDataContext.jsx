@@ -16,6 +16,8 @@ export function UserDataProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [isUserDataExist, setIsUserDataExist] = useState(true);
+  const [isMailBoxIdDefault, setIsMailBoxIdDefault] = useState(true);
+  const [isUserNameDefault, setIsUserNameDefault] = useState(true);
 
   useLayoutEffect(() => {
     const fetchUserData = async () => {
@@ -39,6 +41,8 @@ export function UserDataProvider({ children }) {
   async function initializeUserData(result) {
     if (result.exists()) {
       setUserData(result.data());
+      setIsMailBoxIdDefault(result.data().mailBoxID === "Example");
+      setIsUserNameDefault(result.data().userName === "Example");
       setIsUserDataExist(true);
     } else {
       setUserData(null);
@@ -50,6 +54,8 @@ export function UserDataProvider({ children }) {
   const value = {
     userData,
     isUserDataExist,
+    isMailBoxIdDefault,
+    isUserNameDefault,
   };
 
   return (

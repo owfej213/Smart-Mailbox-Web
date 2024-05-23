@@ -1,12 +1,12 @@
 import { Heading } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
-function SubTitle({ children, ...prop }){
+function SubTitle({ children, size = "3xl", ...prop }){
 
     return (
         <Heading
             as='h1'
-            size='md'
+            fontSize={size}
             pb='4'
             color='white'
             textAlign='center'
@@ -18,7 +18,8 @@ function SubTitle({ children, ...prop }){
 }
 
 SubTitle.propTypes = {
-    children: PropTypes.any
+    children: PropTypes.any,
+    size: PropTypes.any,
 }
 
 export default SubTitle;

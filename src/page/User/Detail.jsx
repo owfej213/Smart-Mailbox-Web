@@ -52,14 +52,14 @@ function Detail() {
       <MainTitle>郵件細節</MainTitle>
       <Wrapper>
         <Container w="500px">
-          <SubTitle>基本資訊</SubTitle>
+          <SubTitle size="2xl">基本資訊</SubTitle>
           <span>送達日期：{date}</span>
           <span>信件主題：{title}</span>
           <span>類型：{type}</span>
           <span>收信人：{receiver}</span>
         </Container>
         <Container w="500px">
-          <SubTitle>進階資訊</SubTitle>
+          <SubTitle size="2xl">進階資訊</SubTitle>
           <span>寄送人：{sender}</span>
           <span>寄送單位：{senderCompany}</span>
           <span>寄送單位地址：{senderAddress}</span>

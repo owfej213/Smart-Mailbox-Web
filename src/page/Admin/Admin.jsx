@@ -1,6 +1,5 @@
-import Wrapper from "../components/ui/Wrapper";
-import MainTitle from "../components/ui/MainTitle";
-import Container from "../components/ui/Container";
+import Wrapper from "../../components/ui/Wrapper";
+import Container from "../../components/ui/Container";
 import { motion } from "framer-motion";
 import {
   Button,
@@ -13,7 +12,6 @@ import {
 function Admin() {
   return (
     <>
-      <MainTitle>管理介面</MainTitle>
       <Wrapper>
         <Container w="1000px">
           <VStack

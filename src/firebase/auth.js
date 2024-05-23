@@ -1,4 +1,12 @@
-import { auth } from "./firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -6,20 +14,59 @@ import {
   sendEmailVerification,
   updatePassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  getAdditionalUserInfo,
 } from "firebase/auth";
+//創建新用戶資料
+const userDataInitial = async (userCredential) => {
+  const userDocRef = doc(db, `users/${userCredential.user.uid}`);
+
+  await setDoc(userDocRef, {
+    userName: "Example",
+    userRealName: "",
+    userRole: "user",
+    email: userCredential.user.email,
+    mailBoxID: "Example",
+  });
+};
 
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  userDataInitial(userCredential);
+
+  return userCredential;
 };
 
 export const doSignInWithEmailAndPassword = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
+export const doSignInWithUserName = async (userName, password) => {
+  const userDoc = query(
+    collection(db, "users"),
+    where("userName", "==", userName)
+  );
+  const QuerySnapshot = await getDocs(userDoc);
+  let email = "";
+  if (!QuerySnapshot.empty) email = QuerySnapshot.docs[0].data().email;
+
+  return doSignInWithEmailAndPassword(email, password);
+};
+
 export const doSignInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
+  const userCredential = await signInWithPopup(auth, provider);
+
+  const AdditionalUserInfo = getAdditionalUserInfo(userCredential);
+
+  if (AdditionalUserInfo.isNewUser) userDataInitial(userCredential);
+
+  return userCredential;
 };
 
 export const doSignOut = () => {

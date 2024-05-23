@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import MainTitle from "../components/ui/MainTitle";
 import { Box, HStack, StackDivider, Text, VStack } from "@chakra-ui/react";
 import Wrapper from "../components/ui/Wrapper";
 import Container from "../components/ui/Container";
@@ -31,9 +30,10 @@ const List = ({ mailsData }) => {
       {mailsData &&
         mailsData.map((mail, index) => {
           const { createAt } = mail;
+          const { seconds } = createAt || {};
           return (
             <Box key={index}>
-              <Link to={`/home/history/${mail.uid}`}>
+              <Link to={`/detail/${mail.uid}`}>
                 <HStack>
                   <Text
                     fontWeight="bold"
@@ -48,7 +48,7 @@ const List = ({ mailsData }) => {
                   <Text fontWeight="bold" fontSize="small">
                     -{" "}
                     {calculateTimeDifference(
-                      createAt.seconds,
+                      seconds,
                       new Date().getTime() / 1000
                     )}
                   </Text>
@@ -69,34 +69,34 @@ function Home() {
   const { isGoogleUser, isEmailUser } = useAuth();
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
-  const { userName, userType } = userData || {};
+  const { userName, userRole } = userData || {};
 
   const [userLoginType, setUserLoginType] = useState("");
 
   useEffect(() => {
     if (isEmailUser) setUserLoginType("Email");
     if (isGoogleUser) setUserLoginType("Google");
-  }, []);
+  }, [isEmailUser, isGoogleUser]);
 
   return (
     <>
-      <MainTitle>主頁</MainTitle>
+
       <Wrapper>
-        <VStack w="300px" spacing="8">
+        <VStack w="400px" spacing="8">
           <Container>
-            <SubTitle>登入狀態</SubTitle>
+            <SubTitle size="2xl">登入狀態</SubTitle>
             <VStack align="flex-start">
               <Text fontWeight="bold">名稱：{userName}</Text>
-              <Text fontWeight="bold">身分：{userType}</Text>
+              <Text fontWeight="bold">身分：{userRole}</Text>
               <Text fontWeight="bold">登入方式：{userLoginType}</Text>
             </VStack>
           </Container>
           <Container>
-            <SubTitle>郵箱使用人</SubTitle>
+            <SubTitle size="2xl">郵箱使用人</SubTitle>
           </Container>
         </VStack>
-        <Container w="500px">
-          <SubTitle>重要郵件</SubTitle>
+        <Container w="600px">
+          <SubTitle size="2xl">重要郵件</SubTitle>
           <VStack divider={<StackDivider borderColor="gray.600" />}>
             <List mailsData={mailsData} />
           </VStack>

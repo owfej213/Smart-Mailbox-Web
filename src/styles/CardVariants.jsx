@@ -68,6 +68,23 @@ const variants = {
       },
     },
   }),
+  setting: definePartsStyle({
+    container: {
+      color: "gray.800",
+      background: "transparent",
+      width: "100%",
+    },
+    body: {
+      label: {
+        fontSize: "xl",
+        fontWeight: "900",
+      },
+      input: {
+        bg: "gray.200",
+        color: "black",
+      },
+    },
+  }),
 };
 
 export const cardTheme = defineMultiStyleConfig({ variants });

@@ -1,7 +1,7 @@
 import { db } from "../../firebase/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { useLayoutEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MainTitle from "../../components/ui/MainTitle";
 import AuthWrapper from "../../components/ui/AuthWrapper";
 import {
@@ -23,7 +23,6 @@ function UserOptions() {
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState("");
   const [userRealName, setUserRealName] = useState("");
-  const [address, setAddress] = useState("");
   const [mailBoxID, setMailID] = useState("");
   const navigate = useNavigate();
 
@@ -39,15 +38,11 @@ function UserOptions() {
         if (currentUser) {
           setLoading(true);
 
-          const userType = sessionStorage.getItem("userType");
           const userDocRef = doc(db, `users/${currentUser.uid}`);
 
-          await setDoc(userDocRef, {
+          await updateDoc(userDocRef, {
             userName: userName,
             userRealName: userRealName,
-            userType: userType,
-            email: currentUser.email,
-            address: address,
             mailBoxID: mailBoxID,
           });
           setLoading(false);
@@ -61,7 +56,6 @@ function UserOptions() {
 
   return (
     <>
-      {isUserDataExist && <Navigate to={"/home"} replace={true} />}
       <MainTitle>請輸入基本資料</MainTitle>
       <AuthWrapper>
         <Center minHeight="calc(100vh - 250px)">
@@ -84,14 +78,6 @@ function UserOptions() {
                       maxLength={20}
                       onChange={(e) => {
                         setUserRealName(e.target.value);
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>地址</FormLabel>
-                    <Input
-                      onChange={(e) => {
-                        setAddress(e.target.value);
                       }}
                     />
                   </FormControl>

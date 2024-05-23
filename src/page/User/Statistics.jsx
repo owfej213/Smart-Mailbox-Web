@@ -9,7 +9,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import MainTitle from "../../components/ui/MainTitle";
 import Wrapper from "../../components/ui/Wrapper";
 import SubTitle from "../../components/ui/SubTitle";
 import PropTypes from "prop-types";
@@ -22,7 +21,7 @@ ChartJS.register(...registerables);
 function Chart({ title, children }) {
   return (
     <VStack p="4" h="100%">
-      <SubTitle size="lg">{title}</SubTitle>
+      <SubTitle size="3xl">{title}</SubTitle>
       <Center w="100%" h="400px">
         {children}
       </Center>
@@ -83,7 +82,6 @@ function Statistics() {
   console.log(selectedDate);
   return (
     <>
-      <MainTitle>圖表統計</MainTitle>
       <Wrapper>
         <Grid
           h="400px"
@@ -95,7 +93,7 @@ function Statistics() {
         >
           <GridItem colSpan={5}>
             <Container h="100%">
-              <SubTitle size="lg">總覽</SubTitle>
+              <SubTitle>總覽</SubTitle>
               <HStack spacing="8">
                 <Container bg="gray.500">
                   <SubTitle size="md">郵件總數</SubTitle>
@@ -106,7 +104,7 @@ function Statistics() {
                   </Center>
                 </Container>
                 <Container bg="gray.500">
-                  <SubTitle size="md">目前郵箱內郵件數</SubTitle>
+                  <SubTitle size="md">今日郵件數</SubTitle>
                   <Center>
                     <Text color="white" fontSize="3xl">
                       1
@@ -126,7 +124,7 @@ function Statistics() {
           </GridItem>
           <GridItem colSpan={3}>
             <Container h="100%">
-              <SubTitle size="lg">日期選擇</SubTitle>
+              <SubTitle>日期選擇</SubTitle>
               <Input
                 my="auto"
                 bg="white"
@@ -152,18 +150,6 @@ function Statistics() {
             </Container>
           </GridItem>
         </Grid>
-        {/* <HStack w="100%" spacing="10">
-          <Container borderRadius="40px" maxW="600px">
-            <Chart title="2023上半年收件數量">
-              <Bar data={BarData} options={BarOptions} />
-            </Chart>
-          </Container>
-          <Container borderRadius="40px" maxW="600px">
-            <Chart title="2023上半年收件數量">
-              <Pie data={PieData} options={""} />
-            </Chart>
-          </Container>
-        </HStack> */}
       </Wrapper>
     </>
   );

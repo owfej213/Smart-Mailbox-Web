@@ -2,6 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import {
   doSignInWithGoogle,
   doSignInWithEmailAndPassword,
+  doSignInWithUserName,
 } from "../../firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "../../components/ui/GoogleButton";
@@ -29,9 +30,9 @@ function Login() {
   const { userLoggedIn } = useAuth();
 
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [email, setEmail] = useState("");
+  const [input, setInput] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, SetErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -42,17 +43,32 @@ function Login() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isSigningIn) {
       setIsSigningIn(true);
-      await doSignInWithEmailAndPassword(email, password).catch(() => {
-        SetErrorMessage("帳號或密碼錯誤！");
-        setIsSigningIn(false);
-      });
-    }
+      try {
+        if (isEmail(input)) {
+                // 使用電子郵件登入
+                await doSignInWithEmailAndPassword(input, password)
+            
+              } else {
+                // 使用用戶名登入
+                await doSignInWithUserName(input, password);
+             
+            }
+      } catch(error) {
+        setErrorMessage("帳號或密碼錯誤！");
+        //console.log(error);
+      }
+    
+      setIsSigningIn(false);
+  };
+
+  const isEmail = (input) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(input);
   };
 
   const handleErrorMessage = () => {
-    SetErrorMessage("");
+    setErrorMessage("");
   };
 
   const onGoogleSignIn = (e) => {
@@ -81,13 +97,13 @@ function Login() {
                 <FormControl w="100%">
                   <FormLabel>電子信箱或使用者名稱</FormLabel>
                   <Input
-                    type="email"
+                    type="text"
                     autoComplete="email"
                     placeholder="電子信箱或使用者名稱"
                     required
                     onClick={handleErrorMessage}
                     onChange={(e) => {
-                      setEmail(e.target.value);
+                      setInput(e.target.value);
                     }}
                   />
                 </FormControl>

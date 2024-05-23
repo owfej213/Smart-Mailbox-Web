@@ -1,9 +1,8 @@
-import Wrapper from "../components/ui/Wrapper";
-import MainTitle from "../components/ui/MainTitle";
-import { useUserData } from "../components/Context/UserDataContext";
+import Wrapper from "../../components/ui/Wrapper";
+import { useUserData } from "../../components/Context/UserDataContext";
 import { useEffect, useState } from "react";
 import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db } from "../../firebase/firebase";
 import { Button, Card, CardBody, FormControl, FormLabel, HStack, Input, Radio, RadioGroup, Stack, VStack } from "@chakra-ui/react";
 
 const Today = () => {
@@ -19,7 +18,7 @@ const Today = () => {
   return dateString;
 };
 
-function Test() {
+function SendMail() {
   const { userData } = useUserData();
   const { mailBoxID } = userData || {};
 
@@ -64,7 +63,6 @@ function Test() {
 
   return (
     <>
-      <MainTitle>Test</MainTitle>
       <Wrapper>
         <Card variant="test" w="800px">
             <CardBody>
@@ -196,4 +194,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default SendMail;

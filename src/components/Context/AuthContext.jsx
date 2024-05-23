@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useContext, useState, useLayoutEffect } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
@@ -5,7 +6,6 @@ import PropTypes from "prop-types";
 
 const AuthContext = React.createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }

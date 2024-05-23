@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import MainTitle from "../../components/ui/MainTitle";
 import Wrapper from "../../components/ui/Wrapper";
 import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { useMailsData } from "../../components/Context/MailsDataContext";
@@ -62,7 +61,7 @@ function List({ mailsData, ...props }) {
                   color: "teal.400",
                 }}
               >
-                <Link to={`/home/history/${mail.uid}`}>查看</Link>
+                <Link to={`/detail/${mail.uid}`}>查看</Link>
               </TableItem>
             </TableRow>
           );
@@ -80,7 +79,6 @@ function History() {
 
   return (
     <>
-      <MainTitle>歷史紀錄</MainTitle>
       <Wrapper>
         <VStack spacing="1" maxW="1000px" w="100%">
           <TableRow

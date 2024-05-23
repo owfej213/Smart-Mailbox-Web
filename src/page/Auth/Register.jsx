@@ -3,7 +3,7 @@ import {
   doCreateUserWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../firebase/auth";
-import { Navigate, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "../../components/ui/GoogleButton";
 import MainTitle from "../../components/ui/MainTitle";
 import Logo from "../../components/layout/Logo";
@@ -37,8 +37,8 @@ function Register() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if(userLoggedIn) navigate("/home");
-  }, [navigate, userLoggedIn]);
+    if(!isRegistering && userLoggedIn) navigate("/home");
+  }, [isRegistering, navigate, userLoggedIn]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +52,9 @@ function Register() {
       //https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection
 
       try {
-        await doCreateUserWithEmailAndPassword(email, password);
+        doCreateUserWithEmailAndPassword(email, password);
+
+        setIsRegistering(false);
       } catch (error) {
         if (error.code === "auth/email-already-in-use")
           SetErrorMessage("帳號已使用！");
@@ -61,7 +63,6 @@ function Register() {
         if (error.code === "auth/weak-password")
           SetErrorMessage("密碼需至少6個字元！");
       }
-      navigate("/register/user-types");
     }
   };
 
@@ -83,7 +84,6 @@ function Register() {
 
   return (
     <>
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
       <MainTitle>智慧郵箱網頁平台</MainTitle>
       <AuthWrapper>
         <Card variant="auth">

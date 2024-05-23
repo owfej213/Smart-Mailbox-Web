@@ -1,79 +1,83 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { UserMenu, Notify } from "./PopupMenu";
 import { Flex, HStack, Text, useToast } from "@chakra-ui/react";
-import { useAuth } from "../Context/AuthContext";
 import { useUserData } from "../Context/UserDataContext";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-function NavItem({ children, to }) {
+function NavItem({ children, to, allowedRoles = ["user"] }) {
+  const { userData } = useUserData();
+  const { userRole } = userData || {};
   const location = useLocation();
+  const isActive = to === location.pathname;
+
   return (
-    <>
-      {to === location.pathname ? (
-        <>
-          <Text
-            as={Link}
-            to={to}
-            _after={{
-              content: '""',
-              display: "block",
-              h: "4px",
-              borderRadius: "5px",
-              animation: "slide 0.5s",
-              bg: "blue.200",
-            }}
-          >
-            {children}
-          </Text>
-        </>
-      ) : (
-        <>
-          <Text
-            as={Link}
-            to={to}
-            _after={{
-              content: '""',
-              display: "block",
-              h: "4px",
-            }}
-          >
-            {children}
-          </Text>
-        </>
-      )}
-    </>
+    (allowedRoles.includes(userRole) || userRole === "root") && (
+      <Text
+        as={Link}
+        to={to}
+        color="white"
+        _hover={{
+          color: "gray.100",
+        }}
+        _after={() => {
+          return isActive
+            ? {
+                content: '""',
+                display: "block",
+                h: "4px",
+                borderRadius: "5px",
+                animation: "slide 0.5s",
+                bg: "blue.200",
+              }
+            : {
+                content: '""',
+                display: "block",
+                h: "4px",
+              };
+        }}
+      >
+        {children}
+      </Text>
+    )
   );
 }
 
 NavItem.propTypes = {
   children: PropTypes.any,
   to: PropTypes.string,
+  allowedRoles: PropTypes.array,
 };
 
 function Header() {
-  const { userLoggedIn } = useAuth();
-  const { isUserDataExist } = useUserData();
+  const { isUserDataExist, isMailBoxIdDefault, isUserNameDefault, userData } = useUserData();
+  const { userRole } = userData || {};
   const toast = useToast();
-  const toastIdRef = useRef();
-  const navigate = useNavigate();
+  const toastMailIDRef = useRef();
+  const toastUserNameRef = useRef();
 
-  useLayoutEffect(() => {
-    if (!userLoggedIn) {
-      navigate("/Login");
-    } else if (!isUserDataExist) {
-      if (!toastIdRef.current) {
-        toastIdRef.current = toast({
-          title: `請先輸入個人基本資料！`,
-          description: "你可以在個人設定中輸入",
+  useEffect(() => {
+      if ((!toastMailIDRef.current || toastMailIDRef.current < 2) & userRole === "user" & isMailBoxIdDefault) {
+        toastMailIDRef.current = toast({
+          title: `目前郵箱ID為Example`,
+          description: "請先在個人設定中更改郵箱ID！",
           duration: null,
           status: "warning",
           variant: "subtle",
           isClosable: true,
         });
       }
-    }
-  }, [isUserDataExist, navigate, toast, userLoggedIn]);
+      if ((!toastUserNameRef.current || toastUserNameRef.current < 2) & userRole === "user" & isUserNameDefault) {
+        toastUserNameRef.current = toast({
+          title: `目前登入名稱為Example`,
+          description: "請先在個人設定中更改名稱！",
+          duration: null,
+          status: "warning",
+          variant: "subtle",
+          isClosable: true,
+        });
+      }
+  }, [isMailBoxIdDefault, isUserDataExist, isUserNameDefault, toast, userRole]);
 
   return (
     <>
@@ -91,11 +95,18 @@ function Header() {
               智慧郵箱
             </Text>
             <NavItem to="/home">主頁</NavItem>
-            <NavItem to="/home/history">歷史紀錄</NavItem>
-            <NavItem to="/home/statistics">圖表統計</NavItem>
-            <NavItem to="/home/inside-box">郵箱內部</NavItem>
-            <NavItem to="/home/admin">管理介面</NavItem>
-            <NavItem to="/home/test">信件上傳測試</NavItem>
+            <NavItem to="/history">歷史紀錄</NavItem>
+            <NavItem to="/statistics">圖表統計</NavItem>
+            <NavItem to="/inside-box">郵箱內部</NavItem>
+            <NavItem to="/admin" allowedRoles={["admin"]}>
+              管理介面
+            </NavItem>
+            <NavItem to="/send-mail-test" allowedRoles={["root"]}>
+              信件上傳測試
+            </NavItem>
+            <NavItem to="/send-image-test" allowedRoles={["root"]}>
+              圖片上傳測試
+            </NavItem>
           </HStack>
           <HStack>
             <Notify />

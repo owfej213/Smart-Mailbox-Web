@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 function Wrapper({ children }){
 
     return (
-        <HStack 
+        <HStack
+            mx="8"
+            pt="12"
             spacing='8'
             justify='center'
             align='flex-start'

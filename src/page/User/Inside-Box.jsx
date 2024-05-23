@@ -1,15 +1,17 @@
-import { useState } from "react";
-import MainTitle from "../../components/ui/MainTitle";
+import { useEffect, useState } from "react";
 import Wrapper from "../../components/ui/Wrapper";
-import { Box, Button, Flex, Image, VStack } from "@chakra-ui/react";
-
-const Now = () => {
-  var currentDate = new Date();
-  var year = currentDate.getFullYear();
-  var month = currentDate.getMonth() + 1;
-  var day = currentDate.getDate();
-  var hour = currentDate.getHours();
-  var Minute = currentDate.getMinutes();
+import { Flex, Image, Text, VStack } from "@chakra-ui/react";
+import Icon from "../../components/ui/Icon";
+import { getDownloadURL, getMetadata, listAll, ref } from "firebase/storage";
+import { storage } from "../../firebase/firebase";
+import { useUserData } from "../../components/Context/UserDataContext";
+const getStringTime = (imageDateNumber) => {
+  var imageDate = new Date(imageDateNumber * 1000);
+  var year = imageDate.getFullYear();
+  var month = imageDate.getMonth() + 1;
+  var day = imageDate.getDate();
+  var hour = imageDate.getHours();
+  var Minute = imageDate.getMinutes();
 
   month = month < 10 ? "0" + month : month;
   day = day < 10 ? "0" + day : day;
@@ -20,58 +22,90 @@ const Now = () => {
   return dateString;
 };
 
-const NoImage = () => {
-  return <Image w="100px" h="100px" src="../../images/mail.png" />;
-};
-
-// const RandomImage = ({ seed }) => {
-
-//   var url = `https://picsum.photos/800/600?random=${seed}`;
-
-//   return (
-//     <img src={url}></img>
-//   )
-// }
-
 function InsideBox() {
-  // eslint-disable-next-line no-unused-vars
-  const [imageExists, setImgaeExists] = useState(true);
-  const [reloadKey, SetReloadKey] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [imageExist, setImageExist] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageDateNumber, setImageDateNumber] = useState(Number);
+  const { userData } = useUserData();
+  const { mailBoxID } = userData || {};
+  //取得所有圖片的Metadata
+  useEffect(() => {
+    const fetchImagesMetadata = async () => {
+      try {
+        const imagesListRef = ref(storage, `${mailBoxID}/images/`);
+        const ListResult = await listAll(imagesListRef);
+        const ImagesMetadata = await Promise.all(
+          ListResult.items.map(async (item) => {
+            const metadata = await getMetadata(item);
+            var imageName = metadata.name;
+            var imageDate = imageName.match(/\d+/g)[0];
+            return {
+              imageDate: imageDate,
+              imageRef: item,
+            };
+          })
+        );
+        if (ImagesMetadata.length === 0) {
+          setImageExist(false);
+          setLoading(false);
+          return;
+        }else{
+          setImageExist(true);
+        }
+        //將所有圖片時間排序，取得最新圖片的資料
+        var lastestImageData = ImagesMetadata.sort(
+          (a, b) => b.imageDate - a.imageDate
+        )[0];
+        //得到最新圖片的Url
+        const ImageUrl = await getDownloadURL(lastestImageData.imageRef);
+        setImageDateNumber(lastestImageData.imageDate);
+        setImageUrl(ImageUrl);
+        setLoading(false);
+      } catch (error) {
+        console.error();
+      }
+    };
+    fetchImagesMetadata();
+  }, [mailBoxID]);
 
-  const time = Now();
-
-  function handleReload() {
-    SetReloadKey((prevkey) => prevkey + 1);
-  }
-
-  return (
-    <>
-      <MainTitle>郵箱內部</MainTitle>
-      <Wrapper>
-        <VStack>
+  function ImageLayout() {
+    return (
+      <>
+      <VStack>
+        {imageExist ? (
+          <><Text my="4" color="white" fontWeight="600" fontSize="xl">
+          上次更新時間：
+          {imageDateNumber !== 0 && getStringTime(imageDateNumber)}
+        </Text>
+        <Image src={imageUrl} />
+        </>
+          
+        ) : (
+          <>
+          <Text my="4" color="white" fontWeight="600" fontSize="xl">
+          尚未有任何照片
+      
+        </Text>
           <Flex
-            key={reloadKey}
             bg="gray.300"
             w="900px"
             h="600px"
             align="center"
             justify="center"
           >
-            <NoImage />
-            {/* {imageExists ? <RandomImage seed= {reloadKey} />: <NoImage />} */}
-          </Flex>
-          <Box my="4" color="white">
-            上次更新時間：{time}
-          </Box>
-          <Button
-            onClick={handleReload}
-            p="4"
-            width="150px"
-            borderRadius="20px"
-          >
-            更新
-          </Button>
+            <Icon name="Mail" color="#3182CE" size={160} />
+          </Flex></>
+        )}
         </VStack>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Wrapper>
+          {!loading && <ImageLayout />}
       </Wrapper>
     </>
   );

@@ -18,7 +18,7 @@ export function UserMenu() {
     doSignOut().then(() => navigate("/Login"));
   }
   function Setting() {
-    navigate("/home/setting");
+    navigate("/setting");
   }
   return (
     <>
