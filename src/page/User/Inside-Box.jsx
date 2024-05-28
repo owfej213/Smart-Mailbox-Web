@@ -5,22 +5,7 @@ import Icon from "../../components/ui/Icon";
 import { getDownloadURL, getMetadata, listAll, ref } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import { useUserData } from "../../components/Context/UserDataContext";
-const getStringTime = (imageDateNumber) => {
-  var imageDate = new Date(imageDateNumber * 1000);
-  var year = imageDate.getFullYear();
-  var month = imageDate.getMonth() + 1;
-  var day = imageDate.getDate();
-  var hour = imageDate.getHours();
-  var Minute = imageDate.getMinutes();
-
-  month = month < 10 ? "0" + month : month;
-  day = day < 10 ? "0" + day : day;
-  hour = hour < 10 ? "0" + hour : hour;
-  Minute = Minute < 10 ? "0" + Minute : Minute;
-
-  var dateString = `${year}年${month}月${day}日${hour}時${Minute}分`;
-  return dateString;
-};
+import { formateDateYMDHM } from "../../utils/dateUtils";
 
 function InsideBox() {
   const [loading, setLoading] = useState(true);
@@ -50,7 +35,7 @@ function InsideBox() {
           setImageExist(false);
           setLoading(false);
           return;
-        }else{
+        } else {
           setImageExist(true);
         }
         //將所有圖片時間排序，取得最新圖片的資料
@@ -69,43 +54,37 @@ function InsideBox() {
     fetchImagesMetadata();
   }, [mailBoxID]);
 
-  function ImageLayout() {
-    return (
-      <>
-      <VStack>
-        {imageExist ? (
-          <><Text my="4" color="white" fontWeight="600" fontSize="xl">
-          上次更新時間：
-          {imageDateNumber !== 0 && getStringTime(imageDateNumber)}
-        </Text>
-        <Image src={imageUrl} />
-        </>
-          
-        ) : (
-          <>
-          <Text my="4" color="white" fontWeight="600" fontSize="xl">
-          尚未有任何照片
-      
-        </Text>
-          <Flex
-            bg="gray.300"
-            w="900px"
-            h="600px"
-            align="center"
-            justify="center"
-          >
-            <Icon name="Mail" color="#3182CE" size={160} />
-          </Flex></>
-        )}
-        </VStack>
-      </>
-    );
-  }
-
   return (
     <>
       <Wrapper>
-          {!loading && <ImageLayout />}
+        {!loading && (
+          <VStack>
+            {imageExist ? (
+              <>
+                <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                  上次更新時間：
+                  {imageDateNumber !== 0 && formateDateYMDHM(imageDateNumber)}
+                </Text>
+                <Image src={imageUrl} w="1000px" />
+              </>
+            ) : (
+              <>
+                <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                  尚未有任何照片
+                </Text>
+                <Flex
+                  bg="gray.300"
+                  w="900px"
+                  h="600px"
+                  align="center"
+                  justify="center"
+                >
+                  <Icon name="Mail" color="#3182CE" size={160} />
+                </Flex>
+              </>
+            )}
+          </VStack>
+        )}
       </Wrapper>
     </>
   );

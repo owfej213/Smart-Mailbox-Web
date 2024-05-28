@@ -7,15 +7,15 @@ import Wrapper from "../../components/ui/Wrapper";
 import Container from "../../components/ui/Container";
 import SubTitle from "../../components/ui/SubTitle";
 import { useUserData } from "../../components/Context/UserDataContext";
+import { formateDateYMD } from "../../utils/dateUtils";
 
 function Detail() {
   const { id } = useParams();
   const { userData } = useUserData();
   const { mailBoxID } = userData || {};
-
   const [maildata, setMaildata] = useState({});
   const {
-    date,
+    createAt,
     title,
     type,
     receiver,
@@ -25,7 +25,6 @@ function Detail() {
     urgency,
     keyContent,
   } = maildata || {};
-
   useEffect(() => {
     const fetchMailData = async () => {
       if (mailBoxID !== null) {
@@ -53,7 +52,7 @@ function Detail() {
       <Wrapper>
         <Container w="500px">
           <SubTitle size="2xl">基本資訊</SubTitle>
-          <span>送達日期：{date}</span>
+          <span>送達日期：{formateDateYMD(createAt?.seconds)}</span>
           <span>信件主題：{title}</span>
           <span>類型：{type}</span>
           <span>收信人：{receiver}</span>

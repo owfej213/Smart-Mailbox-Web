@@ -20,8 +20,8 @@ function NavItem({ children, to, allowedRoles = ["user"] }) {
         _hover={{
           color: "gray.100",
         }}
-        _after={() => {
-          return isActive
+        _after={
+          isActive
             ? {
                 content: '""',
                 display: "block",
@@ -34,8 +34,8 @@ function NavItem({ children, to, allowedRoles = ["user"] }) {
                 content: '""',
                 display: "block",
                 h: "4px",
-              };
-        }}
+              }
+        }
       >
         {children}
       </Text>
@@ -50,34 +50,42 @@ NavItem.propTypes = {
 };
 
 function Header() {
-  const { isUserDataExist, isMailBoxIdDefault, isUserNameDefault, userData } = useUserData();
+  const { isMailBoxIdDefault, isUserNameDefault, userData } = useUserData();
   const { userRole } = userData || {};
   const toast = useToast();
   const toastMailIDRef = useRef();
   const toastUserNameRef = useRef();
 
   useEffect(() => {
-      if ((!toastMailIDRef.current || toastMailIDRef.current < 2) & userRole === "user" & isMailBoxIdDefault) {
-        toastMailIDRef.current = toast({
-          title: `目前郵箱ID為Example`,
-          description: "請先在個人設定中更改郵箱ID！",
-          duration: null,
-          status: "warning",
-          variant: "subtle",
-          isClosable: true,
-        });
-      }
-      if ((!toastUserNameRef.current || toastUserNameRef.current < 2) & userRole === "user" & isUserNameDefault) {
-        toastUserNameRef.current = toast({
-          title: `目前登入名稱為Example`,
-          description: "請先在個人設定中更改名稱！",
-          duration: null,
-          status: "warning",
-          variant: "subtle",
-          isClosable: true,
-        });
-      }
-  }, [isMailBoxIdDefault, isUserDataExist, isUserNameDefault, toast, userRole]);
+    if (
+      (!toastMailIDRef.current || toastMailIDRef.current < 2) &
+      (userRole === "user") &
+      isMailBoxIdDefault
+    ) {
+      toastMailIDRef.current = toast({
+        title: `目前郵箱ID為Example`,
+        description: "請先在個人設定中更改郵箱ID！",
+        duration: null,
+        status: "warning",
+        variant: "subtle",
+        isClosable: true,
+      });
+    }
+    if (
+      (!toastUserNameRef.current || toastUserNameRef.current < 2) &
+      (userRole === "user") &
+      isUserNameDefault
+    ) {
+      toastUserNameRef.current = toast({
+        title: `目前登入名稱為Example`,
+        description: "請先在個人設定中更改名稱！",
+        duration: null,
+        status: "warning",
+        variant: "subtle",
+        isClosable: true,
+      });
+    }
+  }, [isMailBoxIdDefault, isUserNameDefault, toast, userRole]);
 
   return (
     <>

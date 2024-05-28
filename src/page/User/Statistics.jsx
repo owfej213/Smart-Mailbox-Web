@@ -35,13 +35,13 @@ Chart.propTypes = {
 };
 
 const BarData = {
-  labels: ["1月", "2月", "3月", "4月", "5月", "6月"],
+  labels: ["1月", "2月", "3月", "4月", "5月"],
   datasets: [
     {
       label: "數量",
       backgroundColor: "rgb(56, 182, 255)",
       hoverBackgroundColor: "rgb(0, 160, 253)",
-      data: [9, 8, 8, 10, 5, 9],
+      data: [9, 8, 8, 10, 6],
     },
   ],
 };
@@ -107,7 +107,7 @@ function Statistics() {
                   <SubTitle size="md">今日郵件數</SubTitle>
                   <Center>
                     <Text color="white" fontSize="3xl">
-                      1
+                      0
                     </Text>
                   </Center>
                 </Container>
@@ -115,7 +115,7 @@ function Statistics() {
                   <SubTitle size="md">每月平均信件數</SubTitle>
                   <Center>
                     <Text color="white" fontSize="3xl">
-                      1
+                      6
                     </Text>
                   </Center>
                 </Container>
@@ -124,7 +124,7 @@ function Statistics() {
           </GridItem>
           <GridItem colSpan={3}>
             <Container h="100%">
-              <SubTitle>日期選擇</SubTitle>
+              <SubTitle>收件日期範圍選擇</SubTitle>
               <Input
                 my="auto"
                 bg="white"

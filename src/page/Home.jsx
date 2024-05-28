@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Box, HStack, StackDivider, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  StackDivider,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import Wrapper from "../components/ui/Wrapper";
 import Container from "../components/ui/Container";
 import SubTitle from "../components/ui/SubTitle";
@@ -8,21 +15,8 @@ import { useUserData } from "../components/Context/UserDataContext";
 import { useMailsData } from "../components/Context/MailsDataContext";
 import { useAuth } from "../components/Context/AuthContext";
 import { useEffect, useState } from "react";
-
-function calculateTimeDifference(start, end) {
-  var difference = Math.abs(end - start);
-  var daysDifference = Math.floor(difference / (60 * 60 * 24));
-  var hoursDifference = Math.floor((difference % (60 * 60 * 24)) / (60 * 60));
-  var minutesDifference = Math.floor((difference % (60 * 60)) / 60);
-
-  if (daysDifference > 0) {
-    return daysDifference + "天前";
-  } else if (hoursDifference > 0) {
-    return hoursDifference + "小時前";
-  } else {
-    return minutesDifference + "分鐘前";
-  }
-}
+import Icon from "../components/ui/Icon";
+import { TimeBetween } from "../utils/dateUtils";
 
 const List = ({ mailsData }) => {
   return (
@@ -31,6 +25,7 @@ const List = ({ mailsData }) => {
         mailsData.map((mail, index) => {
           const { createAt } = mail;
           const { seconds } = createAt || {};
+          if (mail.urgency !== "高") return;
           return (
             <Box key={index}>
               <Link to={`/detail/${mail.uid}`}>
@@ -46,11 +41,7 @@ const List = ({ mailsData }) => {
                     你有一封新信件 - {mail.title}
                   </Text>
                   <Text fontWeight="bold" fontSize="small">
-                    -{" "}
-                    {calculateTimeDifference(
-                      seconds,
-                      new Date().getTime() / 1000
-                    )}
+                    - {TimeBetween(seconds, new Date().getTime() / 1000)}
                   </Text>
                 </HStack>
               </Link>
@@ -80,7 +71,6 @@ function Home() {
 
   return (
     <>
-
       <Wrapper>
         <VStack w="400px" spacing="8">
           <Container>
@@ -93,6 +83,30 @@ function Home() {
           </Container>
           <Container>
             <SubTitle size="2xl">郵箱使用人</SubTitle>
+            <HStack mx="8" spacing="6">
+              <VStack>
+                <Icon name="CircleUserRound" color="white" size={42} />
+                <Text fontWeight="600">A</Text>
+              </VStack>
+              <VStack>
+                <Icon name="CircleUserRound" color="white" size={42} />
+                <Text fontWeight="600">B</Text>
+              </VStack>
+              <VStack>
+                <Icon name="CircleUserRound" color="white" size={42} />
+                <Text fontWeight="600">C</Text>
+              </VStack>
+              <VStack>
+                <Button
+                  bg="none"
+                  _hover={{
+                    bg: "none",
+                  }}
+                >
+                  <Icon name="CirclePlus" color="white" size={42} />
+                </Button>
+              </VStack>
+            </HStack>
           </Container>
         </VStack>
         <Container w="600px">
