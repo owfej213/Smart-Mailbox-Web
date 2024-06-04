@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { UserMenu, Notify } from "./PopupMenu";
-import { Flex, HStack, Text, useToast } from "@chakra-ui/react";
+import { Flex, Spacer, Stack, Text, useToast } from "@chakra-ui/react";
 import { useUserData } from "../Context/UserDataContext";
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
@@ -89,38 +89,43 @@ function Header() {
 
   return (
     <>
-      <Flex bgGradient="linear-gradient(180deg, rgb(91, 110, 255) 0%, rgb(100, 118, 255) 100%)">
-        <Flex mx="auto" maxW="1000px" w="100%" justify="space-between">
-          <HStack
-            justify="center"
-            align="center"
-            spacing="4"
-            color="white"
-            fontWeight="bold"
-            fontSize="xl"
-          >
-            <Text as={Link} to="/home" fontSize="3xl">
-              智慧郵箱
-            </Text>
-            <NavItem to="/home">主頁</NavItem>
-            <NavItem to="/history">歷史紀錄</NavItem>
-            <NavItem to="/statistics">圖表統計</NavItem>
-            <NavItem to="/inside-box">郵箱內部</NavItem>
-            <NavItem to="/admin" allowedRoles={["admin"]}>
-              管理介面
-            </NavItem>
-            <NavItem to="/send-mail-test" allowedRoles={["root"]}>
-              信件上傳測試
-            </NavItem>
-            <NavItem to="/send-image-test" allowedRoles={["root"]}>
-              圖片上傳測試
-            </NavItem>
-          </HStack>
-          <HStack>
+      <Flex
+        w="100%"
+        bgGradient="linear-gradient(180deg, rgb(91, 110, 255) 0%, rgb(100, 118, 255) 100%)"
+      >
+        <Stack
+          mx={["2", "2", "2", "auto"]}
+          w="100%"
+          maxW="1000px"
+          spacing={["2", "2", "4"]}
+          fontWeight="bold"
+          fontSize="xl"
+          align={["none", "none", "center"]}
+          direction={["column", "column", "row"]}
+        >
+          <Text as={Link} to="/home" fontSize="3xl" color="white">
+            智慧郵箱
+          </Text>
+          <NavItem to="/home">主頁</NavItem>
+          <NavItem to="/history">歷史紀錄</NavItem>
+          <NavItem to="/statistics">圖表統計</NavItem>
+          <NavItem to="/inside-box">郵箱內部</NavItem>
+          <NavItem to="/admin" allowedRoles={["admin"]}>
+            管理介面
+          </NavItem>
+          <NavItem to="/send-mail-test" allowedRoles={["root"]}>
+            信件上傳測試
+          </NavItem>
+          <NavItem to="/send-image-test" allowedRoles={["root"]}>
+            圖片上傳測試
+          </NavItem>
+
+          <Spacer />
+          <Flex>
             <Notify />
             <UserMenu />
-          </HStack>
-        </Flex>
+          </Flex>
+        </Stack>
       </Flex>
       <Outlet />
     </>

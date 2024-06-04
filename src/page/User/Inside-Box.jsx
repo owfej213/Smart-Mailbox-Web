@@ -18,7 +18,7 @@ function InsideBox() {
   useEffect(() => {
     const fetchImagesMetadata = async () => {
       try {
-        const imagesListRef = ref(storage, `${mailBoxID}/images/`);
+        const imagesListRef = ref(storage, `${mailBoxID}/`);
         const ListResult = await listAll(imagesListRef);
         const ImagesMetadata = await Promise.all(
           ListResult.items.map(async (item) => {

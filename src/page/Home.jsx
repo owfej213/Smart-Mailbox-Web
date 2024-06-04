@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import {
-  Box,
-  Button,
-  HStack,
-  StackDivider,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, HStack, StackDivider, Text, VStack } from "@chakra-ui/react";
 import Wrapper from "../components/ui/Wrapper";
 import Container from "../components/ui/Container";
 import SubTitle from "../components/ui/SubTitle";
@@ -15,8 +8,8 @@ import { useUserData } from "../components/Context/UserDataContext";
 import { useMailsData } from "../components/Context/MailsDataContext";
 import { useAuth } from "../components/Context/AuthContext";
 import { useEffect, useState } from "react";
-import Icon from "../components/ui/Icon";
 import { TimeBetween } from "../utils/dateUtils";
+import MailBoxUserModal from "../components/layout/MailBoxUserModal";
 
 const List = ({ mailsData }) => {
   return (
@@ -60,7 +53,7 @@ function Home() {
   const { isGoogleUser, isEmailUser } = useAuth();
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
-  const { userName, userRole } = userData || {};
+  const { userName, userRole, mailBoxID } = userData || {};
 
   const [userLoginType, setUserLoginType] = useState("");
 
@@ -72,7 +65,7 @@ function Home() {
   return (
     <>
       <Wrapper>
-        <VStack w="400px" spacing="8">
+        <VStack w={["100%", "100%", "400px"]} spacing="8">
           <Container>
             <SubTitle size="2xl">登入狀態</SubTitle>
             <VStack align="flex-start">
@@ -82,34 +75,10 @@ function Home() {
             </VStack>
           </Container>
           <Container>
-            <SubTitle size="2xl">郵箱使用人</SubTitle>
-            <HStack mx="8" spacing="6">
-              <VStack>
-                <Icon name="CircleUserRound" color="white" size={42} />
-                <Text fontWeight="600">A</Text>
-              </VStack>
-              <VStack>
-                <Icon name="CircleUserRound" color="white" size={42} />
-                <Text fontWeight="600">B</Text>
-              </VStack>
-              <VStack>
-                <Icon name="CircleUserRound" color="white" size={42} />
-                <Text fontWeight="600">C</Text>
-              </VStack>
-              <VStack>
-                <Button
-                  bg="none"
-                  _hover={{
-                    bg: "none",
-                  }}
-                >
-                  <Icon name="CirclePlus" color="white" size={42} />
-                </Button>
-              </VStack>
-            </HStack>
+            <MailBoxUserModal mailBoxID={mailBoxID} />
           </Container>
         </VStack>
-        <Container w="600px">
+        <Container w={["100%", "100%", "600px"]}>
           <SubTitle size="2xl">重要郵件</SubTitle>
           <VStack divider={<StackDivider borderColor="gray.600" />}>
             <List mailsData={mailsData} />

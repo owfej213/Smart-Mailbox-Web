@@ -36,7 +36,7 @@ export function UserMenu() {
           >
             <Icon name="CircleUserRound" color="white" size={42} />
           </MenuButton>
-          <MenuList>
+          <MenuList fontSize="md">
             <MenuItem
               icon={<Icon name="Settings" color="black" />}
               onClick={Setting}
@@ -74,7 +74,7 @@ export function Notify() {
           >
             <Icon name="Bell" color="white" size={42} />
           </MenuButton>
-          <MenuList>
+          <MenuList fontSize="md">
             <MenuItem as={Center}>目前沒有任何通知</MenuItem>
           </MenuList>
         </Menu>

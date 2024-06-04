@@ -37,29 +37,33 @@ function Login() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if(userLoggedIn) navigate("/home");
+    if (userLoggedIn) navigate("/home");
   }, [navigate, userLoggedIn]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-      setIsSigningIn(true);
-      try {
-        if (isEmail(input)) {
-                // 使用電子郵件登入
-                await doSignInWithEmailAndPassword(input, password)
-            
-              } else {
-                // 使用用戶名登入
-                await doSignInWithUserName(input, password);
-             
-            }
-      } catch(error) {
-        setErrorMessage("帳號或密碼錯誤！");
-        //console.log(error);
+    setIsSigningIn(true);
+    try {
+      if (input === "Example") {
+        setErrorMessage("Example為預設名稱，若尚未修改名稱，請使用Email登入！");
+        setIsSigningIn(false);
+        return;
       }
-    
-      setIsSigningIn(false);
+
+      if (isEmail(input)) {
+        // 使用電子郵件登入
+        await doSignInWithEmailAndPassword(input, password);
+      } else {
+        // 使用用戶名登入
+        await doSignInWithUserName(input, password);
+      }
+    } catch (error) {
+      setErrorMessage("帳號或密碼錯誤！");
+      //console.log(error);
+    }
+
+    setIsSigningIn(false);
   };
 
   const isEmail = (input) => {
@@ -121,7 +125,7 @@ function Login() {
                   />
                 </FormControl>
                 {errorMessage && (
-                  <Text color="red.400" fontWeight="bold">
+                  <Text px="4" color="red.400" fontWeight="bold">
                     {errorMessage}
                   </Text>
                 )}

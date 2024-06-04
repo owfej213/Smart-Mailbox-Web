@@ -44,13 +44,18 @@ export function MailsDataProvider({ children }) {
   async function initializeMailsData(result) {
     if (result) {
       //將資料轉成array
-      const mails = result.docs.map((item) => {
-        let items = item.data();
-        //firebase文件ID當作是郵件ID
-        items["uid"] = item.id;
+      const mails = result.docs
+        .map((item) => {
+          let items = item.data();
+          //firebase文件ID當作是郵件ID
+          items["uid"] = item.id;
 
-        return items;
-      });
+          return items;
+        })
+        .sort((a, b) => {
+          if (!a?.createAt?.seconds || !b?.createAt?.seconds) return 0;
+          return b.createAt.seconds - a.createAt.seconds;
+        });
       setMailsDataCount(mails.length);
       setMailsData(mails);
     }

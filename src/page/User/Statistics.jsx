@@ -4,8 +4,8 @@ import {
   Center,
   Grid,
   GridItem,
-  HStack,
   Input,
+  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -73,7 +73,7 @@ const PieData = {
 
 function Statistics() {
   const { mailsDataCount } = useMailsData();
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -87,14 +87,13 @@ function Statistics() {
           h="400px"
           maxW="1200px"
           w="100%"
-          templateRows="repeat(2, 1fr)"
           templateColumns="repeat(8, 1fr)"
           gap={4}
         >
-          <GridItem colSpan={5}>
+          <GridItem colSpan={[8, 8, 5]}>
             <Container h="100%">
               <SubTitle>總覽</SubTitle>
-              <HStack spacing="8">
+              <Stack spacing="8" direction={["column", "column", "row"]}>
                 <Container bg="gray.500">
                   <SubTitle size="md">郵件總數</SubTitle>
                   <Center>
@@ -119,10 +118,10 @@ function Statistics() {
                     </Text>
                   </Center>
                 </Container>
-              </HStack>
+              </Stack>
             </Container>
           </GridItem>
-          <GridItem colSpan={3}>
+          <GridItem colSpan={[8, 8, 3]}>
             <Container h="100%">
               <SubTitle>收件日期範圍選擇</SubTitle>
               <Input
@@ -135,14 +134,14 @@ function Statistics() {
               />
             </Container>
           </GridItem>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={[8, 8, 4]}>
             <Container h="100%">
               <Chart title="郵件數量">
                 <Bar data={BarData} options={BarOptions} />
               </Chart>
             </Container>
           </GridItem>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={[8, 8, 4]}>
             <Container h="100%">
               <Chart title="郵件總類">
                 <Pie data={PieData} options={""} />

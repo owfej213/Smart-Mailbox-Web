@@ -1,16 +1,21 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Wrapper from "../../components/ui/Wrapper";
-import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Flex, Show, Text, VStack } from "@chakra-ui/react";
 import { useMailsData } from "../../components/Context/MailsDataContext";
 import { formateDateYMD } from "../../utils/dateUtils";
 
 function TableRow({ children, ...props }) {
   return (
     <>
-      <HStack maxW="1000px" w="100%" {...props}>
+      <Flex
+        maxW="1000px"
+        w="100%"
+        direction={["column", "column", "row"]}
+        {...props}
+      >
         {children}
-      </HStack>
+      </Flex>
     </>
   );
 }
@@ -19,10 +24,18 @@ TableRow.propTypes = {
   children: PropTypes.any,
 };
 
-function TableItem({ children, ...props }) {
+function TableItem({ children, title, maxW, ...props }) {
   return (
-    <Flex p="4" width={["50%", "100%"]} {...props}>
+    <Flex
+      p="3"
+      w="100%"
+      justify={["space-between", "space-between", "center"]}
+      maxW={maxW}
+    >
       <Text fontSize="2xl" fontWeight="bold">
+        {title}
+      </Text>
+      <Text fontSize="2xl" fontWeight="bold" {...props}>
         {children}
       </Text>
     </Flex>
@@ -30,49 +43,61 @@ function TableItem({ children, ...props }) {
 }
 
 TableItem.propTypes = {
-  data: PropTypes.any,
   children: PropTypes.any,
-  isUserMail: PropTypes.bool,
+  title: PropTypes.string,
+  maxW: PropTypes.string,
 };
 
 function List({ mailsData, ...props }) {
   return (
     <>
       {mailsData &&
-        mailsData
-          .sort((a, b) => {
-            if (!a?.createAt?.seconds || !b?.createAt?.seconds) return 0;
-            return b.createAt.seconds - a.createAt.seconds;
-          })
-          .map((mail, index) => {
-            return (
-              <TableRow key={index} {...props}>
-                <TableItem maxW="300px" justify="center">
-                  {formateDateYMD(mail?.createAt?.seconds)}
-                </TableItem>
-                <TableItem maxW="250px" justify="center">
-                  {mail.title}
-                </TableItem>
-                <TableItem maxW="150px" justify="center">
-                  {mail.receiver}
-                </TableItem>
-                <TableItem maxW="150px" justify="center">
-                  {mail.urgency}
-                </TableItem>
-                <TableItem
-                  maxW="150px"
-                  justify="center"
-                  fontWeight="bold"
-                  color="teal.600"
-                  _hover={{
-                    color: "teal.400",
-                  }}
-                >
-                  <Link to={`/detail/${mail.uid}`}>查看</Link>
-                </TableItem>
-              </TableRow>
-            );
-          })}
+        mailsData.map((mail, index) => {
+          return (
+            <>
+              <Show above="md">
+                <TableRow key={index} {...props}>
+                  <TableItem maxW="300px">
+                    {formateDateYMD(mail?.createAt?.seconds)}
+                  </TableItem>
+                  <TableItem maxW="250px">{mail.title}</TableItem>
+                  <TableItem maxW="150px">{mail.receiver}</TableItem>
+                  <TableItem maxW="150px">{mail.urgency}</TableItem>
+                  <TableItem
+                    maxW="150px"
+                    fontWeight="bold"
+                    color="teal.600"
+                    _hover={{
+                      color: "teal.400",
+                    }}
+                  >
+                    <Link to={`/detail/${mail.uid}`}>查看</Link>
+                  </TableItem>
+                </TableRow>
+              </Show>
+              <Show below="md">
+                <TableRow bg="gray.300">
+                  <TableItem title="收件日期">
+                    {formateDateYMD(mail?.createAt?.seconds)}
+                  </TableItem>
+                  <TableItem title="郵件標題">{mail.title}</TableItem>
+                  <TableItem title="收信人">{mail.receiver}</TableItem>
+                  <TableItem title="緊急度">{mail.urgency}</TableItem>
+                  <TableItem
+                    title="細節"
+                    fontWeight="bold"
+                    color="teal.600"
+                    _hover={{
+                      color: "teal.400",
+                    }}
+                  >
+                    <Link to={`/detail/${mail.uid}`}>查看</Link>
+                  </TableItem>
+                </TableRow>
+              </Show>
+            </>
+          );
+        })}
     </>
   );
 }
@@ -88,23 +113,15 @@ function History() {
     <>
       <Wrapper>
         <VStack spacing="1" maxW="1000px" w="100%">
-          <TableRow bg="gray.400">
-            <TableItem maxW="300px" justify="center">
-              收件日期
-            </TableItem>
-            <TableItem maxW="250px" justify="center">
-              郵件標題
-            </TableItem>
-            <TableItem maxW="150px" justify="center">
-              收信人
-            </TableItem>
-            <TableItem maxW="150px" justify="center">
-              緊急度
-            </TableItem>
-            <TableItem maxW="150px" justify="center">
-              細節
-            </TableItem>
-          </TableRow>
+          <Show above="md">
+            <TableRow bg="gray.400">
+              <TableItem maxW="300px" title="收件日期" />
+              <TableItem maxW="250px" title="郵件標題" />
+              <TableItem maxW="150px" title="收信人" />
+              <TableItem maxW="150px" title="緊急度" />
+              <TableItem maxW="150px" title="細節" />
+            </TableRow>
+          </Show>
           <List bg="gray.300" mailsData={mailsData} />
         </VStack>
       </Wrapper>

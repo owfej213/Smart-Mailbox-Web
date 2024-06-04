@@ -6,6 +6,7 @@ import {
   CardBody,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Input,
@@ -13,17 +14,26 @@ import {
 } from "@chakra-ui/react";
 import { useAuth } from "../../components/Context/AuthContext";
 import { useEffect, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import SubTitle from "../../components/ui/SubTitle";
 import Icon from "../../components/ui/Icon";
 import { useUserData } from "../../components/Context/UserDataContext";
+
 function Setting() {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formUserName, setFormUserName] = useState("");
   const [formUserRealName, setFormUserRealName] = useState("");
   const [formMailBoxID, setFormMailBoxID] = useState("");
+  const [isError, setIsError] = useState("");
   const { userData } = useUserData();
   const { userName, userRealName, mailBoxID } = userData || {};
 
@@ -32,7 +42,6 @@ function Setting() {
     setFormUserRealName(userRealName);
     setFormMailBoxID(mailBoxID);
   }, []);
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -40,12 +49,25 @@ function Setting() {
       try {
         if (currentUser) {
           setLoading(true);
-
+          // 確認名稱是否重複
+          if (userName !== formUserName) {
+            const usersDoc = query(
+              collection(db, "users"),
+              where("userName", "==", formUserName)
+            );
+            const QuerySnapshot = await getDocs(usersDoc);
+            if (!QuerySnapshot.empty) {
+              setIsError("名稱重複!");
+              setLoading(false);
+              return;
+            }
+          }
           const userDocRef = doc(db, `users/${currentUser.uid}`);
-
           if (formUserName) updateDoc(userDocRef, { userName: formUserName });
-          if (formUserRealName) updateDoc(userDocRef, { userRealName: formUserRealName });
-          if (formMailBoxID) updateDoc(userDocRef, { mailBoxID: formMailBoxID });
+          if (formUserRealName)
+            updateDoc(userDocRef, { userRealName: formUserRealName });
+          if (formMailBoxID)
+            updateDoc(userDocRef, { mailBoxID: formMailBoxID });
 
           setLoading(false);
         }
@@ -60,7 +82,9 @@ function Setting() {
     <>
       <Wrapper>
         <Flex w="150px" direction="column">
-          <SubTitle textAlign="left" size="2xl">設定</SubTitle>
+          <SubTitle textAlign="left" size="2xl">
+            設定
+          </SubTitle>
           <VStack align="flex-start">
             <Button
               color="white"
@@ -86,21 +110,30 @@ function Setting() {
             </Button>
           </VStack>
         </Flex>
-        <Container w="600px">
+        <Container w={["100%", "100%", "600px"]}>
           <Card variant="setting">
             <CardBody>
               <form onSubmit={onSubmit}>
                 <VStack align="flex-start">
-                  <FormControl>
+                  <FormControl isInvalid={isError}>
                     <FormLabel>使用者名稱</FormLabel>
                     <Input
                       maxLength={20}
                       value={formUserName}
                       onChange={(e) => {
                         setFormUserName(e.target.value);
+                        setIsError("");
                       }}
                     />
-                    <FormHelperText color="gray.700">帳戶登入與顯示</FormHelperText>
+                    {isError ? (
+                      <FormErrorMessage color="red.500" fontWeight="bold">
+                        {isError}
+                      </FormErrorMessage>
+                    ) : (
+                      <FormHelperText color="gray.700">
+                        帳戶登入與顯示
+                      </FormHelperText>
+                    )}
                   </FormControl>
                   <FormControl>
                     <FormLabel>真實姓名</FormLabel>
@@ -111,7 +144,9 @@ function Setting() {
                         setFormUserRealName(e.target.value);
                       }}
                     />
-                    <FormHelperText color="gray.700">確保能夠寄送通知</FormHelperText>
+                    <FormHelperText color="gray.700">
+                      確保能夠寄送通知
+                    </FormHelperText>
                   </FormControl>
                   <FormControl>
                     <FormLabel>郵箱ID</FormLabel>

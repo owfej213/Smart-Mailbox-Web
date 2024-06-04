@@ -10,29 +10,28 @@ function SendImage() {
   const [imageUrls, setImageUrls] = useState([]);
   const { userData } = useUserData();
   const { mailBoxID } = userData || {};
-  
-  
-  const uploadFile = async() => {
+
+  const uploadFile = async () => {
     if (imageUpload == null) return;
-    const imageRef = ref(storage, `${mailBoxID}/images/${imageUpload.name}`);
+    const imageRef = ref(storage, `${mailBoxID}/${imageUpload.name}`);
     const UploadResult = await uploadBytes(imageRef, imageUpload);
     const url = await getDownloadURL(UploadResult.ref);
     setImageUrls((prev) => [...prev, url]);
   };
 
   useEffect(() => {
-    const fetchImageData = async() => {
-      const imagesListRef = ref(storage, `${mailBoxID}/images/`);
+    const fetchImageData = async () => {
+      const imagesListRef = ref(storage, `${mailBoxID}/`);
       const ListResult = await listAll(imagesListRef);
-        const Images = await Promise.all(
-          ListResult.items.map(async (item) => {
-            return await getDownloadURL(item);
-          })
-        )
-        setImageUrls(Images);
-    }
+      const Images = await Promise.all(
+        ListResult.items.map(async (item) => {
+          return await getDownloadURL(item);
+        })
+      );
+      setImageUrls(Images);
+    };
     fetchImageData();
-  }, []);
+  }, [mailBoxID]);
 
   return (
     <>
