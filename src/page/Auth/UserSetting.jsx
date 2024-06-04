@@ -41,7 +41,7 @@ function Setting() {
     setFormUserName(userName);
     setFormUserRealName(userRealName);
     setFormMailBoxID(mailBoxID);
-  }, []);
+  }, [mailBoxID, userName, userRealName]);
   const onSubmit = async (e) => {
     e.preventDefault();
 

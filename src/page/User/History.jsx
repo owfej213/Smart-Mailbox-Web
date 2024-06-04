@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Wrapper from "../../components/ui/Wrapper";
-import { Flex, Show, Text, VStack } from "@chakra-ui/react";
+import { Flex, Hide, Show, Text, VStack } from "@chakra-ui/react";
 import { useMailsData } from "../../components/Context/MailsDataContext";
 import { formateDateYMD } from "../../utils/dateUtils";
 
@@ -27,15 +27,15 @@ TableRow.propTypes = {
 function TableItem({ children, title, maxW, ...props }) {
   return (
     <Flex
-      p="3"
+      p={["2", "3"]}
       w="100%"
       justify={["space-between", "space-between", "center"]}
       maxW={maxW}
     >
-      <Text fontSize="2xl" fontWeight="bold">
+      <Text fontSize={["lg", "xl", "2xl"]} fontWeight="bold">
         {title}
       </Text>
-      <Text fontSize="2xl" fontWeight="bold" {...props}>
+      <Text fontSize={["lg", "xl", "2xl"]} fontWeight="bold" {...props}>
         {children}
       </Text>
     </Flex>
@@ -75,7 +75,7 @@ function List({ mailsData, ...props }) {
                   </TableItem>
                 </TableRow>
               </Show>
-              <Show below="md">
+              <Hide above="md">
                 <TableRow bg="gray.300">
                   <TableItem title="收件日期">
                     {formateDateYMD(mail?.createAt?.seconds)}
@@ -94,7 +94,7 @@ function List({ mailsData, ...props }) {
                     <Link to={`/detail/${mail.uid}`}>查看</Link>
                   </TableItem>
                 </TableRow>
-              </Show>
+              </Hide>
             </>
           );
         })}

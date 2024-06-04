@@ -103,7 +103,13 @@ function Header() {
           align={["none", "none", "center"]}
           direction={["column", "column", "row"]}
         >
-          <Text as={Link} to="/home" fontSize="3xl" color="white">
+          <Text
+            as={Link}
+            to="/home"
+            fontSize="3xl"
+            color="white"
+            align="center"
+          >
             智慧郵箱
           </Text>
           <NavItem to="/home">主頁</NavItem>
