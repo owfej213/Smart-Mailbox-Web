@@ -53,6 +53,7 @@ function List({ mailsData, ...props }) {
     <>
       {mailsData &&
         mailsData.map((mail, index) => {
+          if (!mail?.createAt) return;
           return (
             <>
               <Show above="md">
@@ -117,7 +118,7 @@ function History() {
             <TableRow bg="gray.400">
               <TableItem maxW="300px" title="收件日期" />
               <TableItem maxW="250px" title="郵件標題" />
-              <TableItem maxW="150px" title="收信人" />
+              <TableItem maxW="150px" title="收件人" />
               <TableItem maxW="150px" title="緊急度" />
               <TableItem maxW="150px" title="細節" />
             </TableRow>

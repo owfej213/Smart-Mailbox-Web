@@ -92,7 +92,7 @@ function Statistics() {
         >
           <GridItem colSpan={[8, 8, 5]}>
             <Container h="100%">
-              <SubTitle>總覽</SubTitle>
+              <SubTitle>總攬</SubTitle>
               <Stack spacing="8" direction={["column", "column", "row"]}>
                 <Container bg="gray.500">
                   <SubTitle size="md">郵件總數</SubTitle>

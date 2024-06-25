@@ -44,7 +44,9 @@ function App() {
                       <Route
                         exact
                         path="/"
-                        element={<RoleBasedRoute allowedRoles={["admin", "root"]} />}
+                        element={
+                          <RoleBasedRoute allowedRoles={["admin", "root"]} />
+                        }
                       >
                         <Route exact path="admin" element={<Admin />} />
                       </Route>
@@ -53,8 +55,16 @@ function App() {
                         path="/"
                         element={<RoleBasedRoute allowedRoles={["root"]} />}
                       >
-                        <Route exact path="send-mail-test" element={<SendMail />} />
-                        <Route exact path="send-image-test" element={<SendImage />} />
+                        <Route
+                          exact
+                          path="send-mail-test"
+                          element={<SendMail />}
+                        />
+                        <Route
+                          exact
+                          path="send-image-test"
+                          element={<SendImage />}
+                        />
                       </Route>
                     </Route>
                   </Route>
