@@ -1,6 +1,0 @@
-name = "imailbox"
-
-[pages]
-pages_build_output_dir = "build"
-
-ignore = ["functions/**"]
