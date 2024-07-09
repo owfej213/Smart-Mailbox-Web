@@ -133,7 +133,6 @@ const MailBoxUserModal = ({ mailBoxID }) => {
           })}
         <VStack>
           <Button
-            bg="gray.300"
             borderRadius="full"
             p="0"
             onClick={() => {
@@ -141,7 +140,7 @@ const MailBoxUserModal = ({ mailBoxID }) => {
               setSearchUserList([]);
             }}
           >
-            <Icon name="Plus" color="white" size={30} />
+            <Icon name="Plus" color="gray" size={30} />
           </Button>
         </VStack>
       </HStack>

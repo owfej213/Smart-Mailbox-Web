@@ -18,6 +18,7 @@ export function MailsDataProvider({ children }) {
   const [mailsData, setMailsData] = useState([]);
   const [mailsDataCount, setMailsDataCount] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [mailClasses, setMailClasses] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -58,6 +59,14 @@ export function MailsDataProvider({ children }) {
         });
       setMailsDataCount(mails.length);
       setMailsData(mails);
+      mails.forEach((mail) => {
+        if (mail?.type !== undefined && mail?.type !== "") {
+          setMailClasses((prevState) => ({
+            ...prevState,
+            [mail?.type]: prevState[mail?.type] ? prevState[mail?.type] + 1 : 1,
+          }));
+        }
+      });
     }
     setLoading(false);
   }
@@ -65,6 +74,7 @@ export function MailsDataProvider({ children }) {
   const value = {
     mailsData,
     mailsDataCount,
+    mailClasses,
   };
 
   return (
