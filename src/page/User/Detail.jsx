@@ -59,7 +59,7 @@ function Detail() {
         <Container w="500px">
           <SubTitle size="2xl">進階資訊</SubTitle>
           <span>寄送人：{sender}</span>
-          <span>寄送單位或地址：{senderCompany}</span>
+          <span>寄送單位或地址：{senderAddress}</span>
           <span>緊急性：{urgency}</span>
           <span>關鍵內容：{keyContent}</span>
         </Container>
