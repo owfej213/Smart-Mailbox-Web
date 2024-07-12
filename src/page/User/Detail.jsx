@@ -19,8 +19,9 @@ function Detail() {
     title,
     type,
     receiver,
+    receiverAddress,
     sender,
-    senderCompany,
+    senderAddress,
     urgency,
     keyContent,
   } = maildata || {};
@@ -55,11 +56,12 @@ function Detail() {
           <span>信件主題：{title}</span>
           <span>類型：{type}</span>
           <span>收信人：{receiver}</span>
+          <span>收信人地址：{receiverAddress}</span>
         </Container>
         <Container w="500px">
           <SubTitle size="2xl">進階資訊</SubTitle>
-          <span>寄送人：{sender}</span>
-          <span>寄送單位或地址：{senderAddress}</span>
+          <span>寄件人或單位：{sender}</span>
+          <span>寄件地址：{senderAddress}</span>
           <span>緊急性：{urgency}</span>
           <span>關鍵內容：{keyContent}</span>
         </Container>
