@@ -37,7 +37,7 @@ function Register() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if(!isRegistering && userLoggedIn) navigate("/home");
+    if (!isRegistering && userLoggedIn) navigate("/home");
   }, [isRegistering, navigate, userLoggedIn]);
 
   const onSubmit = async (e) => {

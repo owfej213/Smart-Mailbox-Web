@@ -10,6 +10,7 @@ import { useAuth } from "../components/Context/AuthContext";
 import { useEffect, useState } from "react";
 import { TimeBetween } from "../utils/dateUtils";
 import MailBoxUserModal from "../components/layout/MailBoxUserModal";
+import { monthsMailFilter } from "../utils/mailsFilters";
 
 const List = ({ mailsData }) => {
   return (
@@ -31,7 +32,7 @@ const List = ({ mailsData }) => {
                       color: "teal.400",
                     }}
                   >
-                    你有一封新信件 - {mail.title}
+                    {mail.title}
                   </Text>
                   <Text fontWeight="bold" fontSize="small">
                     - {TimeBetween(seconds, new Date().getTime() / 1000)}
@@ -54,13 +55,14 @@ function Home() {
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
   const { userName, userRole, mailBoxID } = userData || {};
-
+  const [monthsMail, setMonthsMail] = useState([]);
   const [userLoginType, setUserLoginType] = useState("");
 
   useEffect(() => {
     if (isEmailUser) setUserLoginType("Email");
     if (isGoogleUser) setUserLoginType("Google");
-  }, [isEmailUser, isGoogleUser]);
+    setMonthsMail(monthsMailFilter(mailsData));
+  }, [isEmailUser, isGoogleUser, mailsData]);
 
   return (
     <>
@@ -81,7 +83,7 @@ function Home() {
         <Container w={["100%", "100%", "600px"]}>
           <SubTitle size="2xl">重要郵件</SubTitle>
           <VStack divider={<StackDivider borderColor="gray.600" />}>
-            <List mailsData={mailsData} />
+            <List mailsData={monthsMail} />
           </VStack>
         </Container>
       </Wrapper>

@@ -1,21 +1,6 @@
-import { Chart as ChartJS, registerables } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
-import {
-  Button,
-  Center,
-  Flex,
-  Grid,
-  GridItem,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Chart, registerables } from "chart.js";
+import { Pie, Line } from "react-chartjs-2";
+import { Center, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
 import Wrapper from "../../components/ui/Wrapper";
 import SubTitle from "../../components/ui/SubTitle";
 import Container from "../../components/ui/Container";
@@ -24,9 +9,12 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker, createStaticRanges } from "react-date-range";
 import { useEffect, useState } from "react";
-import { monthsMailFilter, todaysMailFilter } from "../../utils/mailsFilters";
+import {
+  dateSelecter,
+  monthsMailFilter,
+  todaysMailFilter,
+} from "../../utils/mailsFilters";
 import { zhTW } from "date-fns/locale";
-import Icon from "../../components/ui/Icon";
 import {
   addDays,
   addMonths,
@@ -41,6 +29,17 @@ import {
   startOfWeek,
   startOfYear,
 } from "date-fns";
+
+const COLOR = [
+  "rgba(255, 99, 132, 0.8)",
+  "rgba(54, 162, 235, 0.8)",
+  "rgba(75, 192, 192, 0.8)",
+  "rgba(255, 206, 86, 0.8)",
+  "rgba(255, 159, 64, 0.8)",
+  "rgba(153, 102, 255, 0.8)",
+  "rgba(255, 182, 193, 0.8)",
+  "rgba(0, 255, 255, 0.8)",
+];
 
 const defineds = {
   startOfWeek: startOfWeek(new Date()),
@@ -123,10 +122,10 @@ const InputRanges = [
   },
 ];
 
-ChartJS.register(...registerables);
+Chart.register(...registerables);
 
 function Statistics() {
-  const { mailsDataCount, mailsData, mailClasses } = useMailsData();
+  const { mailsDataCount, mailsData } = useMailsData();
   const [state, setState] = useState([
     {
       startDate: new Date(),
@@ -134,37 +133,37 @@ function Statistics() {
       key: "selection",
     },
   ]);
+  const [classes, setClasses] = useState({});
+  const [timeClasses, setTimeClasses] = useState({});
+  const [dateArray, setDateArray] = useState([]);
   const [todaysMailCounts, setTodaysMailCounts] = useState(Number);
   const [monthsMailCounts, setMonthsMailCounts] = useState(Number);
+  const [dateRange, setDateRange] = useState({});
   const PieData = {
-    labels: Object.keys(mailClasses),
+    labels: Object.keys(classes),
     datasets: [
       {
         label: "數量",
-        data: Object.values(mailClasses),
-        backgroundColor: [
-          "rgb(0, 202, 220)",
-          "rgb(255, 87, 87)",
-          "rgb(255, 145, 77)",
-          "rgb(126, 217, 87)",
-        ],
-        hoverOffset: 4,
+        data: Object.values(classes),
+        backgroundColor: COLOR,
+        borderWidth: 1,
+        hoverOffset: 50,
       },
     ],
   };
 
-  const BarData = {
-    labels: ["1月", "2月", "3月", "4月", "5月"],
-    datasets: [
-      {
-        label: "數量",
-        backgroundColor: "rgb(56, 182, 255)",
-        hoverBackgroundColor: "rgb(0, 160, 253)",
-        borderRadius: 5,
-        barPercentage: 0.5,
-        data: [9, 8, 8, 10, 6],
-      },
-    ],
+  const LineData = {
+    labels: dateArray,
+    datasets: Object.keys(timeClasses).map((item, index) => {
+      return {
+        label: item,
+        data: timeClasses[item],
+        backgroundColor: COLOR[index % COLOR.length],
+        borderWidth: 5,
+        borderColor: COLOR[index % COLOR.length],
+        tension: 0.5,
+      };
+    }),
   };
 
   const BarOptions = {
@@ -181,11 +180,18 @@ function Statistics() {
 
     let monthsMails = monthsMailFilter(mailsData);
     setMonthsMailCounts(monthsMails.length);
-  }, [mailsData]);
-  console.log(mailClasses);
+    const { mailClasses, mailtimeClasses, formattedDates } = dateSelecter(
+      mailsData,
+      dateRange.startDate,
+      dateRange.endDate
+    );
+    setClasses(mailClasses);
+    setTimeClasses(mailtimeClasses);
+    setDateArray(formattedDates);
+  }, [dateRange, mailsData]);
+
   function handleSelect(ranges) {
-    console.log(ranges.selection.startDate);
-    console.log(ranges.selection.endDate);
+    setDateRange(ranges.selection);
     setState([ranges.selection]);
   }
 
@@ -199,9 +205,9 @@ function Statistics() {
           templateColumns="repeat(8, 1fr)"
           gap={4}
         >
-          <GridItem colSpan={[8, 8, 8]}>
+          <GridItem colSpan={8}>
             <Container h="100%">
-              <SubTitle>總攬</SubTitle>
+              <SubTitle>總覽</SubTitle>
               <Stack spacing="8" direction={["column", "column", "row"]}>
                 <Container bg="gray.500">
                   <SubTitle size="lg">郵件總數</SubTitle>
@@ -240,39 +246,30 @@ function Statistics() {
           </GridItem>
           <GridItem colSpan={[8, 8, 4]}>
             <Container h="100%">
-              <Flex justify="center">
-                <SubTitle size="3xl" pb="0">
-                  收件日期範圍選擇
-                </SubTitle>
-                <Popover h="100%">
-                  <PopoverTrigger>
-                    <Button fontSize="2xl" p="2" ml="2">
-                      <Icon name="CalendarPlus2" color="gray" size={30} />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent w="600px">
-                    <PopoverArrow />
-                    <PopoverCloseButton />
-                    <PopoverHeader textAlign="center" fontWeight="bold">
-                      請選擇日期範圍
-                    </PopoverHeader>
-                    <PopoverBody>
-                      <DateRangePicker
-                        locale={zhTW}
-                        editableDateInputs={true}
-                        onChange={handleSelect}
-                        moveRangeOnFirstSelection={false}
-                        ranges={state}
-                        dateDisplayFormat="yyyy-MM-dd"
-                        staticRanges={StaticRanges}
-                        inputRanges={InputRanges}
-                      />
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>{" "}
-              </Flex>
-              <Center w="100%" h="400px">
-                <Bar data={BarData} options={BarOptions} />
+              <SubTitle size="3xl" pb="0">
+                收件日期範圍選擇
+              </SubTitle>
+              <Center h="100%">
+                <DateRangePicker
+                  locale={zhTW}
+                  editableDateInputs={true}
+                  onChange={handleSelect}
+                  moveRangeOnFirstSelection={false}
+                  ranges={state}
+                  dateDisplayFormat="yyyy-MM-dd"
+                  staticRanges={StaticRanges}
+                  inputRanges={InputRanges}
+                />{" "}
+              </Center>
+            </Container>
+          </GridItem>
+          <GridItem colSpan={[8, 8, 8]}>
+            <Container h="100%">
+              <SubTitle size="3xl" pb="0">
+                收件日期
+              </SubTitle>
+              <Center w="100%" h="600px">
+                <Line data={LineData} options={BarOptions} />
               </Center>
             </Container>
           </GridItem>

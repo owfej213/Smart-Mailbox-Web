@@ -17,8 +17,10 @@ import { useEffect, useState } from "react";
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -42,9 +44,9 @@ function Setting() {
     setFormUserRealName(userRealName);
     setFormMailBoxID(mailBoxID);
   }, [mailBoxID, userName, userRealName]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-
     async function UserDataUpdate() {
       try {
         if (currentUser) {
@@ -63,12 +65,38 @@ function Setting() {
             }
           }
           const userDocRef = doc(db, `users/${currentUser.uid}`);
+
           if (formUserName) updateDoc(userDocRef, { userName: formUserName });
           if (formUserRealName)
             updateDoc(userDocRef, { userRealName: formUserRealName });
-          if (formMailBoxID)
+          if (formMailBoxID) {
             updateDoc(userDocRef, { mailBoxID: formMailBoxID });
 
+            if (mailBoxID === formMailBoxID) return setLoading(false);
+
+            const mailBoxRef = doc(db, `mailBoxes/${mailBoxID}`);
+            const mailBoxNewRef = doc(db, `mailBoxes/${formMailBoxID}`);
+            let userList = [];
+            let newUserList = [];
+
+            if (mailBoxID) {
+              const result = await getDoc(mailBoxRef);
+              userList = result.data()?.users || [];
+              userList = userList.filter((user) => {
+                return user.userID !== currentUser.uid;
+              });
+              setDoc(mailBoxRef, { users: userList });
+            }
+            if (formMailBoxID) {
+              const result = await getDoc(mailBoxNewRef);
+              newUserList = result.data()?.users || [];
+              newUserList.push({
+                userID: currentUser.uid,
+                userName: formUserName,
+              });
+              setDoc(mailBoxNewRef, { users: newUserList });
+            }
+          }
           setLoading(false);
         }
       } catch (error) {

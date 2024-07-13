@@ -4,6 +4,7 @@ import Wrapper from "../../components/ui/Wrapper";
 import { Flex, Hide, Show, Text, VStack } from "@chakra-ui/react";
 import { useMailsData } from "../../components/Context/MailsDataContext";
 import { formateDateYMD } from "../../utils/dateUtils";
+import { useUserData } from "../../components/Context/UserDataContext";
 
 function TableRow({ children, ...props }) {
   return (
@@ -48,16 +49,27 @@ TableItem.propTypes = {
   maxW: PropTypes.string,
 };
 
-function List({ mailsData, ...props }) {
+function List({ mailsData }) {
+  const { userData } = useUserData();
+
   return (
     <>
       {mailsData &&
         mailsData.map((mail, index) => {
           if (!mail?.createAt) return;
+
+          let TableRowColor = "";
+
+          if (mail.receiver === userData.userRealName) {
+            TableRowColor = "cyan.100";
+          } else {
+            TableRowColor = "gray.300";
+          }
+
           return (
             <>
               <Show above="md">
-                <TableRow key={index} {...props}>
+                <TableRow key={index} bg={TableRowColor}>
                   <TableItem maxW="300px">
                     {formateDateYMD(mail?.createAt?.seconds)}
                   </TableItem>
@@ -77,7 +89,7 @@ function List({ mailsData, ...props }) {
                 </TableRow>
               </Show>
               <Hide above="md">
-                <TableRow bg="gray.300">
+                <TableRow bg={TableRowColor}>
                   <TableItem title="收件日期">
                     {formateDateYMD(mail?.createAt?.seconds)}
                   </TableItem>
@@ -123,7 +135,7 @@ function History() {
               <TableItem maxW="150px" title="細節" />
             </TableRow>
           </Show>
-          <List bg="gray.300" mailsData={mailsData} />
+          <List mailsData={mailsData} />
         </VStack>
       </Wrapper>
     </>
