@@ -1,6 +1,20 @@
 import { Chart, registerables } from "chart.js";
 import { Pie, Line } from "react-chartjs-2";
-import { Center, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Grid,
+  GridItem,
+  Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import Wrapper from "../../components/ui/Wrapper";
 import SubTitle from "../../components/ui/SubTitle";
 import Container from "../../components/ui/Container";
@@ -29,6 +43,9 @@ import {
   startOfWeek,
   startOfYear,
 } from "date-fns";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const COLOR = [
   "rgba(255, 99, 132, 0.8)",
@@ -197,84 +214,140 @@ function Statistics() {
 
   return (
     <>
-      <Wrapper>
-        <Grid
-          h="400px"
-          maxW="1200px"
-          w="100%"
-          templateColumns="repeat(8, 1fr)"
-          gap={4}
-        >
-          <GridItem colSpan={8}>
-            <Container h="100%">
-              <SubTitle>總覽</SubTitle>
-              <Stack spacing="8" direction={["column", "column", "row"]}>
-                <Container bg="gray.500">
-                  <SubTitle size="lg">郵件總數</SubTitle>
-                  <Center>
-                    <Text color="white" fontSize="3xl">
-                      {mailsDataCount}
-                    </Text>
-                  </Center>
-                </Container>
-                <Container bg="gray.500">
-                  <SubTitle size="lg">今日郵件數</SubTitle>
-                  <Center>
-                    <Text color="white" fontSize="3xl">
-                      {todaysMailCounts}
-                    </Text>
-                  </Center>
-                </Container>
-                <Container bg="gray.500">
-                  <SubTitle size="lg">本月郵件數</SubTitle>
-                  <Center>
-                    <Text color="white" fontSize="3xl">
-                      {monthsMailCounts}
-                    </Text>
-                  </Center>
-                </Container>
-              </Stack>
-            </Container>
-          </GridItem>
-          <GridItem colSpan={[8, 8, 4]}>
-            <Container h="100%">
-              <SubTitle size="3xl">郵件總類</SubTitle>
-              <Center w="100%" h="400px">
-                <Pie data={PieData} options={""} />
-              </Center>
-            </Container>
-          </GridItem>
-          <GridItem colSpan={[8, 8, 4]}>
-            <Container h="100%">
-              <SubTitle size="3xl" pb="0">
-                收件日期範圍選擇
-              </SubTitle>
-              <Center h="100%">
-                <DateRangePicker
-                  locale={zhTW}
-                  editableDateInputs={true}
-                  onChange={handleSelect}
-                  moveRangeOnFirstSelection={false}
-                  ranges={state}
-                  dateDisplayFormat="yyyy-MM-dd"
-                  staticRanges={StaticRanges}
-                  inputRanges={InputRanges}
-                />{" "}
-              </Center>
-            </Container>
-          </GridItem>
-          <GridItem colSpan={[8, 8, 8]}>
-            <Container h="100%">
-              <SubTitle size="3xl" pb="0">
-                收件日期
-              </SubTitle>
-              <Center w="100%" h="600px">
-                <Line data={LineData} options={BarOptions} />
-              </Center>
-            </Container>
-          </GridItem>
-        </Grid>
-      </Wrapper>
+      <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Wrapper>
+          <Grid
+            h="400px"
+            maxW="1200px"
+            w="100%"
+            templateColumns="repeat(8, 1fr)"
+            gap={4}
+          >
+            <GridItem colSpan={[8, 8, 4]}>
+              <Container h="100%">
+                <SubTitle>總覽</SubTitle>
+                <Stack spacing="8" direction="column" p="8">
+                  <Container bg="gray.500">
+                    <SubTitle size="lg">郵件總數</SubTitle>
+                    <Center>
+                      <Text color="white" fontSize="3xl">
+                        {mailsDataCount}
+                      </Text>
+                    </Center>
+                  </Container>
+                  <Container bg="gray.500">
+                    <SubTitle size="lg">今日郵件數</SubTitle>
+                    <Center>
+                      <Text color="white" fontSize="3xl">
+                        {todaysMailCounts}
+                      </Text>
+                    </Center>
+                  </Container>
+                  <Container bg="gray.500">
+                    <SubTitle size="lg">本月郵件數</SubTitle>
+                    <Center>
+                      <Text color="white" fontSize="3xl">
+                        {monthsMailCounts}
+                      </Text>
+                    </Center>
+                  </Container>
+                </Stack>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={[8, 8, 4]}>
+              <Container h="100%">
+                <SubTitle size="3xl">分類說明</SubTitle>
+                <TableContainer>
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>分類名稱</Th>
+                        <Th>種類</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>金融信封</Td>
+                        <Td>保險/銀行/股票/投資</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>學校信封</Td>
+                        <Td>XX大學、高中/成績單/學校通知</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>費用信封</Td>
+                        <Td>電費/瓦斯費/水費/罰單/繳費單/繳稅</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>私人信封</Td>
+                        <Td>朋友/私密訊息</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>公文信封</Td>
+                        <Td>公家單位</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>活動傳單</Td>
+                        <Td>社區活動/慈善宣傳</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>廣告傳單</Td>
+                        <Td>補習班/店家/產品/優惠/折價券</Td>
+                      </Tr>
+                      <Tr>
+                        <Td>書刊</Td>
+                        <Td>周刊/月刊/雜誌</Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={[8, 8, 4]}>
+              <Container h="100%">
+                <SubTitle size="3xl">郵件總類</SubTitle>
+                <Center w="100%" h="400px">
+                  <Pie data={PieData} options={""} />
+                </Center>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={[8, 8, 4]}>
+              <Container h="100%">
+                <SubTitle size="3xl" pb="0">
+                  收件日期範圍選擇
+                </SubTitle>
+                <Center h="100%">
+                  <DateRangePicker
+                    locale={zhTW}
+                    editableDateInputs={true}
+                    onChange={handleSelect}
+                    moveRangeOnFirstSelection={false}
+                    ranges={state}
+                    dateDisplayFormat="yyyy-MM-dd"
+                    staticRanges={StaticRanges}
+                    inputRanges={InputRanges}
+                  />{" "}
+                </Center>
+              </Container>
+            </GridItem>
+            <GridItem colSpan={[8, 8, 8]}>
+              <Container h="100%">
+                <SubTitle size="3xl" pb="0">
+                  收件日期
+                </SubTitle>
+                <Center w="100%" h="600px">
+                  <Line data={LineData} options={BarOptions} />
+                </Center>
+              </Container>
+            </GridItem>
+          </Grid>
+        </Wrapper>
+      </MotionBox>
     </>
   );
 }

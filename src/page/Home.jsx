@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import { TimeBetween } from "../utils/dateUtils";
 import MailBoxUserModal from "../components/layout/MailBoxUserModal";
 import { monthsMailFilter } from "../utils/mailsFilters";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const List = ({ mailsData }) => {
   return (
@@ -66,27 +69,34 @@ function Home() {
 
   return (
     <>
-      <Wrapper>
-        <VStack w={["100%", "100%", "400px"]} spacing="8">
-          <Container>
-            <SubTitle size="2xl">登入狀態</SubTitle>
-            <VStack align="flex-start">
-              <Text fontWeight="bold">名稱：{userName}</Text>
-              <Text fontWeight="bold">身分：{userRole}</Text>
-              <Text fontWeight="bold">登入方式：{userLoginType}</Text>
+      <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Wrapper>
+          <VStack w={["100%", "100%", "400px"]} spacing="8">
+            <Container>
+              <SubTitle size="2xl">登入狀態</SubTitle>
+              <VStack align="flex-start">
+                <Text fontWeight="bold">名稱：{userName}</Text>
+                <Text fontWeight="bold">身分：{userRole}</Text>
+                <Text fontWeight="bold">登入方式：{userLoginType}</Text>
+              </VStack>
+            </Container>
+            <Container>
+              <MailBoxUserModal mailBoxID={mailBoxID} />
+            </Container>
+          </VStack>
+          <Container w={["100%", "100%", "600px"]}>
+            <SubTitle size="2xl">重要郵件</SubTitle>
+            <VStack divider={<StackDivider borderColor="gray.600" />}>
+              <List mailsData={monthsMail} />
             </VStack>
           </Container>
-          <Container>
-            <MailBoxUserModal mailBoxID={mailBoxID} />
-          </Container>
-        </VStack>
-        <Container w={["100%", "100%", "600px"]}>
-          <SubTitle size="2xl">重要郵件</SubTitle>
-          <VStack divider={<StackDivider borderColor="gray.600" />}>
-            <List mailsData={monthsMail} />
-          </VStack>
-        </Container>
-      </Wrapper>
+        </Wrapper>
+      </MotionBox>
     </>
   );
 }

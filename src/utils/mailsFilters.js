@@ -41,23 +41,35 @@ export function dateSelecter(mails, startDate, endDate){
     const datesInRange = eachDayOfInterval({ start: startDate, end: endDate });
     const formattedDates = datesInRange.map(date => format(date, 'yyyy/MM/dd'));
     
+    const mailDefaultClasses = { '金融': '金融信封', '學校': '學校信封', '費用': '費用信封', '私人': '私人信封', '公文': '公文信封', '活動': '活動傳單', '廣告': '廣告傳單', '書刊': '書刊'}
+
     selecteDateMails.forEach(mail => {
         if (mail?.type !== undefined && mail?.type !== "") {
-            if(mailClasses[mail?.type]){
-                mailClasses[mail?.type] += 1;
-            } else {
-                mailClasses[mail?.type] = 1;
+
+            let mailType = "";
+
+            for(var mailclass in mailDefaultClasses){
+                if(mail.type.includes(mailclass)){
+                    mailType = mailDefaultClasses[mailclass];
+                    break;
+                }
             }
 
-            if(!mailtimeClasses[mail?.type]){
-                mailtimeClasses[mail?.type] = [];
+            if(mailClasses[mailType]){
+                mailClasses[mailType] += 1;
+            } else {
+                mailClasses[mailType] = 1;
+            }
+
+            if(!mailtimeClasses[mailType]){
+                mailtimeClasses[mailType] = [];
                 for(var i = 0; i < formattedDates.length; i++){
-                    mailtimeClasses[mail?.type].push(0);
+                    mailtimeClasses[mailType].push(0);
                 }
             }
             const daysDiff = differenceInDays(new Date(mail?.createAt?.seconds * 1000), startDate);
 
-            mailtimeClasses[mail?.type][daysDiff] += 1;
+            mailtimeClasses[mailType][daysDiff] += 1;
         }
     });
     return {

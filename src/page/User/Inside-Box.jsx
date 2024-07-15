@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import Wrapper from "../../components/ui/Wrapper";
-import { Flex, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import Icon from "../../components/ui/Icon";
 import { getDownloadURL, getMetadata, listAll, ref } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import { useUserData } from "../../components/Context/UserDataContext";
 import { formateDateYMDHM } from "../../utils/dateUtils";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function InsideBox() {
   const [loading, setLoading] = useState(true);
@@ -56,36 +59,43 @@ function InsideBox() {
 
   return (
     <>
-      <Wrapper>
-        {!loading && (
-          <VStack>
-            {imageExist ? (
-              <>
-                <Text my="4" color="white" fontWeight="600" fontSize="xl">
-                  上次更新時間：
-                  {imageDateNumber !== 0 && formateDateYMDHM(imageDateNumber)}
-                </Text>
-                <Image src={imageUrl} w="1000px" />
-              </>
-            ) : (
-              <>
-                <Text my="4" color="white" fontWeight="600" fontSize="xl">
-                  尚未有任何照片
-                </Text>
-                <Flex
-                  bg="gray.300"
-                  w="900px"
-                  h="600px"
-                  align="center"
-                  justify="center"
-                >
-                  <Icon name="Mail" color="#3182CE" size={160} />
-                </Flex>
-              </>
-            )}
-          </VStack>
-        )}
-      </Wrapper>
+      <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Wrapper>
+          {!loading && (
+            <VStack>
+              {imageExist ? (
+                <>
+                  <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                    上次更新時間：
+                    {imageDateNumber !== 0 && formateDateYMDHM(imageDateNumber)}
+                  </Text>
+                  <Image src={imageUrl} w="1000px" />
+                </>
+              ) : (
+                <>
+                  <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                    尚未有任何照片
+                  </Text>
+                  <Flex
+                    bg="gray.300"
+                    w="900px"
+                    h="600px"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon name="Mail" color="#3182CE" size={160} />
+                  </Flex>
+                </>
+              )}
+            </VStack>
+          )}
+        </Wrapper>
+      </MotionBox>
     </>
   );
 }
