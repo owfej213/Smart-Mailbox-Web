@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Input,
@@ -17,7 +18,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Icon from "../ui/Icon";
-import SubTitle from "../ui/SubTitle";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -120,69 +120,70 @@ const MailBoxUserModal = ({ mailBoxID }) => {
 
   return (
     <>
-      <SubTitle size="2xl">郵箱使用人</SubTitle>
-      <HStack mx="8" spacing="6">
-        {userList &&
-          userList.map((user) => {
-            return (
-              <VStack key={user?.userName}>
-                <Icon name="CircleUserRound" color="white" size={42} />
-                <Text fontWeight="600">{user?.userName}</Text>
+      <Box h="100%">
+        <HStack mx="8" spacing="6">
+          {userList &&
+            userList.map((user) => {
+              return (
+                <VStack key={user?.userName}>
+                  <Icon name="CircleUserRound" color="white" size={42} />
+                  <Text fontWeight="600">{user?.userName}</Text>
+                </VStack>
+              );
+            })}
+          <VStack>
+            <Button
+              borderRadius="full"
+              p="0"
+              onClick={() => {
+                onOpen();
+                setSearchUserList([]);
+              }}
+            >
+              <Icon name="Plus" color="gray" size={30} />
+            </Button>
+          </VStack>
+        </HStack>
+        <Modal onClose={onClose} size="lg" isOpen={isOpen}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>新增用戶</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <HStack>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon name="Search" color="gray" size={20} />
+                  </InputLeftElement>
+                  <Input
+                    type="text"
+                    placeholder="使用者名稱"
+                    onChange={(e) => {
+                      setSearchKeyword(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+                <Button onClick={handleSearchSubmit}>搜尋</Button>
+              </HStack>
+              <VStack pt="4">
+                {searchUserList &&
+                  searchUserList.map((user, index) => {
+                    return (
+                      <AddUserButton
+                        key={index}
+                        user={user}
+                        userList={userList}
+                      />
+                    );
+                  })}
               </VStack>
-            );
-          })}
-        <VStack>
-          <Button
-            borderRadius="full"
-            p="0"
-            onClick={() => {
-              onOpen();
-              setSearchUserList([]);
-            }}
-          >
-            <Icon name="Plus" color="gray" size={30} />
-          </Button>
-        </VStack>
-      </HStack>
-      <Modal onClose={onClose} size="lg" isOpen={isOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>新增用戶</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <HStack>
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <Icon name="Search" color="gray" size={20} />
-                </InputLeftElement>
-                <Input
-                  type="text"
-                  placeholder="使用者名稱"
-                  onChange={(e) => {
-                    setSearchKeyword(e.target.value);
-                  }}
-                />
-              </InputGroup>
-              <Button onClick={handleSearchSubmit}>搜尋</Button>
-            </HStack>
-            <VStack pt="4">
-              {searchUserList &&
-                searchUserList.map((user, index) => {
-                  return (
-                    <AddUserButton
-                      key={index}
-                      user={user}
-                      userList={userList}
-                    />
-                  );
-                })}
-            </VStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
     </>
   );
 };

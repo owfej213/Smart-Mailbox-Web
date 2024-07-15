@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Box, HStack, StackDivider, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  StackDivider,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import Wrapper from "../components/ui/Wrapper";
 import Container from "../components/ui/Container";
 import SubTitle from "../components/ui/SubTitle";
@@ -76,25 +84,32 @@ function Home() {
         transition={{ duration: 0.5 }}
       >
         <Wrapper>
-          <VStack w={["100%", "100%", "400px"]} spacing="8">
-            <Container>
-              <SubTitle size="2xl">登入狀態</SubTitle>
-              <VStack align="flex-start">
-                <Text fontWeight="bold">名稱：{userName}</Text>
-                <Text fontWeight="bold">身分：{userRole}</Text>
-                <Text fontWeight="bold">登入方式：{userLoginType}</Text>
-              </VStack>
-            </Container>
-            <Container>
-              <MailBoxUserModal mailBoxID={mailBoxID} />
-            </Container>
-          </VStack>
-          <Container w={["100%", "100%", "600px"]}>
-            <SubTitle size="2xl">重要郵件</SubTitle>
-            <VStack divider={<StackDivider borderColor="gray.600" />}>
-              <List mailsData={monthsMail} />
-            </VStack>
-          </Container>
+          <Grid maxW="1000px" w="100%" templateColumns="repeat(8, 1fr)" gap={4}>
+            <GridItem colSpan="4">
+              <Container>
+                <SubTitle size="2xl">登入狀態</SubTitle>
+                <VStack align="flex-start">
+                  <Text fontWeight="bold">名稱：{userName}</Text>
+                  <Text fontWeight="bold">身分：{userRole}</Text>
+                  <Text fontWeight="bold">登入方式：{userLoginType}</Text>
+                </VStack>
+              </Container>
+            </GridItem>
+            <GridItem colSpan="4">
+              <Container h="100%">
+                <SubTitle size="2xl">郵箱使用人</SubTitle>
+                <MailBoxUserModal mailBoxID={mailBoxID} />
+              </Container>
+            </GridItem>
+            <GridItem colSpan="8">
+              <Container>
+                <SubTitle size="2xl">重要郵件</SubTitle>
+                <VStack divider={<StackDivider borderColor="gray.600" />}>
+                  <List mailsData={monthsMail} />
+                </VStack>
+              </Container>
+            </GridItem>
+          </Grid>
         </Wrapper>
       </MotionBox>
     </>
