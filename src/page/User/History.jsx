@@ -57,6 +57,7 @@ function TableItem({ children, title, ...props }) {
       p={["2", "3"]}
       w="100%"
       justify={["space-between", "space-between", "center"]}
+      align="center"
       {...props}
     >
       {title && (
