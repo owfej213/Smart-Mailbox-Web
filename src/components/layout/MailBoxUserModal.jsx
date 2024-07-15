@@ -147,7 +147,7 @@ const MailBoxUserModal = ({ mailBoxID }) => {
         <Modal onClose={onClose} size="lg" isOpen={isOpen}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>新增用戶</ModalHeader>
+            <ModalHeader>發送邀請</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <HStack>

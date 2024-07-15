@@ -11,6 +11,7 @@ import {
   FormLabel,
   Input,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useAuth } from "../../components/Context/AuthContext";
 import { useEffect, useState } from "react";
@@ -39,6 +40,8 @@ function Setting() {
   const { userData } = useUserData();
   const { userName, userRealName, mailBoxID } = userData || {};
 
+  const toast = useToast();
+
   useEffect(() => {
     setFormUserName(userName);
     setFormUserRealName(userRealName);
@@ -66,13 +69,12 @@ function Setting() {
           }
           const userDocRef = doc(db, `users/${currentUser.uid}`);
 
-          if (formUserName) updateDoc(userDocRef, { userName: formUserName });
-          if (formUserRealName)
+          if (formUserName && formUserName !== userName)
+            updateDoc(userDocRef, { userName: formUserName });
+          if (formUserRealName && formUserRealName !== userRealName)
             updateDoc(userDocRef, { userRealName: formUserRealName });
-          if (formMailBoxID) {
+          if (formMailBoxID && mailBoxID !== formMailBoxID) {
             updateDoc(userDocRef, { mailBoxID: formMailBoxID });
-
-            if (mailBoxID === formMailBoxID) return setLoading(false);
 
             const mailBoxRef = doc(db, `mailBoxes/${mailBoxID}`);
             const mailBoxNewRef = doc(db, `mailBoxes/${formMailBoxID}`);
@@ -98,6 +100,13 @@ function Setting() {
             }
           }
           setLoading(false);
+          toast({
+            title: "儲存成功！",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+          return;
         }
       } catch (error) {
         console.log(error);

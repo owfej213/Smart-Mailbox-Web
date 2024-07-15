@@ -234,19 +234,15 @@ function History() {
                       <Tbody>
                         <Tr>
                           <Td>高</Td>
-                          <Td></Td>
+                          <Td>具時效性與繳費、公家機關相關之郵件</Td>
                         </Tr>
                         <Tr>
                           <Td>中</Td>
-                          <Td></Td>
-                        </Tr>
-                        <Tr>
-                          <Td>低</Td>
-                          <Td></Td>
+                          <Td>建議使用者查看之郵件</Td>
                         </Tr>
                         <Tr>
                           <Td>無</Td>
-                          <Td></Td>
+                          <Td>無限期，可不需查看之郵件</Td>
                         </Tr>
                       </Tbody>
                     </Table>
