@@ -46,7 +46,7 @@ export function dateSelecter(mails, startDate, endDate){
     selecteDateMails.forEach(mail => {
         if (mail?.type !== undefined && mail?.type !== "") {
 
-            let mailType = "";
+            let mailType = "其他";
 
             for(var mailclass in mailDefaultClasses){
                 if(mail.type.includes(mailclass)){
