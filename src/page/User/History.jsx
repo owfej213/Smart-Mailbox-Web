@@ -61,14 +61,14 @@ function TableItem({ children, title, ...props }) {
       {...props}
     >
       {title && (
-        <Text fontSize={["lg", "xl", "2xl"]} fontWeight="bold">
+        <Box fontSize={["lg", "xl", "2xl"]} fontWeight="bold">
           {title}
-        </Text>
+        </Box>
       )}
       {children && (
-        <Text fontSize={["lg", "xl", "2xl"]} fontWeight="bold">
+        <Box fontSize={["lg", "xl", "2xl"]} fontWeight="bold">
           {children}
-        </Text>
+        </Box>
       )}
     </Flex>
   );
@@ -82,6 +82,7 @@ TableItem.propTypes = {
 function List({ filteredMails, userData }) {
   const theme = useTheme();
   const { mailBoxID } = userData || {};
+  const [newMail, setNewMail] = useState(null);
 
   const handleDeleteMail = async (uid) => {
     try {
@@ -95,6 +96,33 @@ function List({ filteredMails, userData }) {
     }
   };
 
+  useEffect(() => {
+    if (newMail) {
+      const { receiver, title, urgency } = newMail;
+      const message = `有一封新郵件已送達，標題 ${title}，收件人 ${receiver}，緊急度 ${urgency}`;
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = "zh-TW";
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [newMail]);
+
+  useEffect(() => {
+    if (filteredMails) {
+      const currentTime = new Date().getTime() / 1000;
+      const newMail = filteredMails.find((mail) => {
+        return (
+          mail.visible !== false &&
+          mail.createAt &&
+          currentTime - mail.createAt.seconds < 300
+        );
+      });
+
+      if (newMail) {
+        setNewMail(newMail);
+      }
+    }
+  }, [filteredMails]);
+
   return (
     <>
       {filteredMails &&
@@ -106,7 +134,7 @@ function List({ filteredMails, userData }) {
           let initialTableRowColor = "";
           let currentTime = new Date();
 
-          if (currentTime.getTime() / 1000 - mail.createAt.seconds < 60) {
+          if (currentTime.getTime() / 1000 - mail.createAt.seconds < 300) {
             initialTableRowColor = theme.colors.red[500];
           } else {
             initialTableRowColor = theme.colors.gray[200];
@@ -159,7 +187,7 @@ function List({ filteredMails, userData }) {
                         onClick={() => handleDeleteMail(mail.uid)}
                         bg="transparent"
                       >
-                        <Icon name="Trash2" color="red" size="32" />
+                        <Icon name="Trash2" color="red" size={32} />
                       </Button>
                     </TableItem>
                   </TableRow>
@@ -174,7 +202,7 @@ function List({ filteredMails, userData }) {
 
 List.propTypes = {
   filteredMails: PropTypes.array,
-  userData: PropTypes.array,
+  userData: PropTypes.any,
 };
 
 function History() {
@@ -204,6 +232,7 @@ function History() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mailsData, myMailsCheckbox]);
+
   return (
     <>
       <MotionBox
