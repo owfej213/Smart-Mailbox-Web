@@ -4,11 +4,13 @@ import Wrapper from "../../components/ui/Wrapper";
 import {
   Box,
   Button,
-  Checkbox,
   Flex,
+  FormControl,
+  FormLabel,
   Grid,
   GridItem,
   Show,
+  Switch,
   Table,
   TableContainer,
   Tbody,
@@ -32,13 +34,16 @@ import { db } from "../../firebase/firebase";
 import { collection, deleteDoc, doc } from "firebase/firestore";
 
 const MotionBox = motion(Box);
-function TableRow({ children, ...props }) {
+function TableRow({ children, isTitle, ...props }) {
   return (
     <>
       <Flex
         maxW="1200px"
         w="100%"
         direction={["column", "column", "row"]}
+        bg={isTitle ? "gray.400" : {}}
+        borderWidth={isTitle ? {} : "3px"}
+        _hover={isTitle ? {} : { borderWidth: "3px", borderColor: "blue.500" }}
         {...props}
       >
         {children}
@@ -49,6 +54,7 @@ function TableRow({ children, ...props }) {
 
 TableRow.propTypes = {
   children: PropTypes.any,
+  isTitle: PropTypes.bool,
 };
 
 function TableItem({ children, title, ...props }) {
@@ -82,7 +88,6 @@ TableItem.propTypes = {
 function List({ filteredMails, userData }) {
   const theme = useTheme();
   const { mailBoxID } = userData || {};
-  const [newMail, setNewMail] = useState(null);
 
   const handleDeleteMail = async (uid) => {
     try {
@@ -96,33 +101,6 @@ function List({ filteredMails, userData }) {
     }
   };
 
-  useEffect(() => {
-    if (newMail) {
-      const { receiver, title, urgency } = newMail;
-      const message = `有一封新郵件已送達，標題 ${title}，收件人 ${receiver}，緊急度 ${urgency}`;
-      const utterance = new SpeechSynthesisUtterance(message);
-      utterance.lang = "zh-TW";
-      window.speechSynthesis.speak(utterance);
-    }
-  }, [newMail]);
-
-  useEffect(() => {
-    if (filteredMails) {
-      const currentTime = new Date().getTime() / 1000;
-      const newMail = filteredMails.find((mail) => {
-        return (
-          mail.visible !== false &&
-          mail.createAt &&
-          currentTime - mail.createAt.seconds < 300
-        );
-      });
-
-      if (newMail) {
-        setNewMail(newMail);
-      }
-    }
-  }, [filteredMails]);
-
   return (
     <>
       {filteredMails &&
@@ -134,16 +112,17 @@ function List({ filteredMails, userData }) {
           let initialTableRowColor = "";
           let currentTime = new Date();
 
-          if (currentTime.getTime() / 1000 - mail.createAt.seconds < 300) {
-            initialTableRowColor = theme.colors.red[500];
-          } else {
-            initialTableRowColor = theme.colors.gray[200];
-          }
-
           if (mail.receiver === userData.userRealName) {
             TableRowColor = theme.colors.green[200];
           } else {
             TableRowColor = theme.colors.gray[200];
+          }
+
+          if (currentTime.getTime() / 1000 - mail.createAt.seconds < 300) {
+            initialTableRowColor = theme.colors.red[500];
+            TableRowColor = theme.colors.red[200];
+          } else {
+            initialTableRowColor = theme.colors.gray[200];
           }
 
           return (
@@ -207,9 +186,16 @@ List.propTypes = {
 
 function History() {
   const [myMailsCheckbox, setMyMailsCheckbox] = useState(false);
+  const [voiceNotifyEnable, setVoiceNotifyEnable] = useState(false);
   const [filteredMails, setFilteredMails] = useState([]);
+  const [newMail, setNewMail] = useState(null);
   const { userData } = useUserData();
   const { mailsData } = useMailsData();
+
+  useEffect(() => {
+    var storedSettings = JSON.parse(localStorage.getItem("voiceNotifyEnable"));
+    setVoiceNotifyEnable(storedSettings);
+  }, []);
 
   useEffect(() => {
     setFilteredMails(
@@ -232,6 +218,33 @@ function History() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mailsData, myMailsCheckbox]);
+
+  useEffect(() => {
+    if (newMail && voiceNotifyEnable) {
+      const { receiver, title, urgency } = newMail;
+      const message = `有一封新郵件已送達，標題 ${title}，收件人 ${receiver}，緊急度 ${urgency}`;
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = "zh-TW";
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [newMail, voiceNotifyEnable]);
+
+  useEffect(() => {
+    if (filteredMails) {
+      const currentTime = new Date().getTime() / 1000;
+      const newMail = filteredMails.find((mail) => {
+        return (
+          mail.visible !== false &&
+          mail.createAt &&
+          currentTime - mail.createAt.seconds < 300
+        );
+      });
+
+      if (newMail) {
+        setNewMail(newMail);
+      }
+    }
+  }, [filteredMails]);
 
   return (
     <>
@@ -282,20 +295,41 @@ function History() {
               <GridItem colSpan={[8, 8, 4]}>
                 <Container h="100%">
                   <SubTitle>設定</SubTitle>
-                  <Box h="100%">
-                    <Checkbox
-                      onChange={(e) => {
-                        setMyMailsCheckbox(e.target.checked);
-                      }}
-                    >
-                      顯示本人郵件
-                    </Checkbox>
-                  </Box>
+                  <VStack h="100%" align="flex-start">
+                    <FormControl display="flex" alignItems="center">
+                      <Switch
+                        id="voiceNotifyEnable"
+                        isChecked={voiceNotifyEnable}
+                        onChange={(e) => {
+                          var isChecked = e.target.checked;
+                          setVoiceNotifyEnable(isChecked);
+                          localStorage.setItem(
+                            "voiceNotifyEnable",
+                            isChecked.toString()
+                          );
+                        }}
+                      />
+                      <FormLabel mb="0" ml="2">
+                        開啟語音
+                      </FormLabel>
+                    </FormControl>
+                    <FormControl display="flex" alignItems="center">
+                      <Switch
+                        id="myMails"
+                        onChange={(e) => {
+                          setMyMailsCheckbox(e.target.checked);
+                        }}
+                      />
+                      <FormLabel mb="0" ml="2">
+                        顯示本人郵件
+                      </FormLabel>
+                    </FormControl>
+                  </VStack>
                 </Container>
               </GridItem>
             </Grid>
             <Show above="md">
-              <TableRow bg="gray.400">
+              <TableRow isTitle>
                 <TableItem maxW="300px" title="收件日期" />
                 <TableItem maxW="250px" title="郵件標題" />
                 <TableItem maxW="200px" title="收件人" />

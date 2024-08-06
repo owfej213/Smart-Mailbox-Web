@@ -103,7 +103,9 @@ function Home() {
             </GridItem>
             <GridItem colSpan="8">
               <Container>
-                <SubTitle size="2xl">重要郵件</SubTitle>
+                <SubTitle size="2xl">
+                  重要郵件(顯示30天內緊急度為高的郵件)
+                </SubTitle>
                 <VStack divider={<StackDivider borderColor="gray.600" />}>
                   <List mailsData={monthsMail} />
                 </VStack>
