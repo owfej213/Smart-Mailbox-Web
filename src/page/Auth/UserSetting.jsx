@@ -1,20 +1,15 @@
-import Wrapper from "../../components/ui/Wrapper";
-import Container from "../../components/ui/Container";
 import {
+  Box,
   Button,
   Card,
-  CardBody,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
+  Field,
+  Grid,
+  GridItem,
+  Heading,
   Input,
   VStack,
-  useToast,
-} from "@chakra-ui/react";
-import { useAuth } from "../../components/Context/AuthContext";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import {
   collection,
   doc,
@@ -24,23 +19,22 @@ import {
   setDoc,
   updateDoc,
   where,
-} from "firebase/firestore";
-import { db } from "../../firebase/firebase";
-import SubTitle from "../../components/ui/SubTitle";
-import Icon from "../../components/ui/Icon";
-import { useUserData } from "../../components/Context/UserDataContext";
+} from 'firebase/firestore';
+import { db } from '../../utils/firebase/firebase';
+import Icon from '../../components/ui/Icon';
+import { toaster } from '../../components/ui/toaster';
+import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 function Setting() {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
-  const [formUserName, setFormUserName] = useState("");
-  const [formUserRealName, setFormUserRealName] = useState("");
-  const [formMailBoxID, setFormMailBoxID] = useState("");
-  const [isError, setIsError] = useState("");
-  const { userData } = useUserData();
+  const [formUserName, setFormUserName] = useState('');
+  const [formUserRealName, setFormUserRealName] = useState('');
+  const [formMailBoxID, setFormMailBoxID] = useState('');
+  const [isError, setIsError] = useState('');
+  const { userData } = useUserDataContext();
   const { userName, userRealName, mailBoxID } = userData || {};
-
-  const toast = useToast();
 
   useEffect(() => {
     setFormUserName(userName);
@@ -57,12 +51,12 @@ function Setting() {
           // 確認名稱是否重複
           if (userName !== formUserName) {
             const usersDoc = query(
-              collection(db, "users"),
-              where("userName", "==", formUserName)
+              collection(db, 'users'),
+              where('userName', '==', formUserName)
             );
             const QuerySnapshot = await getDocs(usersDoc);
             if (!QuerySnapshot.empty) {
-              setIsError("名稱重複!");
+              setIsError('名稱重複!');
               setLoading(false);
               return;
             }
@@ -100,11 +94,10 @@ function Setting() {
             }
           }
           setLoading(false);
-          toast({
-            title: "儲存成功！",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
+          toaster.create({
+            description: '儲存成功！',
+            type: 'success',
+            closable: true,
           });
           return;
         }
@@ -117,98 +110,96 @@ function Setting() {
 
   return (
     <>
-      <Wrapper>
-        <Flex w="150px" direction="column">
-          <SubTitle textAlign="left" size="2xl">
-            設定
-          </SubTitle>
-          <VStack align="flex-start">
-            <Button
-              color="white"
-              bg="none"
-              h="8"
-              leftIcon={<Icon name="UserCog" color="white" />}
-              _hover={{
-                bg: "gray.500",
-              }}
-            >
-              帳戶
-            </Button>
-            <Button
-              color="white"
-              bg="none"
-              h="8"
-              leftIcon={<Icon name="BellDot" color="white" />}
-              _hover={{
-                bg: "gray.500",
-              }}
-            >
-              通知
-            </Button>
-          </VStack>
-        </Flex>
-        <Container w={["100%", "100%", "600px"]}>
-          <Card variant="setting">
-            <CardBody>
-              <form onSubmit={onSubmit}>
+      <Box animation="fade-in 0.5s">
+        <Grid templateColumns="repeat(5, 1fr)" gap="4">
+          <GridItem colSpan={1}>
+            <Card.Root>
+              <Card.Header>
+                <Heading size="2xl">類別</Heading>
+              </Card.Header>
+              <Card.Body>
                 <VStack align="flex-start">
-                  <FormControl isInvalid={isError}>
-                    <FormLabel>使用者名稱</FormLabel>
-                    <Input
-                      maxLength={20}
-                      value={formUserName}
-                      onChange={(e) => {
-                        setFormUserName(e.target.value);
-                        setIsError("");
-                      }}
-                    />
-                    {isError ? (
-                      <FormErrorMessage color="red.500" fontWeight="bold">
-                        {isError}
-                      </FormErrorMessage>
-                    ) : (
-                      <FormHelperText color="gray.700">
-                        帳戶登入與顯示
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>真實姓名</FormLabel>
-                    <Input
-                      maxLength={20}
-                      value={formUserRealName}
-                      onChange={(e) => {
-                        setFormUserRealName(e.target.value);
-                      }}
-                    />
-                    <FormHelperText color="gray.700">
-                      確保能夠寄送通知
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>郵箱ID</FormLabel>
-                    <Input
-                      value={formMailBoxID}
-                      onChange={(e) => {
-                        setFormMailBoxID(e.target.value);
-                      }}
-                    />
-                  </FormControl>
                   <Button
-                    isDisabled={loading}
-                    isLoading={loading}
-                    type="submit"
-                    mt="4"
-                    colorScheme="blue"
+                    bg="brand.700"
+                    _hover={{
+                      bg: 'brand.500',
+                    }}
                   >
-                    儲存全部
+                    <Icon name="UserCog" color="white" />
+                    帳戶
+                  </Button>
+                  <Button
+                    bg="brand.700"
+                    _hover={{
+                      bg: 'brand.500',
+                    }}
+                  >
+                    <Icon name="BellDot" color="white" />
+                    通知
                   </Button>
                 </VStack>
-              </form>
-            </CardBody>
-          </Card>
-        </Container>
-      </Wrapper>
+              </Card.Body>
+            </Card.Root>
+          </GridItem>
+          <GridItem colSpan={4}>
+            <Card.Root>
+              <Card.Header>
+                <Heading size="2xl">個人資料</Heading>
+              </Card.Header>
+              <Card.Body>
+                <form onSubmit={onSubmit}>
+                  <VStack align="flex-start">
+                    <Field.Root invalid={isError}>
+                      <Field.Label>使用者名稱</Field.Label>
+                      <Input
+                        maxLength={20}
+                        value={formUserName}
+                        onChange={(e) => {
+                          setFormUserName(e.target.value);
+                          setIsError('');
+                        }}
+                      />
+                      <Field.ErrorText>{isError}</Field.ErrorText>
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>真實姓名</Field.Label>
+                      <Input
+                        maxLength={20}
+                        value={formUserRealName}
+                        onChange={(e) => {
+                          setFormUserRealName(e.target.value);
+                        }}
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>郵箱ID</Field.Label>
+                      <Input
+                        value={formMailBoxID}
+                        onChange={(e) => {
+                          setFormMailBoxID(e.target.value);
+                        }}
+                      />
+                    </Field.Root>
+                    <Button
+                      isDisabled={loading}
+                      isLoading={loading}
+                      type="submit"
+                      mt="4"
+                      bg="brand.400"
+                      _hover={{
+                        bg: 'brand.500',
+                      }}
+                      fontWeight="bold"
+                    >
+                      儲存全部
+                    </Button>
+                  </VStack>
+                </form>
+              </Card.Body>
+            </Card.Root>
+          </GridItem>
+        </Grid>
+      </Box>
     </>
   );
 }

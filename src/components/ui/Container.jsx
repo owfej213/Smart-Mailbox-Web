@@ -1,26 +1,14 @@
-import { Flex } from "@chakra-ui/react";
+import { Box } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
-function Container({ children, ...props }){
-
-    return (
-        <Flex
-            justify='center'
-            p='4'
-            w='100%'
-            bg='gray.400'
-            borderRadius='12px'
-            boxShadow='lg'
-            direction='column'
-            { ...props }
-        >
-            {children}
-        </Flex>
-    )
+export function Container({ children, ...props }) {
+  return (
+    <Box m="auto" maxW="container" px={['4', '6', '8']} {...props}>
+      {children}
+    </Box>
+  );
 }
 
 Container.propTypes = {
-    children: PropTypes.any
-}
-
-export default Container;
+  children: PropTypes.any,
+};

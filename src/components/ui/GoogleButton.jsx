@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
-import { space, width } from "styled-system";
-import PropTypes from "prop-types";
+import { Button, HStack, Text } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 
 const GoogleIcon = () => {
   return (
@@ -28,46 +27,27 @@ const GoogleIcon = () => {
   );
 };
 
-function GoogleButton({ onClick, children, ...props }) {
+function GoogleButton({ onClick, ...props }) {
   return (
-    <StyledGoogleButton onClick={onClick} {...props}>
-      <GoogleIcon />
-      <span>{children}</span>
-    </StyledGoogleButton>
+    <Button
+      px="0"
+      bg="brand.50"
+      color="brand.500"
+      fontSize="sm"
+      _hover={{ bg: 'brand.200' }}
+      onClick={onClick}
+      {...props}
+    >
+      <HStack m="2" spacing="2">
+        <GoogleIcon />
+        <Text>Google 登入</Text>
+      </HStack>
+    </Button>
   );
 }
 
 GoogleButton.propTypes = {
   onClick: PropTypes.any,
-  children: PropTypes.any,
 };
-
-const StyledGoogleButton = styled.button`
-  ${space}
-  ${width}
-    display: inline-flex;
-  background-color: rgb(255, 255, 255);
-  color: rgba(0, 0, 0, 0.54);
-  padding: 0px;
-  border-radius: 2px;
-  border: 1px solid transparent;
-  font-size: 14px;
-  font-weight: 500;
-
-  &:hover {
-    cursor: pointer;
-    filter: brightness(0.8);
-  }
-
-  svg {
-    margin: 10px;
-    background: rgb(255, 255, 255);
-    border-radius: 2px;
-  }
-
-  span {
-    padding: 10px;
-  }
-`;
 
 export default GoogleButton;

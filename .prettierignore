@@ -1,0 +1,18 @@
+# 忽略第三方依賴
+node_modules
+dist
+build
+
+# 忽略設定檔
+.vscode/
+*.config.js
+
+# 忽略輸出檔案
+*.min.js
+*.log
+coverage/
+
+# 忽略特定檔案類型
+*.png
+*.jpg
+*.svg

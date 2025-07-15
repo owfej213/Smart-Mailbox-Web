@@ -1,24 +1,15 @@
-import { Box, Image } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { Box, Image } from '@chakra-ui/react';
 
-
-function Logo(){
-    return (
-        <Box
-            w='3%'
-            h='3%'
-        >
-            <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9}}
-            >
-                <Image
-                    src='../../../images/postbox.png'
-                    alt="iMailBox"
-                />
-            </motion.div>
-        </Box>
-    )
+export default function Logo() {
+  return (
+    <Box
+      w="40px"
+      h="40px"
+      cursor="pointer"
+      _hover={{ scale: 1.2 }}
+      transition="scale 0.2s"
+    >
+      <Image src="../../../images/postbox.png" alt="SmartMailBox" />
+    </Box>
+  );
 }
-
-export default Logo;

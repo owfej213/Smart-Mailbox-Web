@@ -1,43 +1,38 @@
-import { useLayoutEffect, useState } from "react";
 import {
-  doCreateUserWithEmailAndPassword,
-  doSignInWithGoogle,
-} from "../../firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
-import GoogleButton from "../../components/ui/GoogleButton";
-import MainTitle from "../../components/ui/MainTitle";
-import Logo from "../../components/layout/Logo";
-import AuthWrapper from "../../components/ui/AuthWrapper";
-import {
+  Box,
   Button,
   Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
+  Field,
   Flex,
-  FormControl,
-  FormLabel,
   HStack,
   Heading,
   Input,
   Text,
   VStack,
-} from "@chakra-ui/react";
-import { useAuth } from "../../components/Context/AuthContext";
+} from '@chakra-ui/react';
+import { useLayoutEffect, useState } from 'react';
+import {
+  userDataInitial,
+  doCreateUserWithEmailAndPassword,
+  doSignInWithGoogle,
+} from '../../utils/firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import GoogleButton from '../../components/ui/googleButton';
+import Logo from '../../components/layout/Logo';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
-function Register() {
-  const { userLoggedIn } = useAuth();
-
+export default function Register() {
+  const { userLoggedIn } = useAuthContext();
   const [isRegistering, setIsRegistering] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, SetErrorMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, SetErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    if (!isRegistering && userLoggedIn) navigate("/home");
+    if (!isRegistering && userLoggedIn) navigate('/home');
   }, [isRegistering, navigate, userLoggedIn]);
 
   const onSubmit = async (e) => {
@@ -52,22 +47,25 @@ function Register() {
       //https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection
 
       try {
-        doCreateUserWithEmailAndPassword(email, password);
-
-        setIsRegistering(false);
+        const userCredential = await doCreateUserWithEmailAndPassword(
+          email,
+          password
+        );
+        userDataInitial(userCredential);
       } catch (error) {
-        if (error.code === "auth/email-already-in-use")
-          SetErrorMessage("帳號已使用！");
-        if (error.code === "auth/invalid-email")
-          SetErrorMessage("無效的帳號！");
-        if (error.code === "auth/weak-password")
-          SetErrorMessage("密碼需至少6個字元！");
+        if (error.code === 'auth/email-already-in-use')
+          SetErrorMessage('帳號已使用！');
+        if (error.code === 'auth/invalid-email')
+          SetErrorMessage('無效的帳號！');
+        if (error.code === 'auth/weak-password')
+          SetErrorMessage('密碼需至少6個字元！');
       }
+      setIsRegistering(false);
     }
   };
 
   const handleErrorMessage = () => {
-    SetErrorMessage("");
+    SetErrorMessage('');
   };
 
   const onGoogleSignIn = (e) => {
@@ -84,66 +82,67 @@ function Register() {
 
   return (
     <>
-      <MainTitle>智慧郵箱網頁平台</MainTitle>
-      <AuthWrapper>
-        <Card variant="auth">
-          <CardHeader>
-            <Heading>建立新帳戶</Heading>
-          </CardHeader>
-          <CardBody>
+      <Heading size="5xl" textAlign="center" my="8">
+        智慧郵箱網頁平台
+      </Heading>
+      <HStack justify="center">
+        <Card.Root variant="dark.outline">
+          <Card.Header>
+            <Heading size="2xl" textAlign="center">
+              建立新帳戶
+            </Heading>
+          </Card.Header>
+          <Card.Body>
             <form onSubmit={onSubmit}>
-              <VStack px="4">
-                <FormControl w="100%">
-                  <FormLabel>電子信箱</FormLabel>
+              <VStack w="300px" pt="4" gap="4">
+                <Field.Root>
+                  <Field.Label fontSize="md">電子信箱</Field.Label>
                   <Input
-                    type="email"
+                    type="text"
                     autoComplete="email"
-                    placeholder="電子信箱"
                     required
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
                   />
-                </FormControl>
-                <FormControl w="100%">
-                  <FormLabel>密碼</FormLabel>
+                </Field.Root>
+                <Field.Root invalid={errorMessage}>
+                  <Field.Label fontSize="md">密碼</Field.Label>
                   <Input
                     type="password"
                     autoComplete="new-password"
-                    placeholder="密碼"
                     required
                     onClick={handleErrorMessage}
                     onChange={(e) => {
                       setPassword(e.target.value);
                     }}
                   />
-                </FormControl>
-                {errorMessage && (
-                  <Text color="red.400" fontWeight="bold">
-                    {errorMessage}
-                  </Text>
-                )}
+                  <Field.ErrorText>{errorMessage}</Field.ErrorText>
+                </Field.Root>
                 <Button
+                  disabled={isSigningIn || isRegistering || !email || !password}
+                  loading={isSigningIn || isRegistering}
                   type="submit"
-                  my="8"
-                  py="4"
+                  my="4"
                   w="150px"
-                  isDisabled={isRegistering || isSigningIn}
-                  isLoading={isRegistering || isSigningIn}
-                  colorScheme="green"
-                  variant="solid"
+                  bg="blue.500"
+                  _hover={{
+                    bg: 'blue.600',
+                  }}
+                  fontWeight="bold"
+                  fontSize="md"
                 >
                   註冊
                 </Button>
                 <Flex>
-                  <Text color="gray.200">已經有帳戶？</Text>
+                  <Text>已經有帳戶？</Text>
                   <Text
                     as={Link}
-                    to={"/Login"}
+                    to={'/login'}
                     fontWeight="bold"
                     _hover={{
-                      color: "blue.400",
+                      color: 'blue.500',
                     }}
                   >
                     登入
@@ -151,26 +150,22 @@ function Register() {
                 </Flex>
               </VStack>
             </form>
-          </CardBody>
-          <CardFooter>
-            <Flex direction="column" w="100%">
-              <HStack w="100%">
-                <hr />
-                <Text>或是使用其他方式</Text>
-                <hr />
-              </HStack>
-              <GoogleButton onClick={onGoogleSignIn} m="auto" mt="8">
-                Google 登入
-              </GoogleButton>
-            </Flex>
-          </CardFooter>
-        </Card>
-      </AuthWrapper>
+          </Card.Body>
+          <Card.Footer justifyContent="center">
+            <VStack w="100%">
+              <Flex w="100%" alignItems="center">
+                <Box borderBottom="1px solid" flex="1" />
+                <Text mx="2">或是使用其他方式</Text>
+                <Box borderBottom="1px solid" flex="1" />
+              </Flex>
+              <GoogleButton onClick={onGoogleSignIn} mt="4" />
+            </VStack>
+          </Card.Footer>
+        </Card.Root>
+      </HStack>
       <Flex mt="8" justify="center">
         <Logo />
       </Flex>
     </>
   );
 }
-
-export default Register;

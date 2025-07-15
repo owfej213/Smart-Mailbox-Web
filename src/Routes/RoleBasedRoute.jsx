@@ -1,14 +1,12 @@
-import { Navigate, Outlet } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useUserData } from "../components/Context/UserDataContext";
+import { Navigate, Outlet } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useUserDataContext } from '../hooks/useUserDataContext';
 
 const RoleBasedRoute = ({ allowedRoles }) => {
-  const { userData } = useUserData();
+  const { userData } = useUserDataContext();
   const { userRole } = userData || {};
 
-  return (
-        allowedRoles.includes(userRole) ? <Outlet /> : <Navigate to="/" />
-  );
+  return allowedRoles.includes(userRole) ? <Outlet /> : <Navigate to="/" />;
 };
 RoleBasedRoute.propTypes = {
   allowedRoles: PropTypes.array,
