@@ -5,7 +5,7 @@ import Home from './page/Home.jsx';
 import History from './page/User/History';
 import Detail from './page/User/Detail';
 import Statistics from './page/User/Statistic';
-import InsideBox from './page/User/InsideBox/Inside_Box.jsx';
+import InsideBox from './page/User/InsideBox';
 import Register from './page/Auth/Register.jsx';
 import Setting from './page/Auth/UserSetting.jsx';
 import PrivateRoute from './Routes/PrivateRoute.jsx';
