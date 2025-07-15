@@ -17,7 +17,7 @@ import {
   doSignInWithGoogle,
 } from '../../utils/firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import GoogleButton from '../../components/ui/googleButton';
+import GoogleButton from '../../components/ui/GoogleButton';
 import Logo from '../../components/layout/Logo';
 import { useAuthContext } from '../../hooks/useAuthContext';
 

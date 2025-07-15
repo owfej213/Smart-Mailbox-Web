@@ -27,7 +27,7 @@ const GoogleIcon = () => {
   );
 };
 
-function GoogleButton({ onClick, ...props }) {
+export default function GoogleButton({ onClick, ...props }) {
   return (
     <Button
       px="0"
@@ -47,7 +47,6 @@ function GoogleButton({ onClick, ...props }) {
 }
 
 GoogleButton.propTypes = {
-  onClick: PropTypes.any,
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
-
-export default GoogleButton;
