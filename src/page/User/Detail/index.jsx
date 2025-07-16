@@ -1,8 +1,22 @@
 import { formateDateYMD } from '../../../utils/dateUtils';
-import { Box, Card, Heading, Table } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Card,
+  CloseButton,
+  Dialog,
+  Heading,
+  Table,
+  Text,
+} from '@chakra-ui/react';
 import { useGetMailData } from './hooks/useGetMailData';
+import Icon from '../../../components/ui/Icon';
+import { useDeleteMail } from '../../../hooks/useDeleteMail';
+import { useNavigate } from 'react-router-dom';
 
-function Detail() {
+export default function Detail() {
+  const navigate = useNavigate();
+  const { deleteMail } = useDeleteMail();
   const { maildata } = useGetMailData();
   const {
     createAt,
@@ -14,6 +28,7 @@ function Detail() {
     senderAddress,
     urgency,
     keyContent,
+    uid,
   } = maildata || {};
 
   return (
@@ -73,6 +88,59 @@ function Detail() {
               </Table.Body>
             </Table.Root>
           </Card.Body>
+          <Card.Footer justifyContent="flex-end">
+            <Dialog.Root>
+              <Dialog.Trigger asChild>
+                <Button bg="red.500">
+                  <Icon name="Trash2" color="white" size={32} />
+                  刪除郵件
+                </Button>
+              </Dialog.Trigger>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content bg="brand.700">
+                  <Dialog.CloseTrigger />
+                  <Dialog.Header>
+                    <Dialog.Title>刪除確認</Dialog.Title>
+                  </Dialog.Header>
+                  <Dialog.Body>
+                    <Text>確定要刪除此郵件嗎？此操作無法撤銷。</Text>
+                  </Dialog.Body>
+                  <Dialog.Footer>
+                    <Dialog.ActionTrigger asChild>
+                      <Button
+                        variant="outline"
+                        color="brand.50"
+                        _hover={{
+                          bg: 'brand.600',
+                        }}
+                      >
+                        取消
+                      </Button>
+                    </Dialog.ActionTrigger>
+                    <Button
+                      bg="red.500"
+                      onClick={() => {
+                        deleteMail(uid);
+                        navigate('/history');
+                      }}
+                    >
+                      確認
+                    </Button>
+                  </Dialog.Footer>
+                  <Dialog.CloseTrigger asChild>
+                    <CloseButton
+                      size="sm"
+                      fill="brand.50"
+                      _hover={{
+                        bg: 'brand.600',
+                      }}
+                    />
+                  </Dialog.CloseTrigger>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Dialog.Root>
+          </Card.Footer>
         </Card.Root>
         <Card.Root mt="4">
           <Card.Header>
@@ -86,5 +154,3 @@ function Detail() {
     </>
   );
 }
-
-export default Detail;

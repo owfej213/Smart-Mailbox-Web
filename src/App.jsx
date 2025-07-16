@@ -4,6 +4,7 @@ import Login from './page/Auth/Login.jsx';
 import Home from './page/Home.jsx';
 import History from './page/User/History';
 import Detail from './page/User/Detail';
+import Analyze from './page/User/Analyze';
 import Statistics from './page/User/Statistic';
 import InsideBox from './page/User/InsideBox';
 import Register from './page/Auth/Register.jsx';
@@ -32,6 +33,7 @@ function App() {
                       <Route path="history" element={<History />} />
                       <Route path="detail/:id" element={<Detail />} />
                       <Route path="statistics" element={<Statistics />} />
+                      <Route path="upload" element={<Analyze />} />
                       <Route path="inside_Box" element={<InsideBox />} />
                       <Route path="setting" element={<Setting />} />
                       {/* 確認權限 */}

@@ -14,9 +14,8 @@ import { Explanation } from './components/Explanation';
 import { MailsTable } from './components/MailsTable';
 
 export default function History() {
-  const { setIsOnlyShowMyMail } = useGetMailsData();
+  const { filteredMails, newMail, setIsOnlyShowMyMail } = useGetMailsData();
   const [voiceNotifyEnable, setVoiceNotifyEnable] = useState(false);
-  const { filteredMails, newMail } = useGetMailsData();
 
   // 初始化localStorage設定
 

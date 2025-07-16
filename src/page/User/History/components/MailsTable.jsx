@@ -1,13 +1,9 @@
-import { Button, Card, Table, Text } from '@chakra-ui/react';
+import { Card, Table, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Icon from '../../../../components/ui/Icon';
 import { formateDateYMD } from '../../../../utils/dateUtils';
-import { useDeleteMail } from '../../../../hooks/useDeleteMail';
 
 export function MailsTable({ mails, ...props }) {
-  const { deleteMail } = useDeleteMail();
-
   return (
     <Card.Root mt="4" {...props}>
       <Card.Body>
@@ -19,7 +15,6 @@ export function MailsTable({ mails, ...props }) {
               <Table.ColumnHeader>收件人</Table.ColumnHeader>
               <Table.ColumnHeader>緊急度</Table.ColumnHeader>
               <Table.ColumnHeader>細節</Table.ColumnHeader>
-              <Table.ColumnHeader>刪除</Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -43,15 +38,6 @@ export function MailsTable({ mails, ...props }) {
                     >
                       查看
                     </Text>
-                  </Table.Cell>
-                  <Table.Cell align="center">
-                    <Button
-                      p="0"
-                      onClick={() => deleteMail(mail.uid)}
-                      bg="transparent"
-                    >
-                      <Icon name="Trash2" color="red" size={32} />
-                    </Button>
                   </Table.Cell>
                 </Table.Row>
               ))}

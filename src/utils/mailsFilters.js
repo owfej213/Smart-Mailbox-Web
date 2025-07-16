@@ -7,6 +7,8 @@ import {
   format,
   differenceInDays,
   getTime,
+  startOfYear,
+  endOfYear,
 } from 'date-fns';
 export function todaysMailFilter(mails) {
   const today = new Date();
@@ -32,6 +34,19 @@ export function monthsMailFilter(mails) {
       mail?.createAt <= endOfMonthTimestamp
   );
   return { thisMonthsMails, thisMonthsMailsCount: thisMonthsMails.length };
+}
+
+export function yearsMailFilter(mails) {
+  const today = new Date();
+  const startOfYearTimestamp = startOfYear(today).getTime() / 1000;
+  const endOfYearTimestamp = endOfYear(today).getTime() / 1000;
+
+  const thisYearsMails = mails.filter(
+    (mail) =>
+      mail?.createAt >= startOfYearTimestamp &&
+      mail?.createAt <= endOfYearTimestamp
+  );
+  return { thisYearsMails, thisYearsMailsCount: thisYearsMails.length };
 }
 
 export function dateSelecter(mails, startDate, endDate) {

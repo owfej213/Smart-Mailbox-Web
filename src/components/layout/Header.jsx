@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { UserMenu, Notify } from './PopupMenu';
 import { Box, Flex, Text, Toaster } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
-import { History, Home, PieChart, View } from 'lucide-react';
+import { History, Home, PackageOpen, PieChart, View } from 'lucide-react';
 import { useUserDataContext } from '../../hooks/useUserDataContext';
 
 export default function Header() {
@@ -14,9 +14,10 @@ export default function Header() {
   const location = useLocation();
   const navigation = [
     { name: '主頁', href: '/home', icon: Home },
+    { name: '郵件分析', href: '/upload', icon: View },
     { name: '歷史紀錄', href: '/history', icon: History },
     { name: '圖表統計', href: '/statistics', icon: PieChart },
-    { name: '郵箱內部', href: '/inside_box', icon: View },
+    { name: '郵箱內部', href: '/inside_box', icon: PackageOpen },
   ];
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function Header() {
                   }}
                 >
                   <Icon size={20} />
-                  <Text pl="1">{item.name}</Text>
+                  <Text pl="2">{item.name}</Text>
                 </Flex>
               );
             })}

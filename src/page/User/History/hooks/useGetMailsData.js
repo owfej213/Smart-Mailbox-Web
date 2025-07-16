@@ -6,7 +6,7 @@ export function useGetMailsData() {
   const { mailsData } = useMailsDataContext();
   const { userData } = useUserDataContext();
   const [newMail, setNewMail] = useState(null);
-  const [filteredMails, setFilteredMails] = useState(null);
+  const [filteredMails, setFilteredMails] = useState([]);
   const [isOnlyShowMyMail, setIsOnlyShowMyMail] = useState(false);
 
   const mails = useMemo(() => {

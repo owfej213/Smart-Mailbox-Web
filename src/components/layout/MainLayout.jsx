@@ -8,7 +8,7 @@ export default function MainLayout() {
   return (
     <Box minH="100vh">
       <Header />
-      <Box pt="8">
+      <Box py="8">
         <Container>
           <Toaster />
           <Outlet />

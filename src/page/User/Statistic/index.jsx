@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import {
   monthsMailFilter,
   todaysMailFilter,
+  yearsMailFilter,
 } from '../../../utils/mailsFilters';
 import { LineChart } from './components/LineChart';
 import { PieChart } from './components/PieChart';
@@ -31,6 +32,7 @@ export default function Statistics() {
 
   const [todaysMailCounts, setTodaysMailCounts] = useState(Number);
   const [monthsMailCounts, setMonthsMailCounts] = useState(Number);
+  const [yearsMailCounts, setYearsMailCounts] = useState(Number);
 
   useEffect(() => {
     const { todaysMailsCount } = todaysMailFilter(mailsData);
@@ -38,6 +40,9 @@ export default function Statistics() {
 
     const { thisMonthsMailsCount } = monthsMailFilter(mailsData);
     setMonthsMailCounts(thisMonthsMailsCount);
+
+    const { thisYearsMailsCount } = yearsMailFilter(mailsData);
+    setYearsMailCounts(thisYearsMailsCount);
   }, [mailsData]);
 
   return (
@@ -67,8 +72,8 @@ export default function Statistics() {
                     <Stat.ValueText>{monthsMailCounts}</Stat.ValueText>
                   </Stat.Root>{' '}
                   <Stat.Root size="lg" borderWidth="1px" p="4" rounded="md">
-                    <Stat.Label color="text">本月郵件數</Stat.Label>
-                    <Stat.ValueText>{monthsMailCounts}</Stat.ValueText>
+                    <Stat.Label color="text">今年郵件數</Stat.Label>
+                    <Stat.ValueText>{yearsMailCounts}</Stat.ValueText>
                   </Stat.Root>
                 </Stack>
               </Card.Body>
