@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import MailsDataContext from '../components/context/MailsDataContext';
+import MailsDataContext from '../../components/context/MailsDataContext';
 
 export function useMailsDataContext() {
   const context = useContext(MailsDataContext);

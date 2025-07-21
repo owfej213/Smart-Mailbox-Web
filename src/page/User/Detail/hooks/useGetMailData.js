@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useMailsDataContext } from '../../../../hooks/useMailsDataContext';
+import { useMailsDataContext } from '../../../../hooks/context/useMailsDataContext';
 import { useParams } from 'react-router-dom';
 
 export function useGetMailData() {

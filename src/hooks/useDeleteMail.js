@@ -1,33 +1,30 @@
-import { collection, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../utils/firebase/firebase';
 import { useCallback, useState } from 'react';
-import { useUserDataContext } from './useUserDataContext';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { useMailsDataContext } from './context/useMailsDataContext';
 
 export function useDeleteMail() {
-  const [isLoading, setIsloading] = useState(false);
+  const { mailBoxRef } = useMailsDataContext();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { userData } = useUserDataContext();
 
   const deleteMail = useCallback(
     async (uid) => {
-      setIsloading(true);
+      if (!uid) return;
+
+      setLoading(true);
       setError(null);
 
       try {
-        const result = doc(
-          collection(doc(db, `mailBoxes/${userData.mailBoxID}`), 'mails'),
-          uid
-        );
-        await deleteDoc(result);
+        const docRef = doc(mailBoxRef, uid);
+        await deleteDoc(docRef);
       } catch (error) {
-        console.log(error);
-        setError('DeleteMail failed');
+        setError('Delete Mail failed');
       } finally {
-        setIsloading(false);
+        setLoading(false);
       }
     },
-    [userData]
+    [mailBoxRef]
   );
 
-  return { isLoading, error, deleteMail };
+  return { loading, error, deleteMail };
 }

@@ -19,7 +19,7 @@ import { useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleButton from '../../components/ui/GoogleButton';
 import Logo from '../../components/layout/Logo';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAuthContext } from '../../hooks/context/useAuthContext';
 
 export default function Login() {
   const { userLoggedIn } = useAuthContext();

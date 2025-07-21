@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useMailsDataContext } from '../../../../hooks/useMailsDataContext';
-import { useUserDataContext } from '../../../../hooks/useUserDataContext';
+import { useMailsDataContext } from './context/useMailsDataContext';
+import { useUserDataContext } from './context/useUserDataContext';
 
 export function useGetMailsData() {
   const { mailsData } = useMailsDataContext();

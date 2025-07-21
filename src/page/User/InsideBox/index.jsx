@@ -4,7 +4,7 @@ import { getDownloadURL, getMetadata, listAll, ref } from 'firebase/storage';
 import { storage } from '../../../utils/firebase/firebase';
 import Icon from '../../../components/ui/Icon';
 import { formateDateYMDHM } from '../../../utils/dateUtils';
-import { useUserDataContext } from '../../../hooks/useUserDataContext';
+import { useUserDataContext } from '../../../hooks/context/useUserDataContext';
 
 export default function InsideBox() {
   const [loading, setLoading] = useState(true);
@@ -57,37 +57,35 @@ export default function InsideBox() {
   }, [mailBoxID]);
 
   return (
-    <>
-      <Box animation="fade-in 0.5s">
-        {!loading && (
-          <VStack>
-            {imageExist ? (
-              <>
-                <Text my="4" color="white" fontWeight="600" fontSize="xl">
-                  上次更新時間：
-                  {imageDateNumber !== 0 && formateDateYMDHM(imageDateNumber)}
-                </Text>
-                <Image src={imageUrl} w="1000px" />
-              </>
-            ) : (
-              <>
-                <Text my="4" color="white" fontWeight="600" fontSize="xl">
-                  尚未有任何照片
-                </Text>
-                <Flex
-                  bg="gray.300"
-                  w="900px"
-                  h="600px"
-                  align="center"
-                  justify="center"
-                >
-                  <Icon name="Mail" color="#3182CE" size={160} />
-                </Flex>
-              </>
-            )}
-          </VStack>
-        )}
-      </Box>
-    </>
+    <Box animation="fade-in 0.5s">
+      {!loading && (
+        <VStack>
+          {imageExist ? (
+            <>
+              <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                上次更新時間：
+                {imageDateNumber !== 0 && formateDateYMDHM(imageDateNumber)}
+              </Text>
+              <Image src={imageUrl} w="1000px" />
+            </>
+          ) : (
+            <>
+              <Text my="4" color="white" fontWeight="600" fontSize="xl">
+                尚未有任何照片
+              </Text>
+              <Flex
+                bg="gray.300"
+                w="900px"
+                h="600px"
+                align="center"
+                justify="center"
+              >
+                <Icon name="Mail" color="#3182CE" size={160} />
+              </Flex>
+            </>
+          )}
+        </VStack>
+      )}
+    </Box>
   );
 }

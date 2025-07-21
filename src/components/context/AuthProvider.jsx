@@ -5,7 +5,7 @@ import AuthContext from './AuthContext';
 import PropTypes from 'prop-types';
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isEmailUser, setIsEmailUser] = useState(false);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
 
   async function initializeUser(user) {
     if (user) {
-      setCurrentUser({ ...user });
+      setUser(user);
 
       // check if provider is email and password login
       const isEmail = user.providerData.some(
@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
       setIsGoogleUser(isGoogle);
       setUserLoggedIn(true);
     } else {
-      setCurrentUser(null);
+      setUser(null);
       setUserLoggedIn(false);
     }
     setLoading(false);
@@ -43,8 +43,8 @@ export function AuthProvider({ children }) {
     userLoggedIn,
     isEmailUser,
     isGoogleUser,
-    currentUser,
-    setCurrentUser,
+    user,
+    setUser,
   };
 
   return (

@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthContext } from '../hooks/useAuthContext';
+import { useAuthContext } from '../hooks/context/useAuthContext';
 
+// PrivateRoute component checks if the user is logged in.
 const PrivateRoute = () => {
   const { userLoggedIn } = useAuthContext();
 

@@ -1,23 +1,23 @@
 import { useState, useLayoutEffect } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../utils/firebase/firebase';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAuthContext } from '../../hooks/context/useAuthContext';
 import UserDataContext from './UserDataContext';
 import PropTypes from 'prop-types';
 
 export function UserDataProvider({ children }) {
-  const { currentUser } = useAuthContext();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [isUserDataExist, setIsUserDataExist] = useState(true);
-  const [isMailBoxIdDefault, setIsMailBoxIdDefault] = useState(true);
-  const [isUserNameDefault, setIsUserNameDefault] = useState(true);
+  const [isMailBoxIdDefault, setIsMailBoxIdDefault] = useState(false);
+  const [isUserNameDefault, setIsUserNameDefault] = useState(false);
 
   useLayoutEffect(() => {
     const fetchUserData = async () => {
       try {
-        if (currentUser !== null) {
-          const userDoc = doc(db, `users/${currentUser.uid}`);
+        if (user?.uid !== null) {
+          const userDoc = doc(db, `users/${user?.uid}`);
 
           //監聽使用者資料
           const unsubscribe = onSnapshot(userDoc, initializeUserData);
@@ -30,7 +30,7 @@ export function UserDataProvider({ children }) {
     };
     fetchUserData();
     setLoading(false);
-  }, [currentUser]);
+  }, [user]);
 
   async function initializeUserData(result) {
     if (result.exists()) {

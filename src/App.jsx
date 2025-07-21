@@ -9,54 +9,35 @@ import Statistics from './page/User/Statistic';
 import InsideBox from './page/User/InsideBox';
 import Register from './page/Auth/Register.jsx';
 import Setting from './page/Auth/UserSetting.jsx';
-import PrivateRoute from './Routes/PrivateRoute.jsx';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 import { AuthProvider } from './components/context/AuthProvider.jsx';
-import { UserDataProvider } from './components/context/UserDataProvider.jsx';
-import { MailsDataProvider } from './components/context/MailsDataProvider.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import { system } from './theme';
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <AuthProvider>
-          <UserDataProvider>
-            <MailsDataProvider>
-              <ChakraProvider value={system}>
-                <Routes>
-                  {/* 確認登入狀態 */}
-                  <Route exact path="/" element={<PrivateRoute />}>
-                    <Route element={<MainLayout />}>
-                      <Route exact path="/" element={<Home />} />
-                      <Route path="home" element={<Home />} />
-                      <Route path="history" element={<History />} />
-                      <Route path="detail/:id" element={<Detail />} />
-                      <Route path="statistics" element={<Statistics />} />
-                      <Route path="upload" element={<Analyze />} />
-                      <Route path="inside_Box" element={<InsideBox />} />
-                      <Route path="setting" element={<Setting />} />
-                      {/* 確認權限 */}
-                      {/* <Route
-                        exact
-                        path="/"
-                        element={
-                          <RoleBasedRoute allowedRoles={['admin']} />
-                        }
-                      >
-                        <Route exact path="admin" element={<Admin />} />
-                      </Route>*/}
-                    </Route>
-                  </Route>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                </Routes>
-              </ChakraProvider>
-            </MailsDataProvider>
-          </UserDataProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <AuthProvider>
+        <ChakraProvider value={system}>
+          <Routes>
+            <Route exact path="/" element={<PrivateRoute />}>
+              <Route element={<MainLayout />}>
+                <Route exact path="/" element={<Home />} />
+                <Route path="home" element={<Home />} />
+                <Route path="history" element={<History />} />
+                <Route path="detail/:id" element={<Detail />} />
+                <Route path="statistics" element={<Statistics />} />
+                <Route path="analyze" element={<Analyze />} />
+                <Route path="inside_Box" element={<InsideBox />} />
+                <Route path="setting" element={<Setting />} />
+              </Route>
+            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </ChakraProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

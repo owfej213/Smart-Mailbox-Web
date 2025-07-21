@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { dateSelecter } from '../../../../utils/mailsFilters';
-import { useMailsDataContext } from '../../../../hooks/useMailsDataContext';
+import { useMailsDataContext } from '../../../../hooks/context/useMailsDataContext';
 
 export function useGetMailsData() {
   const { mailsData } = useMailsDataContext();

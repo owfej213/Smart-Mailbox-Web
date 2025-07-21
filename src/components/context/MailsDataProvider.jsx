@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../../utils/firebase/firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
+import { useUserDataContext } from '../../hooks/context/useUserDataContext';
 import MailsDataContext from './MailsDataContext';
 import PropTypes from 'prop-types';
 
@@ -11,13 +11,15 @@ export function MailsDataProvider({ children }) {
 
   const [mailsData, setMailsData] = useState([]);
   const [mailsDataCount, setMailsDataCount] = useState(0);
+  const [mailBoxRef, setMailBoxRef] = useState(null);
 
   useEffect(() => {
     if (!mailBoxID) return;
 
-    const mailBoxRef = collection(doc(db, `mailBoxes/${mailBoxID}`), 'mails');
+    const ref = collection(doc(db, `mailBoxes/${mailBoxID}`), 'mails');
+    setMailBoxRef(ref);
 
-    const unsubscribe = onSnapshot(mailBoxRef, initializeMailsData);
+    const unsubscribe = onSnapshot(ref, initializeMailsData);
 
     return () => unsubscribe(); // 確保監聽被清除
   }, [mailBoxID]);
@@ -48,7 +50,7 @@ export function MailsDataProvider({ children }) {
   const value = {
     mailsData,
     mailsDataCount,
-    getMailById: (id) => mailsData.find((mail) => mail.uid === id),
+    mailBoxRef,
   };
 
   return (

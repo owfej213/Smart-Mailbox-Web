@@ -1,11 +1,21 @@
 import { Editable, IconButton } from '@chakra-ui/react';
 import { Check, PencilLine, X } from 'lucide-react';
+import propTypes from 'prop-types';
 
-export default function EditableControls() {
+export default function EditableControls({ value, onValueChange }) {
   return (
-    <Editable.Root defaultValue="">
-      <Editable.Preview w="100%" _hover={{ bg: 'brand.600' }} />
-      <Editable.Input />
+    <Editable.Root
+      key={value}
+      defaultValue={value}
+      onSubmit={(nextValue) => onValueChange(nextValue)}
+    >
+      <Editable.Preview
+        key={value}
+        w="100%"
+        _hover={{ bg: 'brand.600' }}
+        fontSize="md"
+      />
+      <Editable.Input fontSize="md" />
       <Editable.Control>
         <Editable.EditTrigger asChild>
           <IconButton
@@ -41,3 +51,8 @@ export default function EditableControls() {
     </Editable.Root>
   );
 }
+
+EditableControls.propTypes = {
+  value: propTypes.string,
+  onValueChange: propTypes.func,
+};

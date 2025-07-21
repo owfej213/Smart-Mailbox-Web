@@ -23,11 +23,11 @@ import {
 import { db } from '../../utils/firebase/firebase';
 import Icon from '../../components/ui/Icon';
 import { toaster } from '../../components/ui/toaster';
-import { useUserDataContext } from '../../hooks/useUserDataContext';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useUserDataContext } from '../../hooks/context/useUserDataContext';
+import { useAuthContext } from '../../hooks/context/useAuthContext';
 
 function Setting() {
-  const { currentUser } = useAuthContext();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [formUserName, setFormUserName] = useState('');
   const [formUserRealName, setFormUserRealName] = useState('');
@@ -46,7 +46,7 @@ function Setting() {
     e.preventDefault();
     async function UserDataUpdate() {
       try {
-        if (currentUser) {
+        if (user) {
           setLoading(true);
           // 確認名稱是否重複
           if (userName !== formUserName) {
@@ -61,7 +61,7 @@ function Setting() {
               return;
             }
           }
-          const userDocRef = doc(db, `users/${currentUser.uid}`);
+          const userDocRef = doc(db, `users/${user?.uid}`);
 
           if (formUserName && formUserName !== userName)
             updateDoc(userDocRef, { userName: formUserName });
@@ -79,7 +79,7 @@ function Setting() {
               const result = await getDoc(mailBoxRef);
               userList = result.data()?.users || [];
               userList = userList.filter((user) => {
-                return user.userID !== currentUser.uid;
+                return user.userID !== user?.uid;
               });
               setDoc(mailBoxRef, { users: userList });
             }
@@ -87,7 +87,7 @@ function Setting() {
               const result = await getDoc(mailBoxNewRef);
               newUserList = result.data()?.users || [];
               newUserList.push({
-                userID: currentUser.uid,
+                userID: user?.uid,
                 userName: formUserName,
               });
               setDoc(mailBoxNewRef, { users: newUserList });
